@@ -12,9 +12,9 @@ System({
     pattern: 'antiword ?(.*)',
     desc: 'remove users who use restricted words',
     type: "manage",
+    onlyGroup: true,
     fromMe: true 
 }, async (message, match, m) => {
-    if(!message.isGroup) return;
     if (!match) return await message.reply("_*antiword* on/off_\n_*antiword* action warn/kick/null_");
     const { antiword } = await transformData(m.jid);
     if(match.toLowerCase() == 'get') {
@@ -81,14 +81,14 @@ System({
     if(!message.isGroup) retrun;
     if (!match) return await message.reply('_*antifake* 94,92_\n_*antifake* on/off_\n_*antifake* list_');
     const { antifake } = await getData(message.chat);
-    if(match.toLowerCase()==='get'){
-    if(!antifake || antifake.status === 'false' || !antifake.message) return await message.send('_Not Found_');
+    if(match.toLowerCase()=='get'){
+    if(!antifake || antifake.status == 'false' || !antifake.message) return await message.send('_Not Found_');
     return await message.send(`_*activated restricted numbers*: ${antifake.message}_`);
-    } else if(match.toLowerCase() === 'on') {
+    } else if(match.toLowerCase() == 'on') {
     	const data = antifake && antifake.message ? antifake.message : '';
     	await setData(message.jid, data, "true", "antifake");
         return await message.send(`_Antifake Activated_`)
-    } else if(match.toLowerCase() === 'off') {
+    } else if(match.toLowerCase() == 'off') {
         const data = antifake && antifake.message ? antifake.message : '';
     	await setData(message.jid, data, "false", "antifake");
     return await message.send(`_Antifake Deactivated_`)
@@ -109,11 +109,11 @@ System({
     if(!message.isGroup) retrun;
     if (!match) return await message.reply("_*antibot* on/off_\n_*antibot* action warn/kick/null_");
     const { antibot } = await getData(message.chat)
-    if(match.toLowerCase() === 'on') {
+    if(match.toLowerCase() == 'on') {
     	const action = antibot && antibot.message ? antibot.message : 'null';
         await setData(message.jid, action, "true", "antibot");
         return await message.send(`_antibot Activated with action null_\n_*antibot action* warn/kick/null for chaning actions_`)
-    } else if(match.toLowerCase() === 'off') {
+    } else if(match.toLowerCase() == 'off') {
     	const action = antibot && antibot.message ? antibot.message : 'null';
         await setData(message.jid, action, "false", "antibot");
         return await message.send(`_antibot deactivated_`)
@@ -134,13 +134,13 @@ System({
 }, async (message, match) => {
     if(!message.isGroup) retrun;
     if (!match) return await message.sendPollMessage({ name: "Choose settings to change antidemote settings", values: [{ displayText: "on", id: "antidemote on"}, { displayText: "off", id: "antidemote off"}], onlyOnce: true, withPrefix: true, participates: [message.sender] });
-    if (match !=== 'on' && match !=== 'off') return message.reply('_antidemote on_');
+    if (match != 'on' && match != 'off') return message.reply('_antidemote on_');
     const { antidemote } = await getData(message.jid);
     if (match == 'on') {
-        if (antidemote && antidemote.status === 'true') return message.reply('_Already activated_');
+        if (antidemote && antidemote.status == 'true') return message.reply('_Already activated_');
         await setData(message.jid, "active", "true", "antidemote");
         return await message.reply('_activated_');
-    } else if (match === 'off') {
+    } else if (match == 'off') {
         if (antidemote && antidemote.status == 'false') return message.reply('_Already Deactivated_');
         await setData(message.jid, "disactive", "false", "antidemote");
         return await message.reply('_deactivated_')
@@ -155,13 +155,13 @@ System({
 }, async (message, match) => {
     if(!message.isGroup) retrun;
     if (!match) return await message.sendPollMessage({ name: "Choose settings to change antipromote settings", values: [{ displayText: "on", id: "antipromote on"}, { displayText: "off", id: "antipromote off"}], onlyOnce: true, withPrefix: true, participates: [message.sender] });
-    if (match !=== 'on' && match !=== 'off') return message.reply('antipromote on');
+    if (match != 'on' && match != 'off') return message.reply('antipromote on');
     const { antipromote } = await getData(message.chat);
-    if (match === 'on') {
+    if (match == 'on') {
         if (antipromote && antipromote.status == 'true') return message.reply('_Already activated_');
         await setData(message.jid, "active", "true", "antipromote");
         return await message.reply('_activated_')
-    } else if (match === 'off') {
+    } else if (match == 'off') {
         if (antipromote && antipromote.status == 'false') return message.reply('_Already Deactivated_');
         await setData(message.jid, "disactive", "false", "antidemote");
         return await message.reply('_deactivated_')
