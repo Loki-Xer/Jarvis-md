@@ -276,11 +276,11 @@ async (message, match) => {
         } else {
         var availupdate = "*Updates available for Jarvis-md* \n\n";
         commits["all"].map((commit, num) => {
-            availupdate += num + 1 + " ●  " + tiny(commit.message) + "\n";
+            availupdate += num + 1 + " ●  " + await tiny(commit.message) + "\n";
         });
 
         return await message.client.sendMessage(message.jid, {
-            text: `${availupdate}\n\n _type *${Config.HANDLERS} update now*_`
+            text: `${availupdate}\n\n _type *${message.prefix} update now*_`
         });
     }
 });
