@@ -1,0 +1,80 @@
+{
+    "name": "Jarvis",
+    "version":"1.0.0",
+    "description": "Jarvis Multi Device whatsappbot",
+    "logo": "https://i.imgur.com/PmfMtfa.jpeg",
+    "keywords": ["whatsapp"],
+    "repository": "https://github.com/Loki-Xer/Jarvis",
+    "website": "https://github.com/Loki-Xer/Jarvis",
+    "success_url": "https://github.com/Loki-Xer/Jarvis",
+    "stack": "container",
+    "env": {
+        "BOT_INFO": {
+            "description": "botname;ownername;ownernumber;image url",
+            "required": true,
+            "value":"ᴊᴀʀᴠɪꜱ;ʟᴏᴋɪ-xᴇʀ;https://i.imgur.com/VIpl3q5.mp4"
+        },
+        "AUDIO_DATA": {
+            "description": "audio package name",
+            "required": true,
+            "value":"ʟᴏᴋɪ-xᴇʀ;ᴊᴀʀᴠɪꜱ;https://i.imgur.com/VgxJeCm.jpeg"
+        },
+        "WARN_COUNT": {
+            "description": "warn count",
+            "required": true,
+            "value":"3"
+        },
+        "AUTO_STATUS_VIEWS": {
+            "description": "auto status views",
+            "required": true,
+            "value":"false"
+        },
+        "MEDIA_DATA": {
+            "description": "media data that uses in list",
+            "required": true,
+            "value":"ʟɪꜱᴛ ᴍᴇɴᴜ;ᴊᴀʀᴠɪꜱ-ᴍᴅ;https://i.imgur.com/ltPPMTh.jpeg"
+        },
+        "HANDLER": {
+            "description": "handler for bot. all so can be null or false",
+            "required": true,
+            "value":"null"
+        },
+        "SESSION_ID": {
+            "description": "session id",
+            "required": true
+        },
+        "WORK_TYPE": {
+            "description": "worker type public or private",
+            "required": true,
+            "value":"private"
+        },
+        "HEROKU_APP_NAME": {
+            "description": "heroku app name, same as above entered",
+            "required": true
+        },
+        "HEROKU_API_KEY": {
+            "description": "Heroku account api key, https://dashboard.heroku.com/account",
+            "required": true
+        },
+        "STICKER_PACKNAME": {
+            "description": "sticker package name",
+            "required": true,
+            "value":"ʟᴏᴋɪ;ᴊᴀʀᴠɪꜱ"
+        },
+        "SUDO": {
+            "description": "owner number of the bot",
+            "required": false,
+            "value":"41782221168"
+        }
+    },
+      "addons": [{
+      "plan": "heroku-postgresql"
+    }],
+    "buildpacks": [{
+      "url": "heroku-community/apt"
+      },
+      {
+      "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
+      }]
+  }
+  

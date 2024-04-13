@@ -1,0 +1,44 @@
+{
+    "name": "Jarvis-md",
+    "version": "0.7.6",
+    "description": "A simple WhatsApp Bot Based On WhiskeySockets/Baileys",
+    "main": "index.js",
+    "scripts": {
+        "start": "pm2 start . --attach --name jarvis",
+        "stop": "pm2 stop jarvis"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Loki-Xer/Jarvis-md.git"
+    },
+    "dependencies": {
+        "@adiwajshing/keyed-db": "^0.2.4",
+        "@ffmpeg-installer/ffmpeg": "^1.1.0",
+        "@ffmpeg-installer/linux-x64": "^4.1.0",
+        "@hapi/boom": "^10.0.1",
+        "@whiskeysockets/baileys": "^6.3.0",
+        "awesome-phonenumber": "^6.4.0",
+        "axios": "^0.24.0",
+        "browser-id3-writer": "^4.4.0",
+        "cheerio": "^1.0.0-rc.10",
+        "crypto-js": "^4.1.1",
+        "dotenv": "^16.0.3",
+        "express": "latest",
+        "fluent-ffmpeg": "^2.1.2",
+        "form-data": "^4.0.0",
+        "fs-extra": "^11.1.1",
+        "heroku-client": "^3.1.0",
+        "jarvis-md": "^1.0.0",
+        "jimp": "^0.16.1",
+        "jsdom": "^20.0.0",
+        "node-fetch": "^2.0.0",
+        "node-webpmux": "^3.2.0",
+        "pino": "^8.14.1",
+        "pm2": "^5.2.0",
+        "sequelize": "^6.23.0",
+        "simple-git": "^3.20.0",
+        "sqlite3": "^5.1.6",
+        "util": "^0.12.5",
+        "wa-sticker-formatter": "^4.3.2"
+    }
+}
