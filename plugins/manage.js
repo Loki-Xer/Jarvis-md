@@ -55,11 +55,11 @@ System({
     if(!message.isGroup) retrun;
     if (!match) return await message.reply("_*antilink* on/off_\n_*antilink* action warn/kick/null_");
     const { antilink } = await getData(message.chat);
-    if(match.toLowerCase() === 'on') {
+    if(match.toLowerCase().match('on')) {
     	const action = antilink && antilink.message ? antilink.message : 'null';
         await setData(message.jid, action, "true", "antilink");
         return await message.send(`_antilink Activated with action null_\n_*antilink action* warn/kick/null for chaning actions_`)
-    } else if(match.toLowerCase() === 'off') {
+    } else if(match.toLowerCase().match('off')) {
     	const action = antilink && antilink.message ? antilink.message : 'null';
         await setData(message.jid, action, "false", "antilink");
         return await message.send(`_antilink deactivated_`)
