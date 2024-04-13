@@ -26,7 +26,7 @@ const {
       desc: "wame generator",
       type: "misc",
   },async (message, match) => {
-      if (!message.reply_message.i) return message.reply("_*Reply to a user*_");
+      if (!message.quoted) return message.reply("_*Reply to a user*_");
       let sender = 'https://wa.me/' + (message.reply_message.sender || message.mention[0] || message.text).split('@')[0];
       await message.reply(sender);
   });
@@ -39,8 +39,7 @@ const {
       type: "misc",
   }, async (message) => {
      if (!message.quoted) return;
-     const quoted = message.reply_message.viewones ? message.reply_message.msg : message.reply_message.message;
-     await message.client.forwardMessage(message.user.jid, quoted, { quoted: message.data });
+     await message.client.forward(message.user.jid, message.reply_message.message, { quoted: message.data });
   });
   
   System({
