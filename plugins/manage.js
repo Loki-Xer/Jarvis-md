@@ -12,9 +12,9 @@ System({
     pattern: 'antiword ?(.*)',
     desc: 'remove users who use restricted words',
     type: "manage",
-    onlyGroup: true,
     fromMe: true 
 }, async (message, match) => {
+    if(!message.isGroup) return;
     if (!match) return await message.reply("_*antiword* on/off_\n_*antiword* action warn/kick/null_");
     const { antiword } = await transformData(m.jid);
     if(match.toLowerCase() == 'get') {
