@@ -34,11 +34,11 @@ System({
     type: "user",
 }, async (message, match) => {
     if (match === "on") { 
-      const pdm = setData(message.user.id, "active", "true", "antiviewones");
+      const pdm = await setData(message.user.id, "active", "true", "antiviewones");
     if (pdm) return await message.send("_*activated*_");
      await message.send("_*error*_");
     } else if (match === "off") {
-     const pdm = setData(message.user.id, "disactive", "false", "antiviewones");
+     const pdm = await setData(message.user.id, "disactive", "false", "antiviewones");
     if (pdm) return await message.send("_*deactivated*_");
      await message.send("_*error*_");
     } else {
