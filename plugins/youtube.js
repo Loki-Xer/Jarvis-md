@@ -42,7 +42,7 @@ System(
           if (isUrl(matchUrl)) {
             return await message.send(
               await GetYtv(matchUrl),
-              { caption: tiny('*made with 🤍*'), quoted: message.data },
+              { caption: await tiny('*made with 🤍*'), quoted: message.data },
               'video'
             );
           } else {
@@ -73,7 +73,7 @@ System(
           if (isUrl(matchUrl)) {
             return await message.send(
               await GetYtv(matchUrl),
-              { caption: tiny('*made with 🤍*'), quoted: message.data },
+              { caption: await tiny('*made with 🤍*'), quoted: message.data },
               'video'
             );
           } else {
