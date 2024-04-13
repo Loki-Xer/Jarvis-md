@@ -29,7 +29,7 @@ System({
     desc: "Heroku Dyno off",
 }, async (message) => {
     const server = message.client.server;
-    if (server !== "heroku") return await message.reply("_shutdown only works in Heroku_");    
+    if (server !== "HEROKU") return await message.reply("_shutdown only works in Heroku_");    
     await heroku.get(baseURI + "/formation").then(async (formation) => {
     await message.send(`_Jarvis is shutting down..._`);
     await heroku.patch(baseURI + "/formation/" + formation[0].id, { body: { quantity: 0 }, });
@@ -52,8 +52,8 @@ async (message, match) => {
     const key = match.slice(0, match.indexOf(':')).trim();
     const value = match.slice(match.indexOf(':') + 1).trim();
     if (!key || !value) return await message.send(`Example: .setvar SUDO:917025673121`); 
-    if (server !== "heroku" && server !== "koyeb") return await message.reply("_setvar only works in Heroku or Koyeb_");
-    if (server === "heroku") {
+    if (server !== "HEROKU" && server !== "KOYEB") return await message.reply("_setvar only works in Heroku or Koyeb_");
+    if (server === "HEROKU") {
         await heroku.patch(baseURI + "/config-vars", {
             body: {
                 [key.toUpperCase()]: value,
@@ -65,7 +65,7 @@ async (message, match) => {
         .catch(async (error) => {
             await message.send(`HEROKU: ${error.body.message}`);
         });
-    } else if (server === "koyeb") {
+    } else if (server === "KOYEB") {
         let check = await get_deployments();
         if (check === 'true')
             return await message.reply('_Please wait..._\n_Currently 2 instances are running in Koyeb, wait to stop one of them._');
@@ -85,8 +85,8 @@ System({
 async (message, match) => {
     const server = message.client.server;
     if (!match) return await message.send("_Example: delvar sudo_");
-    if (server !== "heroku" && server !== "koyeb") return await message.reply("_delvar only works in Heroku or Koyeb_")
-    if (server === "heroku") {
+    if (server !== "HEROKU" && server !== "KOYEB") return await message.reply("_delvar only works in Heroku or Koyeb_")
+    if (server === "HEROKU") {
         heroku
             .get(baseURI + "/config-vars")
             .then(async (vars) => {
@@ -107,7 +107,7 @@ async (message, match) => {
             .catch(async (error) => {
                 await message.send(`*HEROKU: ${error.body.message}*`);
             });
-    } else if (server === "koyeb") {
+    } else if (server === "KOYEB") {
         let check = await get_deployments();
         if (check === 'true')
             return await message.reply('_Please wait..._\n_Currently 2 instances are running in Koyeb, wait to stop one of them._');
@@ -126,12 +126,12 @@ System({
     desc: "all environment variables",
 }, async (message) => {
     const server = message.client.server;
-    if (server !== "heroku" && server !== "koyeb") {
+    if (server !== "HEROKU" && server !== "KOYEB") {
         await message.reply("_allvar only works in Heroku or Koyeb_");
         return;
     }
     
-    if (server === "heroku") {
+    if (server === "HEROKU") {
         let msg = "Here are all your Heroku vars\n\n\n";
 
         try {
@@ -145,7 +145,7 @@ System({
         } catch (error) {
             await message.send(`HEROKU: ${error.message}`);
         }
-    } else if (server === "koyeb") {
+    } else if (server === "KOYEB") {
         let msg = "Here are all your Koyeb vars\n\n";
         let data = await getallvar();
         return await message.reply(msg + data);
@@ -163,12 +163,12 @@ System({
     const server = message.client.server;
     if (!match) return await message.send(`_Example: getvar sudo_`);
     
-    if (server !== "heroku" && server !== "koyeb") {
+    if (server !== "HEROKU" && server !== "KOYEB") {
         await message.reply("_getvar only works in Heroku or Koyeb_");
         return;
     }
     
-    if (server === "heroku") {
+    if (server === "HEROKU") {
         const key = match.trim().toUpperCase();
         
         heroku
@@ -182,7 +182,7 @@ System({
             .catch(async (error) => {
                 await message.send(`HEROKU: ${error.body.message}`);
             });
-    } else if (server === "koyeb") {
+    } else if (server === "KOYEB") {
         let data = await getvar(match);
         return await message.reply(data);
     }
@@ -211,24 +211,23 @@ System({
     const server = message.client.server;
     var newSudo = (message.mention[0] || message.reply_message.sender).split("@")[0];
     
-    if (!newSudo)
-        return await m.reply("*reply to a number*");
+    if (!newSudo) return await m.reply("*reply to a number*");
 
     var setSudo = (Config.SUDO + "," + newSudo).replace(/,,/g, ",");
     setSudo = setSudo.startsWith(",") ? setSudo.replace(",", "") : setSudo;
     
-    if (server !== "heroku" && server !== "koyeb") {
+    if (server !== "HEROKU" && server !== "KOYEB") {
         await message.send("setsudo only works in Heroku or Koyeb");
         return;
     }
     
-    if (server === "heroku") {
+    if (server === "HEROKU") {
         await heroku.patch(baseURI + "/config-vars", { body: { SUDO: setSudo } })
             .then(async (app) => {
                 await message.reply("*new sudo numbers are :* " + setSudo);
                 await message.reply("_It takes 30 seconds to take effect_");
             });
-    } else if (server === "koyeb") {
+    } else if (server === "KOYEB") {
         let check = await get_deployments();
         if (check === 'true')
             return await message.reply('_Please wait..._\n_Currently 2 instances are running in Koyeb, wait to stop one of them._');
@@ -258,9 +257,9 @@ async (message, match) => {
         if (commits.total === 0) {
             return await message.send(`_Jarvis is on the latest version: v${version}_`);
         } else {
-            if (server === "heroku") {
+            if (server === "HEROKU") {
                 await updateBot(message);
-            } else if (server === "koyeb") {
+            } else if (server === "KOYEB") {
                 await message.send("_*Building started 𐍮*_")
                 let check = await get_deployments();
                 if (check === 'true') return citel.reply('_Please wait..._\n_Currently 2 instances are running in Koyeb, wait to stop one of them._');
@@ -296,7 +295,7 @@ System({
 }, async (message, match, m) => {
     const server = message.client.server;
     await message.send("_*Restarting*_");
-    if (server === "heroku") {
+    if (server === "HEROKU") {
         await heroku.delete(baseURI + "/dynos").catch(async (error) => {
             await message.sendMessage(`HEROKU : ${error.body.message}`);
         });
@@ -332,11 +331,11 @@ if (!match === "private" || !match === "public")
     if (!key || !value)
         return await message.sendPollMessage({ name: "Choose mode to change mode", values: [{ displayText: "private", id: "mode private"}, { displayText: "public", id: "mode public"}], onlyOnce: true, withPrefix: true, participates: [message.sender] });
     
-    if (server !== "heroku" && server !== "koyeb") {
+    if (server !== "HEROKU" && server !== "KOYEB") {
         return await message.reply("_*Mod cmd only works in Heroku or Koyeb*_");
     }
     
-    if (server === "heroku") {
+    if (server === "HEROKU") {
         await heroku.patch(baseURI + "/config-vars", {
             body: {
                 [key.toUpperCase()]: value,
@@ -348,7 +347,7 @@ if (!match === "private" || !match === "public")
         .catch(async (error) => {
             await message.send(`HEROKU: ${error.body.message}`);
         });
-    } else if (server === "koyeb") {
+    } else if (server === "KOYEB") {
         let check = await get_deployments();
         if (check === 'true')
         return await message.reply('_Please wait..._\n_Currently 2 instances are running in Koyeb, wait to stop one of them._');
