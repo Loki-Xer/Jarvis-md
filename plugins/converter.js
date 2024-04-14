@@ -106,22 +106,22 @@ System({
     desc: 'make audio into black video',
     type: "converter"
 }, async (message) => {
-   const ffmpeg = ff();
-   if (!message.reply_message?.audio) return await message.send("_Reply to an audio message_");
-   const file = './lib/temp/black.jpg';
-   const audioFile = './lib/temp/audio.mp3';
-   fs.writeFileSync(audioFile, await message.reply_message.download());
-   ffmpeg.input(file);
-   ffmpeg.input(audioFile);
-   ffmpeg.output('./lib/temp/videoMixed.mp4');
-   ffmpeg.on('end', async () => {
-        await message.send(fs.readFileSync('./lib/media/videoMixed.mp4'), {}, 'video');
-   });
-   ffmpeg.on('error', async (err) => {
-        console.error('FFmpeg error:', err);
-        await message.reply("An error occurred during video conversion.");
-   });
-   ffmpeg.run();
+        const ffmpeg = ff();
+        if (!message.reply_message?.audio) return await message.send("_Reply to an audio message_");
+        const file = './lib/temp/black.jpg';
+        const audioFile = './lib/temp/audio.mp3';
+        fs.writeFileSync(audioFile, await message.reply_message.download());
+        ffmpeg.input(file);
+        ffmpeg.input(audioFile);
+        ffmpeg.output('./lib/media/videoMixed.mp4');
+        ffmpeg.on('end', async () => {
+            await message.send(fs.readFileSync('./lib/media/videoMixed.mp4'), {}, 'video');
+        });
+        ffmpeg.on('error', async (err) => {
+            console.error('FFmpeg error:', err);
+            await message.reply("An error occurred during video conversion.");
+        });
+        ffmpeg.run();
 });
 
 
