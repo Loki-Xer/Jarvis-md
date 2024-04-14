@@ -43,12 +43,12 @@ System({
 async (message, match, client) => {
     if (!match) return await message.reply("_Enter a tg sticker url_\nEg: https://t.me/addstickers/Vc_me_dance_pack_by_fStikBot\nKeep in mind that there is a chance of ban if used frequently");
     let packid = match.split("/addstickers/")[1];
-    let { result } = await getJson(`https://api.telegram.org/bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4/getStickerSet?name=${encodeURIComponent(packid)}`);
+    let { result } = await getJson(`https://api.telegram.org/${config.TGTOKEN}/getStickerSet?name=${encodeURIComponent(packid)}`);
     if (result.is_animated) return message.reply("_Animated stickers are not supported_");
     message.reply(`*Total stickers :* ${result.stickers.length}\n*Estimated complete in:* ${result.stickers.length * 1.5} seconds\nKeep in mind that there is a chance of ban if used frequently`.trim());
     for (let sticker of result.stickers) {
-        let file_path = await getJson(`https://api.telegram.org/bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4/getFile?file_id=${sticker.file_id}`);
-        const buff = `https://api.telegram.org/file/bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4/${file_path.result.file_path}`;
+        let file_path = await getJson(`https://api.telegram.org/${config.TGTOKEN}/getFile?file_id=${sticker.file_id}`);
+        const buff = `https://api.telegram.org/file/${config.TGTOKEN}/${file_path.result.file_path}`;
         const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
         const packname = stickerPackNameParts[0];
         const author = stickerPackNameParts[1];
