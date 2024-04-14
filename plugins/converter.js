@@ -144,7 +144,7 @@ System({
         quality: 75, 
    });
    const buffer = await sticker.toBuffer();
-   await client.sendMessage(msg.chat, {sticker: buffer}, {quoted: msg });
+   await msg.client.sendMessage(msg.chat, { sticker: buffer }, { quoted: msg });
 });
 
 System({
@@ -191,7 +191,7 @@ System({
         quality: 75,
    });
   const buffer = await sticker.toBuffer();
-  await client.sendMessage(msg.chat, {sticker: buffer}, {quoted: msg });
+  await msg.client.sendMessage(msg.chat, { sticker: buffer }, { quoted: msg });
 });
 
 
@@ -212,7 +212,7 @@ System({
         quality: 75, 
    });
    const buffer = await sticker.toBuffer();
-   await client.sendMessage(msg.chat, {sticker: buffer}, {quoted: msg });
+   await msg.client.sendMessage(msg.chat, { sticker: buffer }, {quoted: msg });
 });
 
 System({
