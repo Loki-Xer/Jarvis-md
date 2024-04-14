@@ -83,7 +83,7 @@ System({
     type: "converter",
 }, async (message) => {
    if (!message.reply_message?.sticker) return await message.reply("_Reply to a sticker_");
-   if (!message.reply_message.stickerMessage.isAnimated) return await message.reply("_Reply to an animated sticker message_");
+   if (!message.reply_message.isAnimated) return await message.reply("_Reply to an animated sticker message_");
    let buffer = await message.reply_message.download();
    return await message.send(buffer, { mimetype: "video/mp4" }, "video");
 });
@@ -95,7 +95,7 @@ System({
     type: "converter",
 }, async (message) => {
    if (!message.reply_message?.sticker) return await message.reply("_Reply to a sticker_");
-   if (!message.reply_message.stickerMessage.isAnimated) return await message.reply("_Reply to an animated sticker message_");
+   if (!message.reply_message.isAnimated) return await message.reply("_Reply to an animated sticker message_");
    const buffer = await message.reply_message.download();
    return await message.send(buffer, { gifPlayback: true, mimetype: "video/mp4" }, "video");
 });
