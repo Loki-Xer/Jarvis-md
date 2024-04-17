@@ -197,7 +197,7 @@ System({
     type: "server" 
  }, async (message, match) => {
     const server = message.client.server;
-    await message.send("_*SUDO NUMBER'S ARA :*_ "+"```"+config.SUDO+"```")
+    await message.send("_*SUDO NUMBER'S ARA :*_ "+"```"+Config.SUDO+"```")
   });
 
 
