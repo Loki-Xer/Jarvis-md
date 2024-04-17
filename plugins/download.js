@@ -1,4 +1,5 @@
-const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl } = require("../lib/");
+const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl, IronMan, getBuffer, toAudio } = require("../lib/");
+const axios = require('axios');
 
 const fetchData = async (mediafireUrl) => {
     const data = await getJson(config.API + "download/mediafire?link=" + mediafireUrl)
@@ -139,4 +140,76 @@ System({
     const optionChunks = [];
     while (options.length > 0) optionChunks.push(options.splice(0, 10));
     for (const chunk of optionChunks) await message.sendPollMessage({ name: "\n*Instagram Story Downloader ⬇️*\n", values: chunk, onlyOnce: false, id: message.key.id, withPrefix: true, participates: [message.sender] });
+});
+
+
+System({
+  pattern: 'soundcloud (.*)',
+  fromMe: isPrivate,
+  desc: 'SoundCloud downloader',
+  type: 'download',
+}, async (message, match) => {
+  if (!match || !match.includes('soundcloud')) {
+    await message.send("*Need a SoundCloud link to download*\n_Example: .soundcloud https://m.soundcloud.com/corpse_husband/life-waster_");
+    return;
+  }
+
+  try {
+    const link = match.trim();
+    const response = await axios.get(IronMan(`ironman/soundcloud/download?link=${link}`));
+    const title = response.data.title;
+    const qt = await message.send(`*Downloading ${title}*`);
+    const turl = response.data.thumb;
+    const aurl = IronMan(`ironman/scdl?url=${link}`);
+    const aud = await getBuffer(aurl);
+    const img = await getBuffer(turl);
+    const result = await toAudio(aud, 'mp3');
+    await message.client.sendMessage(message.from, {
+      audio: result,
+      mimetype: 'audio/mpeg',
+      contextInfo: {
+        externalAdReply: {
+          title: title,
+          body: 'ᴊᴀʀᴠɪꜱ-ᴍᴅ',
+          thumbnail: img,
+          mediaType: 1,
+          mediaUrl: aurl,
+          sourceUrl: link,
+          showAdAttribution: false,
+          renderLargerThumbnail: true
+        }
+      }
+    }, { quoted: qt });
+
+  } catch (error) {
+    console.error('Error at plugin SOUNDCLOUD:', error);
+    await message.send("Error downloading from SoundCloud.\n_Check you're url and try again later..._");
+  }
+});
+
+
+System({
+    pattern: 'livewp ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Download live wallpapers',
+    type: 'download',
+}, async (message, match) => {
+    try {
+        if (!match) {
+            await message.send("*Need a query to search for live wallpapers*\n_Example: .livewp furina_");
+            return;
+        }
+        const query = match.trim();
+        const response = await axios.get(IronMan(`Ironman/live/wallpaper?query=${query}`));
+        const data = response.data;
+        const { Title, Preview_url, Mobile, Desktop } = data;
+        await message.client.sendMessage(message.chat, { video: { url: Preview_url }, caption: `*${Title}*` });
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await message.client.sendMessage(message.chat, { video: { url: Mobile.Download_url }, caption: `「 *MOBILE VERSION* 」\n\n *➥Title:* ${Mobile.Caption}\n *➥Size:* ${Mobile.Size}` });
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await message.client.sendMessage(message.chat, { video: { url: Desktop.Download_url }, caption: `「 *DESKTOP VERSION* 」\n\n *➥Title:* ${Desktop.Caption}\n *➥Quality:* ${Desktop.Quality}\n *➥Size:* ${Desktop.Size}` });  
+    } catch (error) {
+        console.error('Error at plugin LIVEWP:', error);
+        await message.send("No wallpaper found for that query.\n_Try again later_");
+    }
 });
