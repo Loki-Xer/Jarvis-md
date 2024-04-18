@@ -65,7 +65,37 @@
             "description": "owner number of the bot",
             "required": false,
             "value":"41782221168"
-        }
+        },
+        "ALLWAYS_ONLINE": {
+            "description": "show bot number last seen as online",
+            "required": false,
+            "value":"false"
+        },
+        "READ_MSG": {
+            "description": "Read all messages",
+            "required": false,
+            "value":"false"
+        },
+        "SAVE_STATUS": {
+            "description": "save all status message",
+            "required": false,
+            "value":"null"
+        },
+        "STATUS_VIEW": {
+            "description": "status views, values= true,only-view=jid, not-view=jid",
+            "required": false,
+            "value":"false"
+        },
+        "REJECT_CALL": {
+            "description": "automatic reject call",
+            "required": false,
+            "value":"false"
+        },
+        "ERROR_MSG": {
+            "description": "send error messages to bot number",
+            "required": false,
+            "value":"false"
+        },
     },
       "addons": [{
       "plan": "heroku-postgresql"
