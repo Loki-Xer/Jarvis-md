@@ -61,8 +61,8 @@ System({
     type: "converter",
 }, async (message) => {
    const buff = await message.reply_message.download();
-   const ptv = await message.pvt(buff);
-   await message.forward(message.jid, { ptvMessage: ptv }, {});
+   const videoMessage = await message.client.generatPvtMessage(buff);
+   await message.client.forward(message.jid, { 'ptvMessage': videoMessage }, {});
 });
 
 System({
