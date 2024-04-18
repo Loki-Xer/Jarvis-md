@@ -130,9 +130,9 @@ System({
     fromMe: isPrivate,
     desc: "Changes photo to sticker",
     type: "converter",
-}, async (message, text, msg, client) => {
-   if (!(message.reply_message.sticker || message.reply_message.image)) return await message.reply("_*Reply to photo or sticker*_");       
-   let media = await message.reply_message.download();
+}, async (msg) => {
+   if (!(msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");       
+   let media = await msg.reply_message.download();
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
         author: stickerPackNameParts[1], 
@@ -142,7 +142,7 @@ System({
         quality: 75, 
    });
    const buffer = await sticker.toBuffer();
-   await msg.client.sendMessage(msg.chat, { sticker: buffer }, { quoted: msg });
+   await msg.client.sendMessage(msg.chat, { sticker: buffer }, { quoted: msg.reply_message.data });
 });
 
 System({
@@ -177,9 +177,9 @@ System({
     fromMe: isPrivate,
     desc: "Changes photo to sticker",
     type: "converter",
-}, async (message, text, msg, client) => {
+}, async (message) => {
    if (!(message.reply_message.sticker || message.reply_message.image)) return await message.reply("_*Reply to photo or sticker*_");
-   let media = await msg.reply_message.download();
+   let media = await message.reply_message.download();
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
         author: stickerPackNameParts[1], 
@@ -189,7 +189,7 @@ System({
         quality: 75,
    });
   const buffer = await sticker.toBuffer();
-  await msg.client.sendMessage(msg.chat, { sticker: buffer }, { quoted: msg });
+  await message.client.sendMessage(message.chat, { sticker: buffer }, { quoted: message.reply_message.data });
 });
 
 
@@ -198,8 +198,8 @@ System({
     fromMe: isPrivate,
     desc: "Changes photo to sticker",
     type: "converter",
-}, async (message, text, msg, client) => {
-   if (!(message.reply_message.sticker || message.reply_message.image)) return await message.reply("_*Reply to photo or sticker*_");        
+}, async (msg) => {
+   if (!(msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");        
    let media = await msg.reply_message.download();
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
@@ -210,7 +210,7 @@ System({
         quality: 75, 
    });
    const buffer = await sticker.toBuffer();
-   await msg.client.sendMessage(msg.chat, { sticker: buffer }, {quoted: msg });
+   await msg.client.sendMessage(msg.chat, { sticker: buffer }, { quoted: msg.reply_message.data });
 });
 
 System({
@@ -218,7 +218,7 @@ System({
     fromMe: isPrivate,
     desc: "Changes Exif data of stickers",
     type: "tool",
-}, async (message, match,) => {
+}, async (message, match) => {
    let data;
    if (!message.reply_message || (!message.reply_message.sticker && !message.reply_message.audio)) return await message.reply("_Reply to a sticker or audio_");
    if (message.reply_message.sticker) {
@@ -249,7 +249,7 @@ System({
     fromMe: isPrivate,
     desc: "_Converts Photo or video to sticker_",
     type: "converter",
-}, async (message, match, m) => {
+}, async (message, match) => {
    if (!(message.reply_message.video || message.reply_message.image)) return await message.reply("_Reply to photo or video_");   
    let buff = await message.reply_message.download();
    await message.send(buff, {
