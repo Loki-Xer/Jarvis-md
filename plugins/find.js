@@ -30,7 +30,7 @@ System({
     pattern: 'find',
     fromMe: isPrivate,
     desc: 'Find details of a song',
-    type: 'tools',
+    type: 'search',
 }, async (message, match, m) => {
     if (!message.reply_message || (!message.reply_message.audio && !message.reply_message.video)) return await message.reply('*Reply to audio or video*');
     const p = await message.reply_message.downloadAndSaveMedia();
