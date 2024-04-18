@@ -1,5 +1,4 @@
-const { tiny, System, IronMan, isPrivate, getJson } = require("../lib/");
-const axios = require('axios');
+const { System, IronMan, isPrivate, getJson } = require("../lib/");
 
 
 System({ 
@@ -9,15 +8,12 @@ System({
     type: "anime" 
 }, async (message) => {
     const response = await getJson(await IronMan("ironman/waifu"));
-    if (response.status) {
+    if (!response.status) return await message.send("_*Failed to fetch image*_");
         await message.send(
             response.ironman.url,
-            { caption: await tiny("*here is your waifu*"), quoted: message.data },
+            { caption: "*here is your waifu*", quoted: message.data },
             "image"
         );
-    } else {
-        await message.send("Failed to fetch image");
-    }
 });
 
 System({ 
@@ -27,36 +23,28 @@ System({
     type: "anime" 
 }, async (message) => {
     const response = await getJson(await IronMan("ironman/neko"));
-    if (response.status) {
+    if (!response.status) return await message.send("Failed to fetch image");
         await message.send(
             response.ironman.url,
-            { caption: await tiny("*here is your neko*"), quoted: message.data },
+            { caption: "*here is your neko*", quoted: message.data },
             "image"
         );
-    } else {
-        await message.send("Failed to fetch image");
-    }
 });
 
 
 System({
-    pattern: 'aquote ?(.*)',
-    fromMe: isPrivate,
-    desc: 'Get a random anime quote',
-    type: 'anime',
-}, async (message, match, m) => {    
-    try {
-        const response = await axios.get(IronMan('api/aquote'));
-        const data = response.data;
-        if (data && data.result && data.result.length > 0) {
-            const randomIndex = Math.floor(Math.random() * data.result.length);
-            const { english: enquote, character, anime } = data.result[randomIndex];
-            await message.send(`*➭QUOTE:* ${enquote}\n*➭CHARACTER:* ${character}\n*➭ANIME:* ${anime}`);
-        } else {
-            await message.send('No quotes found.');
-        }
-    } catch (error) {
-        console.error('Error at plugin AQUOTE:', error.message);
-        await message.send('Please try again later.');
-    }
+	pattern: 'aquote ?(.*)',
+	fromMe: isPrivate,
+	desc: 'Get a random anime quote',
+	type: 'anime',
+}, async (message, match, m) => {
+	const data = await getJson(IronMan('api/aquote'));
+	if (!data && !data.result && !data.result.length > 0) return await message.reply('_*No quotes found.*_');
+	const randomIndex = Math.floor(Math.random() * data.result.length);
+	const {
+		english: enquote,
+		character,
+		anime
+	} = data.result[randomIndex];
+	await message.send(`*➭QUOTE:* ${enquote}\n*➭CHARACTER:* ${character}\n*➭ANIME:* ${anime}`);
 });
