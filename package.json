@@ -1,6 +1,6 @@
 {
     "name": "Jarvis-md",
-    "version": "1.1.1",
+    "version": "0.7.6",
     "description": "A simple WhatsApp Bot Based On WhiskeySockets/Baileys",
     "main": "index.js",
     "scripts": {
@@ -35,10 +35,10 @@
         "node-webpmux": "^3.2.0",
         "pino": "^8.14.1",
         "pm2": "^5.2.0",
-        "pg": "^8.11.3",
         "sequelize": "^6.23.0",
         "simple-git": "^3.20.0",
         "sqlite3": "^5.1.6",
+        "sharp": "latest",
         "util": "^0.12.5",
         "wa-sticker-formatter": "^4.3.2"
     }
