@@ -1,27 +1,9 @@
-const { System, yts, isPrivate } = require('../lib');
+const { System, yts, isPrivate, audioCut } = require('../lib');
 const FormData = require('form-data');
 const fetch = require('node-fetch');
 const crypto = require('crypto');
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
-
-
-const audioCut = (infile, start, end, filename = "cutted") => new Promise((function(output, error) {
-    ffmpeg(infile).setStartTime(start).setDuration(end).save(filename + ".mp3").on("error", (e => error(new Error(e.message)))).on("end", (() => {
-        const file = fs.readFileSync(filename + ".mp3");
-        output(file);
-    }));
-}));
-
-const options = {
-    host: 'identify-eu-west-1.acrcloud.com',
-    endpoint: '/v1/identify',
-    signature_version: '1',
-    data_type: 'audio',
-    secure: true,
-    access_key: '8c21a32a02bf79a4a26cb0fa5c941e95',
-    access_secret: 'NRSxpk6fKwEiVdNhyx5lR0DP8LzeflYpClNg1gze',
-};
 
 function buildStringToSign(
     method,
@@ -50,10 +32,17 @@ System({
     desc: 'Find details of a song',
     type: 'tools',
 }, async (message, match, m) => {
-    if (!message.reply_message || (!message.reply_message.audio && !message.reply_message.video)) {
-        return await message.reply('*Reply to audio or video*');
-    }
+    if (!message.reply_message || (!message.reply_message.audio && !message.reply_message.video)) return await message.reply('*Reply to audio or video*');
     const p = await message.reply_message.downloadAndSaveMedia();
+    const options = {
+       host: 'identify-eu-west-1.acrcloud.com',
+       endpoint: '/v1/identify',
+       signature_version: '1',
+       data_type: 'audio',
+       secure: true,
+       access_key: '8c21a32a02bf79a4a26cb0fa5c941e95',
+       access_secret: 'NRSxpk6fKwEiVdNhyx5lR0DP8LzeflYpClNg1gze',
+    };
     const data = await audioCut(p, 0, 15);
     const current_data = new Date();
     const timestamp = current_data.getTime() / 1000;
@@ -65,9 +54,7 @@ System({
         options.signature_version,
         timestamp
     );
-
     const signature = sign(stringToSign, options.access_secret);
-
     const form = new FormData();
     form.append('sample', data);
     form.append('sample_bytes', data.length);
@@ -86,8 +73,8 @@ System({
         return await message.reply(status.msg);
     }
     const { album, release_date, artists, title } = metadata.music[0];
-    const videos = await yts(title);
+    const yt = await Ytsearch(match);
 
-    const cap = `*❯ Title :* ${title}\n*❯ Album :* ${album.name || ''}\n*❯ Artists :* ${artists !== undefined ? artists.map((v) => v.name).join(', ') : ''}\n*❯ Release Date :* ${release_date}`;
+    const cap = `*_${yt.title}_*\n\n\n*Album :* ${album.name || ''}\n*Artists :* ${artists !== undefined ? artists.map((v) => v.name).join(', ') : ''}\n*Release Date :* ${release_date}\n\n\`\`\`1.⬢\`\`\` *audio*\n\`\`\`2.⬢\`\`\` *video*\n\n_*Send a number as a reply to download*_`
     await message.client.sendMessage(message.chat, { image: { url: `${videos.all[0].image}` }, caption: cap });
 });
