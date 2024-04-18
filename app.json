@@ -64,7 +64,7 @@
         "SUDO": {
             "description": "owner number of the bot",
             "required": false,
-            "value":"41782221168"
+            "value":"4915252819677"
         },
         "ALLWAYS_ONLINE": {
             "description": "show bot number last seen as online",
