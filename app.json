@@ -95,7 +95,7 @@
             "description": "send error messages to bot number",
             "required": false,
             "value":"false"
-        },
+        }
     },
       "addons": [{
       "plan": "heroku-postgresql"
