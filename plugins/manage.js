@@ -33,9 +33,10 @@ System({
         return await message.send(`_antiword deactivated_`)
     } else if(match.toLowerCase().match('action')) {
     	const status = antiword && antiword.status ? antiword.status : 'false';
+	const word = antiword && antiword.value ? antiword.value : undefined;
         match = match.replace(/action/gi,'').trim();
         if(!actions.includes(match)) return await message.send('_action must be warn,kick or null_')
-        await makeInDb(message.jid, { status: status, action: action, value: match }, "antiword");
+        await makeInDb(message.jid, { status: status, action: match, value: word }, "antiword");
         return await message.send(`_antiword Action Updated_`);
     } else {
     	if(!match) return await message.send('_*Example:* antiword 🏳️‍🌈, gay, nigga_');
