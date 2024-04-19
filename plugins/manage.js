@@ -15,7 +15,7 @@ System({
     fromMe: true 
 }, async (message, match, m) => {
     if (!match) return await message.reply("_*antiword* on/off_\n_*antiword* action warn/kick/null_");
-        const antiword = await transformData({ type: "antiword", id: message.jid })
+        const antiword = await transformData(message.jid, "antiword")
     if(match.toLowerCase() == 'get') {
     	const status = antiword && antiword.status == 'true' ? true : false
         if(!status  || !antiword.value) return await message.send('_Not Found_');
@@ -174,7 +174,7 @@ System({
     desc: "Manage anti-delete settings",
     type: "user",
 }, async (message, match) => {
-	  const antidelete = await transformData({ type: "antidelete", id: message.user.id })
+	  const antidelete = await transformData(message.user.id, "antidelete")
 	const target = match.replace("send deleted message to ", "").replace("{", "").replace("}", "");
 	  if (match === "on") {
 		const sendto = antidelete && antidelete.action ? antidelete.action : "chat";
