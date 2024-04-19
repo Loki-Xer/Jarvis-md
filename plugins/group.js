@@ -391,7 +391,7 @@ System({
 })
 
 System({
-    pattern: "ctt",
+    pattern: "create",
     fromMe: true,
     desc: "to create a group",
     type: "group",
