@@ -17,10 +17,15 @@ const {
     isPrivate,
     parsedJid,
     warnMessage,
-    isBotAdmins,
     updateProfilePicture,
     extractUrlFromMessage,
 } = require("../lib/");
+
+const isBotAdmins = async (message) => {
+	const groupMetadata = await message.client.groupMetadata(message.chat)
+	const admins = await groupMetadata.participants.filter(v => v.admin !== null).map(v => v.id)
+	return admins.includes(message.user_id)
+}
 
 System({
     pattern: 'add ?(.*)',
@@ -281,8 +286,7 @@ System({
 	desc: 'Left from group',
 	type: 'group'
 }, async (message) => {
-    if (!message.isGroup)
-    return await message.reply("_This command is for groups_");
+    if (!message.isGroup) return await message.reply("_This command is for groups_");
     await message.client.groupLeave(message.jid);
 });
 
@@ -399,8 +403,7 @@ System({
     let gName = match || m.pushName;
     if (!m.reply_message.sender) return m.reply("_reply to a user_");
     const group = await m.client.groupCreate(gName, [m.reply_message.sender, m.sender]);
-    const name = await m.getName(m.sender);
-    await m.send("_Group successfully created:_ ");
+    await m.send("_Group successfully created_ ");
 });
 
 System({
