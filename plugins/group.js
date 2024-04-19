@@ -334,8 +334,9 @@ System({
     if (!match) return await message.send('*Need Subject!*\n*Example: gname New Subject!*.')
     const meta = await message.client.groupMetadata(message.chat)
     if (!meta.restrict) {
-    await message.client.groupUpdateSuboct(message.chat, match)
-    return await message.send("*Subject updated*") }
+      await message.client.groupUpdateSubject(message.chat, match)
+      return await message.send("*Subject updated*") 
+    }
     const isbotAdmin = await isBotAdmins(message)
     if (!isbotAdmin) return await message.send("I'm not an admin")
     await client.groupUpdateSubject(message.chat, match)
