@@ -96,7 +96,7 @@ System({
     match = match.replace(/[^0-9,!]/g, '');
     if(!match) return await message.send('value must be number');
     const status = antifake && antifake.status ? antifake.status : 'true';
-    await setData(message.jid, data, status, "antifake");
+    await setData(message.jid, match, status, "antifake");
     return await message.send(`_Antifake Updated_`);
 });
 
