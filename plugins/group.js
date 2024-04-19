@@ -283,7 +283,7 @@ System({
 }, async (message) => {
     if (!message.isGroup)
     return await message.reply("_This command is for groups_");
-    await message.client.groupLeave(mmessage.jid);
+    await message.client.groupLeave(message.jid);
 });
 
 System({
@@ -395,7 +395,7 @@ System({
     fromMe: true,
     desc: "to create a group",
     type: "group",
-}, async (m) => {
+}, async (m, match) => {
     let gName = match || m.pushName;
     if (!m.reply_message.sender) return m.reply("_reply to a user_");
     const group = await m.client.groupCreate(gName, [m.reply_message.sender, m.sender]);
