@@ -77,7 +77,7 @@ const {
       desc: "To get URL short",
       type: "misc",
   }, async (message, match) => {
-     match = match || (message.reply_message && message.reply_message.text);
+     match = match || message.reply_message.text;
      if (!match) return await message.reply("_Reply to a URL or enter a URL_");          
      if (!isUrl(match)) return await message.reply("_Not a valid URL_");
      let short = await getJson(await LokiXer(`bitly?link=${match}`));
