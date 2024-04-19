@@ -91,14 +91,11 @@ const {
       type: "misc",
   }, async (message, match) => {
      let pp;
+     let status;
      let user = message.reply_message?.sender || (match ? match.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : null);
      if (!user) return message.send('_Need a User!');
-     try {
-        pp = await message.client.profilePictureUrl(user, 'image');
-      } catch {
-        pp = 'https://i.imgur.com/b3hlzl5.jpg';
-      }
-      let status = await message.client.fetchStatus(user);
+     try { pp = await message.client.profilePictureUrl(user, 'image'); } catch { pp = 'https://i.imgur.com/b3hlzl5.jpg'; }
+     try { status = await message.client.fetchStatus(user); } catch { status = 'private'; }
       const date = new Date(status.setAt);
       const options = {
         year: 'numeric',
