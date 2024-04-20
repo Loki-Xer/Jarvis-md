@@ -81,35 +81,32 @@ System({
     fromMe: isPrivate,
     desc: "Get details of a Device",
     type: "search"
-}, async (message, match, { getJson, IronMan }) => {
-    if (!match) return await message.send("*Need a device name*\n_Example: device Xiaomi 11 i_");               
+}, async (message, match, m) => {
+    if (!match) return await message.send("*Need a device name*\n_Example: device Xiaomi 11 i_");
     var data = await getJson(IronMan(`ironman/device?query=${match}`));
     if (Array.isArray(data) && data.length > 0) {
         const { id, name, img, description } = data[0];
         const cap = `*➭Name:* ${name}\n*➭Id:* ${id}\n*➭Description:* ${description}`;
-        await message.client.sendMessage(message.chat, {
-            image: { url: img },
-            caption: cap
-        });
+        await message.client.sendMessage(message.chat, { image: { url: img }, caption: cap });
     } else {
         await message.send("*Device not Found*");
     }
 });
 
-
 System({
     pattern: 'wallpaper ?(.*)',
     fromMe: isPrivate,
     desc: 'wallpaper search',
-    type: 'search',
-}, async (message, match, { getJson, IronMan }) => {   
-    if (!match) return await message.send("*Need a wallpaper name*\n_Example: .wallpaper mountain_");      
+    type: 'search'
+}, async (message, match, m) => {
+    if (!match) return await message.send("*Need a wallpaper name*\n_Example: .wallpaper mountain_");
     const query = match.trim(); 
-    const response = await getJson(IronMan(`ironman/wallpaper?search=${query}`));
+    const response = await axios.get(IronMan(`ironman/wallpaper?search=${query}`));
     if (response.data.length > 0) {
         const images = response.data;
         const randomIndexes = Array.from({ length: 5 }, () => Math.floor(Math.random() * images.length));
-        const randomImages = randomIndexes.map(index => images[index].url);
+        const randomImages = randomIndexes.map(index => images[index]);
+        
         for (const url of randomImages) {
             await message.client.sendMessage(message.chat, { image: { url }, caption: "" });
             await new Promise(resolve => setTimeout(resolve, 1000));
