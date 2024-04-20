@@ -47,35 +47,32 @@ System({
 
 
 System({
-    pattern: "scs (.*)",
-    fromMe: isPrivate,
-    desc: "SoundCloud search",
-    type: "search"
-}, async (message, match, { axios, IronMan }) => {
-    if (!match) return await message.send("*Need a query to search*\n_Example: .scs life waster_");
-    const fullResult = match.trim().startsWith("-full");     
-    const query = fullResult ? match.replace("-full", "").trim() : match.trim();
-    const { data: { result: results } } = await axios.get(IronMan(`ironman/s/soundcloud?query=${query}`));
-    if (!results || results.length === 0) return await message.send("No results found.");
-    
-    if (fullResult) {
-        let fullit = "";
-        results.forEach(result => {
-            fullit += `*Title*: ${result.title}\n*URL*: ${result.url}\n*Artist*: ${result.artist}\n*Views*: ${result.views}\n*Release*: ${result.release}\n*Duration*: ${result.duration}\n\n`;
-        });
-        await message.send(fullit);
-    } else {
-        const furina = results[0];
-        let caption = `╔═════◇\n\n*➭Title*: ${furina.title}\n*➭Artist*: ${furina.artist}\n*➭Views*: ${furina.views}\n*➭Release*: ${furina.release}\n*➭Duration*: ${furina.duration}\n*➭URL*: ${furina.url}\n\n*Use -full in front of query to get full results*\n_Example: .scs -full ${match}_\n\n╚══════════════════╝`;
-        if (furina.thumb) {
-            await message.client.sendMessage(message.chat, {
-                image: { url: furina.thumb },
-                caption: caption
+        pattern: "scs (.*)",
+        fromMe: isPrivate,
+        desc: "SoundCloud search",
+        type: "search"
+}, async (message, match) => {
+        if (!match) return await message.send("*Need a query to search*\n_Example: .scs life waster_");
+        const fullResult = match.trim().startsWith("-full");
+        const query = fullResult ? match.replace("-full", "").trim() : match.trim();
+        const { result: results } = await getJson(IronMan(`ironman/s/soundcloud?query=${query}`));
+        if (!results || results.length === 0) return await message.send("No results found.");
+        if (fullResult) {
+            let fullit = "";
+            results.forEach(result => {
+                fullit += `*Title*: ${result.title}\n*URL*: ${result.url}\n*Artist*: ${result.artist}\n*Views*: ${result.views}\n*Release*: ${result.release}\n*Duration*: ${result.duration}\n\n`;
             });
+            await message.send(fullit);
         } else {
-            await message.send(caption);
+            const furina = results[0];
+            const { title, artist, views, release, duration, thumb, url } = furina;
+            let caption = `╔═════◇\n\n*➭Title*: ${title}\n*➭Artist*: ${artist}\n*➭Views*: ${views}\n*➭Release*: ${release}\n*➭Duration*: ${duration}\n*➭URL*: ${url}\n\n*Use -full in front of query to get full results*\n_Example: .scs -full ${match}_\n\n╚══════════════════╝`;
+            if (thumb) {
+                await message.client.sendMessage(message.chat, { image: { url: thumb }, caption: caption });
+            } else {
+                await message.send(caption);
+            }
         }
-    }
 });
 
 
