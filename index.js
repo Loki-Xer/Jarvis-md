@@ -1,9 +1,9 @@
 const { client } = require("./lib/");
 
-const start = async (text) => {
+const start = async () => {
     try {
         const Client = new client();
-        Client.log(text);
+        Client.log("starting client...");
         await Client.startServer();
         await Client.WaConnect();
     } catch (error) {
@@ -11,4 +11,4 @@ const start = async (text) => {
     }
 };
 
-start("starting client...");
+start();
