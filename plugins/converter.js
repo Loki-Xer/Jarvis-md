@@ -113,9 +113,9 @@ System({
         fs.writeFileSync(audioFile, await message.reply_message.download());
         ffmpeg.input(file);
         ffmpeg.input(audioFile);
-        ffmpeg.output('./lib/media/videoMixed.mp4');
+        ffmpeg.output('./lib/temp/videoMixed.mp4');
         ffmpeg.on('end', async () => {
-            await message.send(fs.readFileSync('./lib/media/videoMixed.mp4'), {}, 'video');
+            await message.send(fs.readFileSync('./lib/temp/videoMixed.mp4'), {}, 'video');
         });
         ffmpeg.on('error', async (err) => {
             console.error('FFmpeg error:', err);
