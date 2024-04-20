@@ -163,7 +163,7 @@ System({
         return await message.reply('_activated_')
     } else if (match === 'off') {
         if (antipromote && antipromote.status == 'false') return message.reply('_Already Deactivated_');
-        await setData(message.jid, "disactive", "false", "antidemote");
+        await setData(message.jid, "disactive", "false", "antipromote");
         return await message.reply('_deactivated_')
     }
 });
