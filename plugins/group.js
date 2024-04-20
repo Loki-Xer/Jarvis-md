@@ -413,5 +413,11 @@ System({
 	desc: "Warn a user",
 	type: "group",
 }, async (message, match) => {
-  await warnMessage(message, match)
+        let user = message.reply_message?.sender || message.mention?.jid?.[0];
+	if (!user) return message.reply("_Reply to someone's message to warn or to reset warn reply to a user and type *warn reset*_");
+	let isBotAdmin = await isAdmin(message, message.user.jid);
+	if(!isBotAdmin) return await message.send("_I'm not admin_");
+	let userIsAdmin = await isAdmin(message, user);
+	if(!userIsAdmin) return await message.client.sendMessage(message.chat, { text: `_user is admin @${user[0].split("@")[0]}_`, mentions: user });
+        await warnMessage(message, match, user)
 })
