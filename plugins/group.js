@@ -414,10 +414,11 @@ System({
 	type: "group",
 }, async (message, match) => {
         let user = message.reply_message?.sender || message.mention?.jid?.[0];
+	const jid = parsedJid(user);
 	if (!user) return message.reply("_Reply to someone's message to warn or to reset warn reply to a user and type *warn reset*_");
 	let isBotAdmin = await isAdmin(message, message.user.jid);
 	if(!isBotAdmin) return await message.send("_I'm not admin_");
 	let userIsAdmin = await isAdmin(message, user);
-	if(userIsAdmin) return await message.client.sendMessage(message.chat, { text: `_user is admin @${user[0].split("@")[0]}_`, mentions: user });
+	if(userIsAdmin) return await message.client.sendMessage(message.chat, { text: `_user is admin @${jid[0].split("@")[0]}_`, mentions: jid });
         await warnMessage(message, match, user)
 })
