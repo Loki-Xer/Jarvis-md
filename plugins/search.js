@@ -102,7 +102,7 @@ System({
     if (!match) return await message.send("*Need a wallpaper name*\n_Example: .wallpaper mountain_");
     const query = match.trim(); 
     const images = await getJson(await IronMan(`ironman/wallpaper?search=${query}`));
-    if (response.data.length > 0) {
+    if (images.length > 0) {
         const randomIndexes = Array.from({ length: 5 }, () => Math.floor(Math.random() * images.length));
         const randomImages = randomIndexes.map(index => images[index]);
         
