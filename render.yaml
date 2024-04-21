@@ -41,5 +41,7 @@ services:
         value: false
       - key: ERROR_MSG
         value: false
-      - key: DATABASE_URL
-        sync: false
+
+addons:
+  - plan: postgresql
+    name: my-postgresql-addon
