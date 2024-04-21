@@ -23,7 +23,9 @@ const {
     toAudio,
     elevenlabs,
     AddMp3Meta,
-    getBuffer
+    getBuffer,
+    webpToPng,
+    webp2mp4
 } = require("../lib/");
 const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
 
@@ -35,8 +37,8 @@ System({
 }, async (message) => {
    if (!message.reply_message?.sticker) return await message.reply("_Reply to a sticker_");
    if (message.reply_message.isAnimatedSticker) return await message.reply("_Reply to a non-animated sticker message_");
-   let buffer = await message.reply_message.download();
-   return await message.send(buffer, { mimetype: "image/png" }, "image");
+   let buffer = await webpToPng(await message.reply_message.downloadAndSave());
+   return await message.send(buffer, {}, "image");
 });
 
 System({
@@ -84,8 +86,8 @@ System({
 }, async (message) => {
    if (!message.reply_message?.sticker) return await message.reply("_Reply to a sticker_");
    if (!message.reply_message.isAnimatedSticker) return await message.reply("_Reply to an animated sticker message_");
-   let buffer = await message.reply_message.download();
-   return await message.send(buffer, { mimetype: "video/mp4" }, "video");
+   let buffer = await webp2mp4(await message.reply_message.download());
+   return await message.send(buffer, {}, "video");
 });
 
 System({
@@ -96,8 +98,8 @@ System({
 }, async (message) => {
    if (!message.reply_message?.sticker) return await message.reply("_Reply to a sticker_");
    if (!message.reply_message.isAnimatedSticker) return await message.reply("_Reply to an animated sticker message_");
-   const buffer = await message.reply_message.download();
-   return await message.send(buffer, { gifPlayback: true, mimetype: "video/mp4" }, "video");
+   const buffer = await webp2mp4(await message.reply_message.download());
+   return await message.send(buffer, { gifPlayback: true }, "video");
 });
 
 System({
