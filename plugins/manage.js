@@ -174,30 +174,29 @@ System({
     desc: "Manage anti-delete settings",
     type: "user",
 }, async (message, match) => {
-	  let text = match;
 	  const antidelete = await transformData(message.user.id, "antidelete");
-   	  const target = match.match(/{([^}]*)}/)[1];
-	  if (text === "on") {
+	  const target = match.match(/{([^}]*)}/)[1];
+	  if (match === "on") {
 		const sendto = antidelete && antidelete.action ? antidelete.action : "chat";
 		const value = antidelete && antidelete.value ? antidelete.value : "all";
 		await makeInDb(message.user.id, { status: "true", action: sendto, value: value }, "antidelete");
 		await message.send(`_*Anti-delete is active. Messages will be sent to ${sendto}*_`);
-	} else if (text === "off") {
+	} else if (match === "off") {
 		const sendto = antidelete && antidelete.action ? antidelete.action : "chat";
 		const value = antidelete && antidelete.value ? antidelete.value : "all";
 		await makeInDb(message.user.id, { status: "false", action: sendto, value: value }, "antidelete");
 		await message.send(`_*Anti-delete is disabled*_`);
-	} else if (text === "only/pm") {
+	} else if (match === "only/pm") {
 		const sendto = antidelete && antidelete.action ? antidelete.action : "chat";
 		const status = antidelete && antidelete.status ? antidelete.status : "false";
 		await makeInDb(message.user.id, { status: "false", action: sendto, value: "only/pm" }, "antidelete");
 		await message.send(`_*Anti-delete is active only for pm. Messages will be sent to ${sendto}*_`);
-	} else if (text === "pm/group") {
+	} else if (match === "pm/group") {
 		const sendto = antidelete && antidelete.action ? antidelete.action : "chat";
 		const status = antidelete && antidelete.status ? antidelete.status : "false";
 		await makeInDb(message.user.id, { status: "false", action: sendto, value: "all" }, "antidelete");
 		await message.send(`_*Anti-delete is active. Messages will be sent to ${sendto}*_`);
-	} else if (text === "only/group") {
+	} else if (match === "only/group") {
 		const sendto = antidelete && antidelete.action ? antidelete.action : "chat";
 		const status = antidelete && antidelete.status ? antidelete.status : "false";
 		await makeInDb(message.user.id, { status: "false", action: sendto, value: "only/group" }, "antidelete");
