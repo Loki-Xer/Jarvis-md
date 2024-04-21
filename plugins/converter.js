@@ -62,6 +62,7 @@ System({
     desc: "video into pvt converter",
     type: "converter",
 }, async (message) => {
+   if (!message.reply_message.video) return message.reply("_*Reply to a video*_");
    const buff = await message.reply_message.download();
    const videoMessage = await message.client.generatPvtMessage(buff);
    await message.client.forward(message.jid, { 'ptvMessage': videoMessage }, {});
