@@ -11,7 +11,6 @@ Jarvis - Loki-Xer
 
 const {
     yts,
-    tiny,
     isUrl,
     System,
     GetYta,
@@ -42,14 +41,14 @@ System(
           if (isUrl(matchUrl)) {
             return await message.send(
               await GetYtv(matchUrl),
-              { caption: await tiny('*made with 🤍*'), quoted: message.data },
+              { caption: '*made with 🤍*', quoted: message.data },
               'video'
             );
           } else {
             const data = await Ytsearch(match);
             return await message.send(
               await GetYtv(data.url),
-              { caption: tiny('*made with 🤍*'), quoted: message.data },
+              { caption: '*made with 🤍*', quoted: message.data },
               'video'
             );
           }
@@ -73,14 +72,14 @@ System(
           if (isUrl(matchUrl)) {
             return await message.send(
               await GetYtv(matchUrl),
-              { caption: await tiny('*made with 🤍*'), quoted: message.data },
+              { caption: '*made with 🤍*', quoted: message.data },
               'video'
             );
           } else {
             const data = await Ytsearch(match);
             return await message.send(
               await GetYtv(data.url),
-              { caption: tiny('*made with 🤍*'), quoted: message.data },
+              { caption: '*made with 🤍*', quoted: message.data },
               'video'
             );
           }
