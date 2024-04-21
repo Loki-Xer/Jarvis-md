@@ -26,12 +26,13 @@ System({
 });
 
 System({
-	pattern: "jid",
-	fromMe: true,
-	desc: "Give jid of chat/user",
-	type: "whatsapp",
+    pattern: "jid",
+    fromMe: true,
+    desc: "Give jid of chat/user",
+    type: "whatsapp",
 }, async (message, match) => {
-	return await message.send( message.mention.jid?.[0] || message.reply_message.jid || message.jid);
+    let jid = message.quoted ? message.reply_message.sender : message.jid;
+    return await message.send(jid);
 });
 
 System({
