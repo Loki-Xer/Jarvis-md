@@ -134,7 +134,8 @@ System({
     desc: "Changes photo to sticker",
     type: "converter",
 }, async (msg) => {
-   if (!(msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");       
+   if (!(msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");
+   if (message.reply_message.isAnimatedSticker) return await message.reply("_Reply to a non-animated sticker message_");
    let media = await msg.reply_message.download();
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
@@ -182,6 +183,7 @@ System({
     type: "converter",
 }, async (message) => {
    if (!(message.reply_message.sticker || message.reply_message.image)) return await message.reply("_*Reply to photo or sticker*_");
+   if (message.reply_message.isAnimatedSticker) return await message.reply("_Reply to a non-animated sticker message_");
    let media = await message.reply_message.download();
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
@@ -202,7 +204,8 @@ System({
     desc: "Changes photo to sticker",
     type: "converter",
 }, async (msg) => {
-   if (!(msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");        
+   if (!(msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");  
+   if (message.reply_message.isAnimatedSticker) return await message.reply("_Reply to a non-animated sticker message_");
    let media = await msg.reply_message.download();
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
