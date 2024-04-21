@@ -175,7 +175,7 @@ System({
     type: "user",
 }, async (message, match) => {
 	  const antidelete = await transformData(message.user.id, "antidelete")
-	const target = match.replace("send deleted message to ", "").replace("{", "").replace("}", "");
+   	  const target = match.match(/{([^}]*)}/)[1];
 	  if (match === "on") {
 		const sendto = antidelete && antidelete.action ? antidelete.action : "chat";
 		const value = antidelete && antidelete.value ? antidelete.value : "all";
