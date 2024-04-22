@@ -202,7 +202,7 @@ System({
 		await makeInDb(message.user.id, { status: "false", action: sendto, value: "only/group" }, "antidelete");
 		await message.send(`_*Anti-delete is active only for group messages. Messages will be sent to ${sendto}*_`);
 	} else if (["pm", "chat", "sudo"].includes(target) || target.includes("@")) {
-         const sendto = target === "sudo" ? message.sudo[0] : target;
+         let sendto = (target === "sudo") ? message.sudo[0] : (target.toLowerCase().startsWith("send")) ? match.match(/{([^}]*)}/)[1] : target;
          const status = antidelete && antidelete.status ? antidelete.status : "false";
          const value = antidelete && antidelete.value ? antidelete.value : "all";
          await makeInDb(message.user.id, { status: status, action: sendto, value: value }, "antidelete");
