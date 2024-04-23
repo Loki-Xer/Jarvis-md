@@ -38,6 +38,7 @@ const {
       desc: "take screenshot of a web", 
       type: "misc",
   }, async (message, match) => {
+      match = message.reply_message.text || match;
       match = await extractUrlFromMessage(match);
       if(!match) return message.send("_*Give me a url to take ss*_");
       await message.sendFromUrl(await LokiXer(`ssweb?link=${match}`));
