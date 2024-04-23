@@ -17,7 +17,6 @@ const {
     isPrivate,
     parsedJid,
     warnMessage,
-    updateProfilePicture,
     extractUrlFromMessage,
 } = require("../lib/");
 
@@ -36,7 +35,7 @@ System({
     if (!message.isGroup) return;
     match = message.reply_message.sender || match;
     let isadmin = await isAdmin(message, message.user.jid);
-	if (!isadmin) return await message.send("_I'm not admin_");
+    if (!isadmin) return await message.send("_I'm not admin_");
     if (!match) return await message.send("_Mention user to add");
     match = match.replaceAll(' ', '');
     if (match) {
@@ -239,7 +238,7 @@ System({
     if (!isadmin) { return await message.send("_I'm not an admin_"); }
     if (!message.reply_message.image) { return await message.send("_Reply to a photo_"); }
     try { const media = await message.reply_message.download();
-    await updateProfilePicture(media, message, message.jid);
+    await message.client.updateProfile(media, message.jid);
     return await message.send("_Group Profile Picture Updated_"); } catch (error) {
     console.error("Error updating profile picture:", error);
     return await message.send("_Failed to update profile picture_");
