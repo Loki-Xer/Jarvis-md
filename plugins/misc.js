@@ -17,6 +17,7 @@ const {
     getJson,
     postJson,
     isPrivate,
+    extractUrlFromMessage
   } = require("../lib/");
   const axios = require("axios");
   
@@ -30,8 +31,18 @@ const {
       let sender = 'https://wa.me/' + (message.reply_message.sender || message.mention[0] || message.text).split('@')[0];
       await message.reply(sender);
   });
-  
-  
+
+  System({
+      pattern: "ss", 
+      fromMe: isPrivate,
+      desc: "take screenshot of a web", 
+      type: "misc",
+  }, async (message, match) => {
+      match = await extractUrlFromMessage(match);
+      if(!match) return message.send("_*Give me a url to take ss*_");
+      await message.send(await LokiXer(`ssweb?link=${match}`), {}, "image");
+  });
+
   System({
       pattern: "save", 
       fromMe: true,
