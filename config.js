@@ -27,7 +27,6 @@ module.exports = {
   TGTOKEN: "bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4",
   API: 'https://api.lokiser.xyz/',
   STICKER_PACKNAME: process.env.STICKER_PACKNAME || 'ᴊᴀʀᴠɪꜱ;ᴡᴀʙᴏᴛ',
-  AUTO_STATUS_VIEWS: toBool(process.env.AUTO_STATUS_VIEWS || 'false'),
   CALL_BLOCK: toBool(process.env.CALL_BLOCK) || false,
   SAVE_STATUS: toBool(process.env.SAVE_STATUS) || false,
   STATUS_VIEW: process.env.STATUS_VIEW || "true",
