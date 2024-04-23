@@ -24,11 +24,6 @@
             "required": true,
             "value":"3"
         },
-        "AUTO_STATUS_VIEWS": {
-            "description": "auto status views",
-            "required": true,
-            "value":"false"
-        },
         "MEDIA_DATA": {
             "description": "media data that uses in list",
             "required": true,
@@ -82,7 +77,7 @@
             "value":"null"
         },
         "STATUS_VIEW": {
-            "description": "status views, values= true,only-view=jid, not-view=jid",
+            "description": "status views use true for view all status or use only-view=jid to only view given jid status or use not-view=jid to not view the one person status and view anothers",
             "required": false,
             "value":"false"
         },
