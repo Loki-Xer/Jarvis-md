@@ -11,7 +11,6 @@ Jarvis - Loki-Xer
 
 const fs = require('fs');
 const ff = require('fluent-ffmpeg');
-const axios = require('axios');
 const { Image } = require("node-webpmux");
 const { fromBuffer } = require('file-type');
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
@@ -26,7 +25,8 @@ const {
     AddMp3Meta,
     getBuffer,
     webpToPng,
-    webp2mp4
+    webp2mp4,
+    elevenlabs
 } = require("../lib/");
 const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
 
@@ -293,7 +293,7 @@ System({
    return await message.send(` *List of Aitts*\n\n 1 _rachel_ \n 2 _clyde_ \n 3 _domi_ \n 4 _dave_ \n 5 _fin_ \n 6 _bella_ \n 7 _antoni_ \n 8 _thomas_ \n 9 _charlie_ \n 10 _emily_ \n 11 _elli_ \n 12 _callum_ \n 13 _patrick_ \n 14 _harry_ \n 15 _liam_ \n 16 _dorothy_ \n 17 _josh_ \n 18 _arnold_ \n 19 _charlotte_ \n 20 _matilda_ \n 21 _matthew_ \n 22 _james_ \n 23 _joseph_ \n 24 _jeremy_ \n 25 _michael_ \n 26 _ethan_ \n 27 _gigi_ \n 28 _freya_ \n 29 _grace_ \n 30 _daniel_ \n 31 _serena_ \n 32 _adam_ \n 33 _nicole_ \n 34 _jessie_ \n 35 _ryan_ \n 36 _sam_ \n 37 _glinda_ \n 38 _giovanni_ \n 39 _mimi_ \n`.replace(/├/g, ''));
    const [v, k] = match.split(/,;|/);
    if (!k) return await message.send(`*_need voice id and text_*\n_example_\n\n_*aitts* hey vroh its a test,adam_\n_*aitts list*_`)
-   const stream = axios.post(config.API + 'post/elevenlabs', { text: match, key: config.ELEVENLABS || '2a0050b5932ff8d79f54418fa370d1c1' }, { responseType: 'stream' });
+   const stream = await elevenlabs(match)
    if (!stream) return await message.send(`_*please upgrade your api key*_\n_get key from http://docs.elevenlabs.io/api-reference/quick-start/introduction_\n_example_\n\nsetvar elvenlabs: your key\n_or update your config.js manually_`);
    return await message.send({ stream }, { mimetype: 'audio/mpeg' }, 'audio');
 });
