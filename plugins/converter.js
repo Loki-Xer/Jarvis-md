@@ -12,6 +12,7 @@ Jarvis - Loki-Xer
 const fs = require('fs');
 const ff = require('fluent-ffmpeg');
 const { Image } = require("node-webpmux");
+const { fromBuffer } = require('file-type');
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 const {
     config,
@@ -223,7 +224,7 @@ System({
     pattern: "take",
     fromMe: isPrivate,
     desc: "Changes Exif data of stickers",
-    type: "tool",
+    type: "converter",
 }, async (message, match) => {
    let data;
    if (!message.reply_message || (!message.reply_message.sticker && !message.reply_message.audio)) return await message.reply("_Reply to a sticker or audio_");
@@ -268,7 +269,7 @@ System({
     pattern: "exif",
     fromMe: isPrivate,
     desc: "get exif data",
-    type: "tool",
+    type: "converter",
 }, async (message, match, m) => {
    if (!message.reply_message || !message.reply_message.sticker)
    return await message.reply("_Reply to sticker_");
@@ -284,7 +285,7 @@ System({
 
 System({
     pattern: "aitts",
-    type: "eva",
+    type: "converter",
     fromMe: isPrivate,
     desc: 'generate ai voices'
 }, async (message, match) => {
@@ -295,4 +296,17 @@ System({
    const stream = await elevenlabs(match);
    if (!stream) return await message.send(`_*please upgrade your api key*_\n_get key from http://docs.elevenlabs.io/api-reference/quick-start/introduction_\n_example_\n\nsetvar elvenlabs: your key\n_or update your config.js manually_`);
    return await message.send({ stream }, { mimetype: 'audio/mpeg' }, 'audio');
+});
+
+System({
+    pattern: 'doc ?(.*)',
+    desc: "convert media to document",
+    type: 'converter',
+    fromMe: isPrivate
+}, async (message, match) => {
+    match = (match || "converted media").replace(/[^A-Za-z0-9]/g,'-');
+    if (!message.quoted || (!message.reply_message.image && !message.reply_message.audio && !message.reply_message.video)) return message.send("_*Reply to a video/audio/image message!*_");
+    const media = await message.reply_message.download()
+    const { ext, mime } = await fromBuffer(media);
+    return await message.client.sendMessage(message.jid, { document: media, mimetype: mime, fileName: match + "." + ext }, { quoted: message });
 });
