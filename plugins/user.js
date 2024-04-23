@@ -9,7 +9,7 @@ Jarvis - Loki-Xer
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-const { System, updateProfilePicture } = require("../lib");
+const { System } = require("../lib");
 
 
 System({
@@ -44,7 +44,7 @@ System({
 	if (!message.reply_message.image)
 	return await message.reply("_Reply to a photo_");
 	let media = await message.reply_message.download();
-	await updateProfilePicture(media, message, message.user.jid);
+	await message.client.updateProfile(media, message.user.jid);
 	return await message.reply("_Profile Picture Updated_");
 });
 
