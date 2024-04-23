@@ -40,7 +40,7 @@ const {
   }, async (message, match) => {
       match = await extractUrlFromMessage(match);
       if(!match) return message.send("_*Give me a url to take ss*_");
-      await message.send(await LokiXer(`ssweb?link=${match}`), {}, "image");
+      await message.sendFromUrl(await LokiXer(`ssweb?link=${match}`));
   });
 
   System({
