@@ -23,6 +23,7 @@ module.exports = {
   ALLWAYS_ONLINE: toBool(process.env.ALLWAYS_ONLINE || "false"),
   READ_MSG: toBool(process.env.READ_MSG || "false"),
   BRANCH: 'main',
+  BRAINSHOP: process.env.BRAINSHOP || '172372,nbjE0YAlyw3cpoMl',
   TGTOKEN: "bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4",
   API: 'https://api.lokiser.xyz/',
   STICKER_PACKNAME: process.env.STICKER_PACKNAME || 'ᴊᴀʀᴠɪꜱ;ᴡᴀʙᴏᴛ',
