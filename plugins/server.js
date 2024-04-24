@@ -158,7 +158,7 @@ System({
     type: "server",
     desc: "Show env",
 }, async (message, match) => {
-    if(!match) return message.reply("_*getvar sudo*_");
+    if(!match) return message.reply("_*eg: getvar sudo*_");
     const requestedVar = match.trim().toUpperCase();
     if (Config.hasOwnProperty(requestedVar)) {
         message.reply(`*${requestedVar}*: ${Config[requestedVar]}`);
