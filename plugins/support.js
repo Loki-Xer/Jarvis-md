@@ -6,8 +6,8 @@ System({
     desc: "jarvis-md support",
     type: "support"
 }, async (message) => {
-    const name = 'ɪʀᴏɴ ᴍᴀɴ 🎓', title = "ᴊᴀʀᴠɪꜱ ꜱᴜᴩᴩᴏʀᴛ 🪄", number = '4915252819677', body = "ɪʀᴏɴ ᴍᴀɴ";
-    const image = "https://i.imgur.com/DYuO4eT.jpeg", sourceUrl = 'https://github.com/Loki-Xer/Jarvis-md';
+    const name = 'ɪʀᴏɴ ᴍᴀɴ 🎓', title = "ᴊ ᴏ ᴊᴏ", number = '2348060585869', body = "hey👻";
+    const image = "https://i.imgur.com/IsLtsl3.jpeg", sourceUrl = '';
     const logo = await getBuffer(image);
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG: powered by Jarvis-md;\nTEL;type=CELL;type=VOICE;waid=${number}:${number}\nEND:VCARD`;
     const adon = { title, body, thumbnail: logo, mediaType: 1, mediaUrl: sourceUrl, sourceUrl, showAdAttribution: true, renderLargerThumbnail: false };
@@ -17,7 +17,7 @@ System({
 System({
     pattern: "allplugin",
     fromMe: isPrivate,
-    desc: "To get all plugin of jarvis-md",
+    desc: "To get all plugin of jojo-md",
     type: "support"
 }, async (message) => {
     const { value } = await getJson(`https://gist.github.com/Loki-Xer/64f0a652223cb801ecb0f2e8dd1edf65/raw`);
