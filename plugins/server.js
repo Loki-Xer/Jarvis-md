@@ -141,42 +141,18 @@ System({
     await message.reply(s);
 });
 
-
 System({
-    pattern: "getvar ",
+    pattern: "getvar (.+)",
     fromMe: true,
     type: "server",
     desc: "Show env",
 }, async (message, match) => {
-    const server = message.client.server;
-    if (!match) return await message.send(`_Example: getvar sudo_`);
-    
-    if (server !== "HEROKU" && server !== "KOYEB") {
-        await message.reply("_getvar only works in Heroku or Koyeb_");
-        return;
-    }
-    
-    if (server === "HEROKU") {
-        const key = match.trim().toUpperCase();
-        
-        heroku
-            .get(baseURI + "/config-vars")
-            .then(async (vars) => {
-                if (vars[key]) {
-                    return await message.send(`_${key} : ${vars[key]}_`);
-                }
-                await message.send(`${key} not found`);
-            })
-            .catch(async (error) => {
-                await message.send(`HEROKU: ${error.body.message}`);
-            });
-    } else if (server === "KOYEB") {
-        let data = await getvar(match);
-        return await message.reply(data);
+    if (Config.hasOwnProperty(match)) {
+        message.reply(`*${match}*: ${Config[match]}`);
+    } else {
+        message.reply(`_*Variable '${match}' not found.*_`);
     }
 });
-
-
 
 System({
     pattern: "getsudo ?(.*)", 
@@ -186,7 +162,7 @@ System({
  }, async (message, match) => {
     const server = message.client.server;
     await message.send("_*SUDO NUMBER'S ARA :*_ "+"```"+Config.SUDO+"```")
-  });
+});
 
 
 
