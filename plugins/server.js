@@ -203,7 +203,7 @@ System({
     type: "server",
     desc: "Checks for update.",
 }, async (message, match) => {
-    const server = ;
+    const server = message.client.server;
     await git.fetch();
     var commits = await git.log([
         Config.BRANCH + "..origin/" + Config.BRANCH,
@@ -213,23 +213,23 @@ System({
         if (commits.total === 0) {
             return await message.send(`_Jarvis is on the latest version: v${version}_`);
         } else {
-            if (message.client.server === "HEROKU") {
+            if (server === "HEROKU") {
                 await updateBot(message);
-            } else if (message.client.server === "KOYEB") {
-                await message.send("_*Building preparing  𐍮*_")
+            } else if (server === "KOYEB") {
+                await message.send("_*Building preparing 𐍮*_")
                 let check = await getDeployments();
                 if (check === 'true') return message.reply('_Please wait..._\n_Currently 2 instances are running in Koyeb, wait to stop one of them._');
                 let data = await redeploy();
                 return await message.reply(data);
             } else {
                 await git.reset("hard", ["HEAD"])
-		    	await git.pull()
+                await git.pull()
                 await message.send("_Successfully updated. Please manually update npm modules if applicable!_");
             }
         }
     } else if (commits.total === 0) {
-            return await message.send(`_Jarvis is on the latest version: v${version}_`);
-        } else {
+        return await message.send(`_Jarvis is on the latest version: v${version}_`);
+    } else {
         var availupdate = "*Updates available for Jarvis-md* \n\n";
         commits["all"].map((commit, num) => {
             availupdate += num + 1 + " ●  " + commit.message + "\n";
