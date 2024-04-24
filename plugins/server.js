@@ -158,10 +158,11 @@ System({
     type: "server",
     desc: "Show env",
 }, async (message, match) => {
-    if (Config.hasOwnProperty(match)) {
-        message.reply(`*${match}*: ${Config[match]}`);
+    const requestedVar = match.trim();
+    if (Config.hasOwnProperty(requestedVar)) {
+        message.reply(`*${requestedVar}*: ${Config[requestedVar]}`);
     } else {
-        message.reply(`_*Variable '${match}' not found.*_`);
+        message.reply(`_*Variable '${requestedVar}' not found.*_`);
     }
 });
 
