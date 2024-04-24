@@ -117,41 +117,29 @@ async (message, match) => {
     }
 });
 
-
-
 System({
     pattern: "allvar",
     fromMe: true,
     type: "server",
     desc: "all environment variables",
 }, async (message) => {
-    const server = message.client.server;
-    if (server !== "HEROKU" && server !== "KOYEB") {
-        await message.reply("_allvar only works in Heroku or Koyeb_");
-        return;
+    delete Config.DATABASE;
+    delete Config.ALIVE_DATA;
+    delete Config.GOODBYE_MSG;
+    delete Config.WELCOME_MSG;
+    if (message.client.server !== "HEROKU") {
+        delete Config.HEROKU_API_KEY;
+        delete Config.HEROKU_APP_NAME;
     }
-    
-    if (server === "HEROKU") {
-        let msg = "Here are all your Heroku vars\n\n\n";
-
-        try {
-            const keys = await heroku.get(baseURI + "/config-vars");
-
-            for (const key in keys) {
-                msg += `${key} : ${keys[key]}\n\n`;
-            }
-
-            await message.send(msg);
-        } catch (error) {
-            await message.send(`HEROKU: ${error.message}`);
-        }
-    } else if (server === "KOYEB") {
-        let msg = "Here are all your Koyeb vars\n\n";
-        let data = await getallvar();
-        return await message.reply(msg + data);
+    if (message.client.server !== "KOYEB") {
+        delete Config.KOYEB_API;
     }
+    let s = '\n*All Your Vars*\n\n';
+    for (const key in Config) {
+        s += `*${key}*: ${Config[key]}\n\n`;
+    }
+    await message.reply(s);
 });
-
 
 
 System({
