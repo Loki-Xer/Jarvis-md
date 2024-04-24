@@ -76,7 +76,7 @@ System({
 });
 
 System({
-    pattern: "setvar (.+)",
+    pattern: "setvar",
     fromMe: true,
     type: "server",
     desc: "Set environment variable",
@@ -102,7 +102,7 @@ System({
 });
 
 System({
-    pattern: "delvar (.+)",
+    pattern: "delvar",
     fromMe: true,
     type: "server",
     desc: "Delete environment variable",
@@ -153,12 +153,13 @@ System({
 });
 
 System({
-    pattern: "getvar (.+)",
+    pattern: "getvar",
     fromMe: true,
     type: "server",
     desc: "Show env",
 }, async (message, match) => {
-    const requestedVar = match.trim();
+    if(!match) return message.reply("_*getvar sudo*_");
+    const requestedVar = match.trim().toUpperCase();
     if (Config.hasOwnProperty(requestedVar)) {
         message.reply(`*${requestedVar}*: ${Config[requestedVar]}`);
     } else {
@@ -167,7 +168,7 @@ System({
 });
 
 System({
-    pattern: "getsudo ?(.*)", 
+    pattern: "getsudo", 
     fromMe: true, 
     desc: "shows sudo", 
     type: "server" 
@@ -176,7 +177,7 @@ System({
 });
 
 System({
-    pattern: "setsudo ?(.*)", 
+    pattern: "setsudo", 
     fromMe: true, 
     desc: "set sudo", 
     type: "server" 
@@ -264,7 +265,7 @@ System({
 });
 
 System({
-    pattern: "mode (.+)",
+    pattern: "mode",
     fromMe: true,
     type: "server",
     desc: "change work type",
