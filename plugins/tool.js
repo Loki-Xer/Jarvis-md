@@ -68,8 +68,8 @@ System({
    desc: "get the delpoyed running time of the bot",
    type: "tool",
 }, async (m) => {
-    const { message } = await getData(m.user.number);
-    const runtime = await Runtime(message);
+    const { loginData } = await getData(m.user.number);
+    const runtime = await Runtime(loginData.message);
     await m.reply(runtime);
 });
 
