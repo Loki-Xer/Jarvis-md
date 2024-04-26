@@ -141,7 +141,7 @@ System({
     desc: "block a user",
     type: "whatsapp",
 }, async (message, match) => {
-    let jid = message.quoted ? message.reply_message.sender : message.jid;
+   let jid = message.quoted ? message.reply_message.sender : message.jid;
    await message.client.updateBlockStatus(jid, "block");
    return await message.reply("_*blocked*_");
 });
@@ -164,9 +164,9 @@ System({
     type: "whatsapp",
 }, async (message, match) => {
     match = match || message.reply_message.text;
-	if (!match) return await message.send('*Need Status!*\n*Example: setbio Hey there! I am using WhatsApp*.');
-	await message.client.updateProfileStatus(match);
-	await message.send('_Profile status updated_');
+    if (!match) return await message.send('*Need Status!*\n*Example: setbio Hey there! I am using WhatsApp*.');
+    await message.client.updateProfileStatus(match);
+    await message.send('_Profile status updated_');
 });
 
 System({
