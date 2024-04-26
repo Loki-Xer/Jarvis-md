@@ -94,10 +94,10 @@ System({
         },
     })
     .then(async () => {
-        await message.send(`${key.toUpperCase()}: ${value}`);
+        await message.send(`_*updated var ${key.toUpperCase()}: ${value}*`);
     })
     .catch(async (error) => {
-        await message.send(`HEROKU: ${error.body.message}`);
+        await message.send(`_HEROKU: ${error.body.message}_`);
     });
 });
 
