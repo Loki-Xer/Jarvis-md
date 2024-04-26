@@ -73,7 +73,7 @@ System({
 		}]
 	}, message.jid)
 	await message.send('_Cleared_')
-})
+});
 
 System({
 	pattern: 'archive ?(.*)',
@@ -91,7 +91,7 @@ System({
 		lastMessages: [lstMsg]
 	}, message.jid);
 	await message.send('_Archived_')
-})
+});
 
 System({
 	pattern: 'unarchive ?(.*)',
@@ -109,7 +109,7 @@ System({
 		lastMessages: [lstMsg]
 	}, message.jid);
 	await message.send('_Unarchived_')
-})
+});
 
 System({
 	pattern: 'chatpin ?(.*)',
@@ -121,7 +121,7 @@ System({
 		pin: true
 	}, message.jid);
 	await message.send('_Pined_')
-})
+});
 
 System({
 	pattern: 'unpin ?(.*)',
@@ -133,4 +133,50 @@ System({
 		pin: false
 	}, message.jid);
 	await message.send('_Unpined_')
-})
+});
+
+System({
+    pattern: "block",
+    fromMe: true,
+    desc: "block a user",
+    type: "whatsapp",
+}, async (message, match) => {
+    let jid = message.quoted ? message.reply_message.sender : message.jid;
+   await message.client.updateBlockStatus(jid, "block");
+   return await message.reply("_*blocked*_");
+});
+
+System({
+    pattern: "unblock",
+    fromMe: true,
+    desc: "block a user",
+    type: "whatsapp",
+}, async (message, match) => {
+    let jid = message.quoted ? message.reply_message.sender : message.jid;
+    return await message.client.updateBlockStatus(message.reply_message.sender, "unblock");
+    return await message.reply("_*unblocked*_");
+});
+
+System({
+    pattern: "setbio",
+    fromMe: true,
+    desc: "To change your profile status",
+    type: "whatsapp",
+}, async (message, match) => {
+    match = match || message.reply_message.text;
+	if (!match) return await message.send('*Need Status!*\n*Example: setbio Hey there! I am using WhatsApp*.');
+	await message.client.updateProfileStatus(match);
+	await message.send('_Profile status updated_');
+});
+
+System({
+	pattern: 'setname ?(.*)',
+	fromMe: true,
+	desc: 'To change your profile name',
+	type: 'whatsapp'
+}, async (message, match) => {
+	match = match || message.reply_message.text;
+	if (!match) return await message.send('*Need Name!*\n*Example: setname your name*.');
+	await message.client.updateProfileName(match);
+	await message.send('_Profile name updated_');
+});
