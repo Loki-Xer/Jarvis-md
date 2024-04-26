@@ -20,14 +20,15 @@ System({
     desc: "To get all plugin of jojo-md",
     type: "support"
 }, async (message) => {
-    const { value } = await getJson(`https://gist.github.com/Loki-Xer/64f0a652223cb801ecb0f2e8dd1edf65/raw`);
-    const { result } = await getJson(`https://gist.githubusercontent.com/Loki-Xer/8aa8f43bb3503daf5f86c52d70519b90/raw`);
-    const [plugin, explugin] = [value.plugin, result.plugin];
-    const image = await getBuffer(result.image);
-    const adon = { title: "External plugins", body: "Ready to use", thumbnail: image, mediaType: 1, mediaUrl: 'https://github.com/IRON-M4N/Jarvis-MD-Plugins/tree/main', sourceUrl: "https://github.com/IRON-M4N/Jarvis-MD-Plugins/tree/main", showAdAttribution: true };
-    await Promise.all([
-        message.client.sendMessage(message.jid, { text: explugin, contextInfo: { externalAdReply: adon } }, { quoted: message }),
-        sleep(1000),
-        message.client.sendMessage(message.jid, { text: plugin, contextInfo: { externalAdReply: adon } }, { quoted: message })
-    ]);
+    const allPluginsData = await getJson('https://api.lokiser.xyz/api/jarvis/allplugin');
+    const externalPluginsData = await getJson('https://api.lokiser.xyz/api/jarvis/plugin');
+    const image = await getBuffer("https://graph.org/file/30ab5e1e228a9636ce7f5.jpg");
+    const formatPluginData = (pluginData) => {
+        return Object.entries(pluginData).map(([key, value]) => `*${key}:* ${value.url}`).join('\n\n');
+    };
+    const noneditplugin = { text: formatPluginData(allPluginsData), contextInfo: { externalAdReply: { title: "External plugins no need to edit", body: "Ready to use", thumbnail: image, mediaType: 1, mediaUrl: 'https://github.com/IRON-M4N/Jarvis-MD-Plugins/tree/main', sourceUrl: "https://github.com/IRON-M4N/Jarvis-MD-Plugins/tree/main", showAdAttribution: true } } };
+    const plugin = { text: formatPluginData(externalPluginsData), contextInfo: { externalAdReply: { title: "External plugins need to edit", body: "Ready to use", thumbnail: image, mediaType: 1, mediaUrl: 'https://github.com/IRON-M4N/Jarvis-MD-Plugins/tree/main', sourceUrl: "https://github.com/IRON-M4N/Jarvis-MD-Plugins/tree/main", showAdAttribution: true } } };
+    await message.client.sendMessage(message.jid, plugin, { quoted: message });
+    await sleep(500);
+    await message.client.sendMessage(message.jid, noneditplugin, { quoted: message });
 });

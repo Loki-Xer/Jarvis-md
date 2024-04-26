@@ -19,6 +19,16 @@ function getUptime() {
     return `_*Runtime: ${hours.toString().padStart(2, "0")} hours ${minutes.toString().padStart(2, "0")} minutes ${seconds.toString().padStart(2, "0")} seconds*_`;
 }
 
+async function Runtime(date) { 
+    const deployedTime = new Date(date);
+    const currentTime = new Date();
+    const runtimeMilliseconds = currentTime - deployedTime;
+    const days = Math.floor(runtimeMilliseconds / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((runtimeMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((runtimeMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((runtimeMilliseconds % (1000 * 60)) / 1000);
+    return `_*Runtime: ${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds....*_`
+}
 
 System({
 	pattern: "ping",
@@ -50,6 +60,17 @@ System({
 }, async (message) => {
     const uptime = getUptime();
     return await message.reply(uptime);
+});
+
+System({
+   pattern: "runtime",
+   fromMe: true,
+   desc: "get the delpoyed running time of the bot",
+   type: "tool",
+}, async (m) => {
+    const { loginData } = await getData(m.user.number);
+    const runtime = await Runtime(loginData.message);
+    await m.reply(runtime);
 });
 
 System({

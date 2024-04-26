@@ -114,3 +114,30 @@ System({
         await message.send("No wallpapers found for the given query.");
     }
 });
+
+System({
+    pattern: "img",
+    fromMe: isPrivate,
+    desc: "to search Google images",
+    type: "search",
+}, async (message, match) => {
+    match = match || message.reply_message.text;
+    if (!match) return await message.reply("_Invalid command format. Please use e.g.: iron man,10_");
+    let [searchTerm, numberOfImages] = match.split(',').map(part => part.trim());
+    numberOfImages = numberOfImages ? (isNaN(numberOfImages) || numberOfImages < 1 || numberOfImages > 10 ? 5 : parseInt(numberOfImages)) : 5;
+    const encodedSearchTerm = encodeURIComponent(searchTerm);
+    const data = await getJson(await IronMan(`ironman/s/google/image?img=${encodedSearchTerm}`));
+    const urlsToSend = data.map(item => item.url);
+    const send = await message.send(`_Downloading ${numberOfImages} images of ${searchTerm}_`);
+    for (const imageUrl of urlsToSend.slice(0, numberOfImages)) {
+        try {
+            await message.client.sendMessage(message.chat, {image: { url: imageUrl }});
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        } catch (imageError) {
+            console.error("Error with image:", imageError);
+            await send.edit("_Error in image_");
+        }
+    }
+    await send.edit("_Downloaded_");
+});
+
