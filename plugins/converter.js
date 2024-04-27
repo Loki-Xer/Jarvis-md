@@ -14,6 +14,7 @@ const ff = require('fluent-ffmpeg');
 const { Image } = require("node-webpmux");
 const { fromBuffer } = require('file-type');
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
+const { exec } = require("child_process");
 const {
     config,
     System,
@@ -309,4 +310,25 @@ System({
     const media = await message.reply_message.download()
     const { ext, mime } = await fromBuffer(media);
     return await message.client.sendMessage(message.jid, { document: media, mimetype: mime, fileName: match + "." + ext }, { quoted: message });
+});
+
+
+System({
+    pattern: 'rotate ?(.*)',
+    fromMe: isPrivate,
+    desc: 'rotate image or video in any direction',
+    type: 'media'
+}, async (message, match) => {
+    if (!(message.quoted && (message.reply_message.video || message.reply_message.image))) return await message.reply('*Reply to an image/video*');
+    if (!match || !['left', 'right', 'horizontal', 'vertical'].includes(match.toLowerCase())) return await message.reply('*Need rotation type.*\n_Example: .rotate left, right, horizontal, or vertical_');	
+    const rotateOptions = { left: 'transpose=2', right: 'transpose=1', horizontal: 'hflip', vertical: 'vflip', };
+    const media = await message.reply_message.downloadAndSave();
+    const ext = media.endsWith('.mp4') ? 'mp4' : 'jpg';
+    const ffmpegCommand = `ffmpeg -y -i ${media} -vf "${rotateOptions[match.toLowerCase()]}" rotated.${ext}`;
+    exec(ffmpegCommand, (error, stdout, stderr) => {
+	if (error) return message.reply(`Error during rotation: ${error.message}`);
+   	let buffer = fs.readFileSync(`rotated.${ext}`);
+	message.send(buffer, {}, media.endsWith('.mp4') ? 'video' : 'image');
+	fs.unlinkSync(`rotated.${ext}`);
+    });
 });
