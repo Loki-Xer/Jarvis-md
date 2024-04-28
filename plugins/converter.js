@@ -312,7 +312,6 @@ System({
     return await message.client.sendMessage(message.jid, { document: media, mimetype: mime, fileName: match + "." + ext }, { quoted: message });
 });
 
-
 System({
     pattern: 'rotate ?(.*)',
     fromMe: isPrivate,
@@ -331,4 +330,15 @@ System({
 	message.send(buffer, {}, media.endsWith('.mp4') ? 'video' : 'image');
 	fs.unlinkSync(`rotated.${ext}`);
     });
+});
+
+System({
+    pattern: 'tovv ?(.*)',
+    desc: "convert media to view ones",
+    type: 'converter',
+    fromMe: true
+}, async (message, match) => {
+    if (message.quoted && (message.reply_message.image || message.reply_message.video || message.reply_message.audio)) {
+        await message.client.forwardMessage(message.jid, message.reply_message, { vv: true });
+    }
 });
