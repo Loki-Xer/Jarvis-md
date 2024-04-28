@@ -316,7 +316,7 @@ System({
     pattern: 'rotate ?(.*)',
     fromMe: isPrivate,
     desc: 'rotate image or video in any direction',
-    type: 'media'
+    type: 'converter'
 }, async (message, match) => {
     if (!(message.quoted && (message.reply_message.video || message.reply_message.image))) return await message.reply('*Reply to an image/video*');
     if (!match || !['left', 'right', 'horizontal', 'vertical'].includes(match.toLowerCase())) return await message.reply('*Need rotation type.*\n_Example: .rotate left, right, horizontal, or vertical_');	
