@@ -49,14 +49,11 @@ async function getDeployments() {
 }
 
 async function redeploy() {
-    try {
-        const { data } = await axios.get(`https://app.koyeb.com/v1/services`, { headers: { 'Content-Type': 'application/json;charset=UTF-8', "Authorization": `Bearer ${Config.KOYEB_API}` } });
-        if (!data.services.length) throw new Error("No services found.");
-        await axios.post(`https://app.koyeb.com/v1/services/${data.services[0].id}/redeploy`, { "deployment_group": "prod" }, axiosConfig);
-        return '_Update started._';
-    } catch (error) {
-        return '*Error redeploying.*\n*Ensure KOYEB_API key is properly set.*\n_E.g.: KOYEB_API:api key from https://app.koyeb.com/account/api ._';
-    }
+    if (!Config.KOYEB_API)return '*Error redeploying.*\n*Ensure KOYEB_API key is properly set.*\n_E.g.: KOYEB_API:api key from https://app.koyeb.com/account/api ._';
+    const { data } = await axios.get(`https://app.koyeb.com/v1/services`, { headers: { 'Content-Type': 'application/json;charset=UTF-8', "Authorization": `Bearer ${Config.KOYEB_API}` } });
+    if (!data.services.length) throw new Error("No services found.");
+    await axios.post(`https://app.koyeb.com/v1/services/${data.services[0].id}/redeploy`, { "deployment_group": "prod" }, axiosConfig);
+    return '_Update started._';
 }
 
 System({
