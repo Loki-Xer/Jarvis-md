@@ -20,7 +20,8 @@ System({
     pattern: "menu",
     fromMe: isPrivate,
     desc: "Show All commands",
-    type: "user",
+    type: "info",
+    dontAddCommandList: true,
 }, async (message) => {
     let [date, time] = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).split(",");
     let menu = `╭━━━〔 ${BOT_INFO.split(';')[0]} ⁩〕━━━┈⊷\n┃⛯╭──────────────\n┃⛯│ *owner* :  ${BOT_INFO.split(';')[1]}\n┃⛯│ *user* : ${message.pushName.replace(/[\r\n]+/gm, "")}\n┃⛯│ *plugins* : ${plugins.commands.length}\n┃⛯│ *date* : ${date}\n┃⛯│ *time* : ${time}\n┃⛯│ *uptime* : ${clockString(uptime())} \n┃⛯│ *version* : ᴠ${version}\n┃⛯╰──────────────\n╰━━━━━━━━━━━━━━━┈⊷\n\n\n╭━━━━━━━━━━━━━━━┈⊷\n╽`;
@@ -50,8 +51,7 @@ System({
     pattern: "list",
     fromMe: isPrivate,
     desc: "Show All commands",
-    type: "user",
-    dontAddCommandList: true,
+    type: "info"
 }, async (message, match) => {
     if (match === "cmd") return;
     let menu = "\nمصنوع من🤍\n\n";
