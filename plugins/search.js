@@ -42,7 +42,7 @@ System({
 }, async (message, match) => {
         if (!match) return await message.send("*Need a query to search*\n_Example: who is iron man_");
         const response = await getJson(IronMan(`ironman/s/google/search?q=${match}`));
-        const text = `❀ *⬢ title*: ${response[0].title}\n*⬢ description*: _${response[0].snippet}_\n`
+        const text = `*⬢ title*: ${response[0].title}\n\n*⬢ description*: _${response[0].snippet}_\n`
         await message.send([{ name: "cta_url", display_text: "Visit Google", url: response[0].link, merchant_url: response[0].link, action: "url", icon: "", style: "link" }], { body: "", footer: "*JARVIS-MD*", title: text }, "button");
 });
 
