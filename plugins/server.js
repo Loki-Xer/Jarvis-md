@@ -23,22 +23,19 @@ const axios = require('axios');
 
 async function updateBot(message) {
     const commits = await git.log(['main..origin/main']);
-    if (commits.total === 0) {
-        return message.send('_Jarvis is on the latest version: v${version}_');
-    } else {
-        const app = await heroku.get('/apps/' + Config.HEROKU_APP_NAME);
-        await message.send("*Updating Jarvis, please wait...*");
-        git.fetch('upstream', 'main');
-        git.reset('hard', ['FETCH_HEAD']);
-        const git_url = app.git_url.replace("https://", "https://api:" + Config.HEROKU_API_KEY + "@");
-        try {
-            await git.addRemote('heroku', git_url);
-        } catch {
-            console.log('Heroku remote adding error');
-        }
-        await git.push('heroku', 'main');
-        return await message.send('*Bot updated...*\n_Restarting._');
+    if (commits.total === 0) return message.send('_Jarvis is on the latest version: v${version}_');
+    const app = await heroku.get('/apps/' + Config.HEROKU_APP_NAME);
+    await message.send("*Updating Jarvis, please wait...*");
+    git.fetch('upstream', 'main');
+    git.reset('hard', ['FETCH_HEAD']);
+    const git_url = app.git_url.replace("https://", "https://api:" + Config.HEROKU_API_KEY + "@");
+    try {
+        await git.addRemote('heroku', git_url);
+    } catch {
+        console.log('Heroku remote adding error');
     }
+    await git.push('heroku', 'main');
+    return await message.send('*Bot updated...*\n_Restarting._');
 }
 
 async function getDeployments() {
