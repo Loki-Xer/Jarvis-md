@@ -16,7 +16,7 @@ System({
 	pattern: "setpp",
 	fromMe: true,
 	desc: "Set profile picture",
-	type: "user",
+	type: "whatsapp",
 }, async (message) => {
 	if (!message.reply_message.image)
 	return await message.reply("_Reply to a photo_");
@@ -39,7 +39,7 @@ System({
 	pattern: "pp$",
 	fromMe: true,
 	desc: "Set full screen profile picture",
-	type: "user",
+	type: "whatsapp",
 }, async (message, match) => {
 	if (!message.reply_message.image)
 	return await message.reply("_Reply to a photo_");
