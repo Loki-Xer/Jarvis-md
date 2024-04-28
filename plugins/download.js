@@ -191,3 +191,17 @@ System({
     await new Promise(resolve => setTimeout(resolve, 2000));
     await message.client.sendMessage(message.chat, { video: { url: Desktop.Download_url }, caption: `「 *DESKTOP VERSION* 」\n\n *➥Title:* ${Desktop.Caption}\n *➥Quality:* ${Desktop.Quality}\n *➥Size:* ${Desktop.Size}` }); 
 });
+
+System ({
+    pattern: 'git ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Repository Downloader',
+    type: 'downloader',
+}, async (message, match) => {
+   if (!isUrl(match)) return await message.reply("*_Need A GitHub Repository Url_*")
+   let user = match.split("/")[3];
+   let repo = match.split("/")[4];
+   const msg = await message.send("_*Downloading 🪲*_", { quoted: message.data });
+   await message.client.sendMessage(message.chat,{ document :{ url: `https://api.github.com/repos/${user}/${repo}/zipball` }, fileName: repo , mimetype: "application/zip"}, {quoted: message });
+   await msg.edit("_*downloaded 🍓*_");
+});
