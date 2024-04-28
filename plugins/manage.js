@@ -172,7 +172,7 @@ System({
     pattern: "antidelete",
     fromMe: true,
     desc: "Manage anti-delete settings",
-    type: "user",
+    type: "manage",
 }, async (message, match) => {
 	const antidelete = await transformData(message.user.id, "antidelete")
 	const target = match.split("/")[1];
