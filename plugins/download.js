@@ -193,7 +193,7 @@ System({
 });
 
 System ({
-    pattern: 'git ?(.*)',
+    pattern: 'gitdl ?(.*)',
     fromMe: isPrivate,
     desc: 'Repository Downloader',
     type: 'downloader',
