@@ -64,7 +64,7 @@
     pattern: "remove(?: |$)(.*)",
     fromMe: true,
     desc: "Remove external plugins",
-    type: "plugin",
+    type: "user",
   }, async (message, match) => {
      if (!match) return await message.send("_*Need a plugin name to remove*_");
        const pluginPath = __dirname + "/" + match + ".js";
