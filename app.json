@@ -83,13 +83,18 @@
         },
         "REJECT_CALL": {
             "description": "automatic reject call",
-            "required": false,
+            "required": true,
             "value":"false"
         },
         "ERROR_MSG": {
             "description": "send error messages to bot number",
-            "required": false,
+            "required": true,
             "value":"false"
+        },
+        "BAN_CHATS": {
+            "description": "ban chat from useing bot value: jid1,jid2",
+            "required": false,
+            "value":""
         }
     },
       "addons": [{
