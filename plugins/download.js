@@ -194,7 +194,7 @@ System ({
     pattern: 'gitdl ?(.*)',
     fromMe: isPrivate,
     desc: 'Repository Downloader',
-    type: 'downloader',
+    type: 'download',
 }, async (message, match) => {
    if (!isUrl(match)) return await message.reply("*_Need A GitHub Repository Url_*")
    let user = match.split("/")[3];
