@@ -133,7 +133,7 @@ System({
     if (match.startsWith("dl-url")) await message.sendFromUrl(url);
     if (!isInstaUrl(url)) return;
     if (!url) return message.reply("_*Provide a valid Instagram story URL*_");
-    const { result}  = await lib.getJson(config.API + "download/insta?url=" + url);
+    const { result}  = await getJson(config.API + "download/insta?url=" + url);
     if (!result) return await message.send("Not Found");
     if (result.length === 1) return await message.sendFromUrl(result[0].download_link);
     const options = result.map((u, index) => ({ name: "quick_reply", display_text: `${index + 1}/${result.length}`, id: `story dl-url  ${u.download_link}`}));
