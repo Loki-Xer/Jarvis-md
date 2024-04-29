@@ -42,7 +42,8 @@ System({
 }, async (message, match) => {
         if (!match) return await message.send("*Need a query to search*\n_Example: who is iron man_");
         const response = await getJson(IronMan(`ironman/s/google/search?q=${match}`));
-        await message.send(`❀ *title*: ${response[0].title}\n❀ *ᴅᴇꜱᴄʀɪᴩᴛɪᴏɴ*: _${response[0].snippet}_\n❀ *ʟɪɴᴋ*: *${response[0].link}*`);
+        const text = `*⬢ title*: ${response[0].title}\n\n*⬢ description*: _${response[0].snippet}_\n`
+        await message.send([{ name: "cta_url", display_text: "Visit Google", url: response[0].link, merchant_url: response[0].link, action: "url", icon: "", style: "link" }], { body: "", footer: "*JARVIS-MD*", title: text }, "button");
 });
 
 
@@ -141,3 +142,15 @@ System({
     await send.edit("_Downloaded_");
 });
 
+System({
+    pattern: 'gitinfo ?(.*)',
+    fromMe: isPrivate,
+    desc: 'github user details',
+    type: 'search',
+}, async (message, match) => {
+    if (!match) return await message.send("*_Need Github UserName_*");   
+    const data = await getJson(`https://api.github.com/users/${match}`);
+    const GhUserPP = data.avatar_url || "https://graph.org/file/924bcf22ea2aab5208489.jpg";
+    const userInfo = `\n⎔ *Username* : ${data.login} \n⎔ *Name* : ${data.name || "Not Available"} \n⎔ *Bio* : ${data.bio || "Not Available"} \n\n➭ *ID* : ${data.id}\n➭ *Followers* : ${data.followers}\n➭ *Following* : ${data.following}\n➭ *Type* : ${data.type}\n➭ *Company* : ${data.company || "Not Available"}\n➭ *Public Repos* : ${data.public_repos}\n➭ *Public Gists* : ${data.public_gists}\n➭ *Email* : ${data.email || "Not Available"}\n➭ *Twitter* : ${data.twitter_username || "Not Available"}\n➭ *Location* : ${data.location || "Not Available"}\n➭ *Blog* : ${data.blog || "Not Available"}\n➭ *Profile URL* : ${data.html_url}\n➭ *Created At* : ${data.created_at}\n\n`;
+    await message.client.sendMessage(message.chat, { image: { url: GhUserPP }, caption: userInfo });
+});

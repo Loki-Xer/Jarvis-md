@@ -12,6 +12,7 @@ const toBool = (x) => x === 'true';
 const DATABASE_URL = process.env.DATABASE_URL === undefined ? "./database.db" : process.env.DATABASE_URL
 
 module.exports = {
+  BAN_CHATS: process.env.BAN_CHATS || "",
   PORT: toBool(process.env.PORT) || 8000,
   AUDIO_DATA: process.env.AUDIO_DATA || 'ʟᴏᴋɪ-xᴇʀ;ᴊᴀʀᴠɪꜱ;https://i.imgur.com/ep3UbBP.jpg',
   WARN_COUNT: process.env.WARN_COUNT || '3',

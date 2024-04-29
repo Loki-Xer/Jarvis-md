@@ -30,7 +30,7 @@ System({
     pattern: 'add ?(.*)',
     type: 'group',
     fromMe: true,
-    desc: ""
+    desc: "add a person to group"
 }, async (message, match) => {
     if (!message.isGroup) return;
     match = message.reply_message.sender || match;
@@ -231,7 +231,7 @@ System({
 	pattern: "gpp$",
 	fromMe: true,
 	desc: "Set full-screen profile picture",
-	type: "user",
+	type: "group",
 }, async (message) => {
     if (!message.isGroup) { return await message.send("_This command is for groups_"); }
     let isadmin = await isAdmin(message, message.user.jid);

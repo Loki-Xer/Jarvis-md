@@ -133,13 +133,11 @@ System({
     if (match.startsWith("dl-url")) await message.sendFromUrl(url);
     if (!isInstaUrl(url)) return;
     if (!url) return message.reply("_*Provide a valid Instagram story URL*_");
-    const { result}  = await getJson("https://api.lokiser.xyz/download/insta?url=" + url);
+    const { result}  = await getJson(config.API + "download/insta?url=" + url);
     if (!result) return await message.send("Not Found");
     if (result.length === 1) return await message.sendFromUrl(result[0].download_link);
-    const options = result.map((u, index) => ({displayText: `${index + 1}/${result.length}`, id: `story dl-url  ${u.download_link}`}));
-    const optionChunks = [];
-    while (options.length > 0) optionChunks.push(options.splice(0, 10));
-    for (const chunk of optionChunks) await message.sendPollMessage({ name: "\n*Instagram Story Downloader ⬇️*\n", values: chunk, onlyOnce: false, id: message.key.id, withPrefix: true, participates: [message.sender] });
+    const options = result.map((u, index) => ({ name: "quick_reply", display_text: `${index + 1}/${result.length}`, id: `story dl-url  ${u.download_link}`}));
+    await message.send(options, { body: "", footer: "*JARVIS-MD*", title: "*Insta Media Downloader 🍉*\n"}, "button");
 });
 
 
@@ -190,4 +188,18 @@ System({
     await message.client.sendMessage(message.chat, { video: { url: Mobile.Download_url }, caption: `「 *MOBILE VERSION* 」\n\n *➥Title:* ${Mobile.Caption}\n *➥Size:* ${Mobile.Size}` });
     await new Promise(resolve => setTimeout(resolve, 2000));
     await message.client.sendMessage(message.chat, { video: { url: Desktop.Download_url }, caption: `「 *DESKTOP VERSION* 」\n\n *➥Title:* ${Desktop.Caption}\n *➥Quality:* ${Desktop.Quality}\n *➥Size:* ${Desktop.Size}` }); 
+});
+
+System ({
+    pattern: 'gitdl ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Repository Downloader',
+    type: 'downloader',
+}, async (message, match) => {
+   if (!isUrl(match)) return await message.reply("*_Need A GitHub Repository Url_*")
+   let user = match.split("/")[3];
+   let repo = match.split("/")[4];
+   const msg = await message.send("_*Downloading 🪲*_", { quoted: message.data });
+   await message.client.sendMessage(message.chat,{ document :{ url: `https://api.github.com/repos/${user}/${repo}/zipball` }, fileName: repo , mimetype: "application/zip"}, {quoted: message });
+   await msg.edit("_*downloaded 🍓*_");
 });

@@ -58,7 +58,7 @@ const {
       pattern: "trt", 
       fromMe: isPrivate,
       desc: "change language", 
-      type: "misc",
+      type: "converter",
   }, async (m, match) => {
       match = m.reply_message.text || match;
       if (!match) return await m.reply("_provided text to translate *eg: i am fine;ml*_");
@@ -87,7 +87,7 @@ const {
       pattern: "bitly",
       fromMe: isPrivate,
       desc: "To get URL short",
-      type: "misc",
+      type: "converter",
   }, async (message, match) => {
      match = match || message.reply_message.text;
      if (!match) return await message.reply("_Reply to a URL or enter a URL_");          
@@ -100,13 +100,13 @@ const {
       pattern: 'whois ?(.*)',
       fromMe: isPrivate,
       desc: 'to find how is',
-      type: "misc",
+      type: "info",
   }, async (message, match) => {
      let pp;
      let status;
      let user = message.quoted ? message.reply_message.sender : match.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
      if (!user) return message.send('_Need a User!');
-     try { pp = await message.client.profilePictureUrl(user, 'image'); } catch { pp = 'https://i.imgur.com/b3hlzl5.jpg'; }
+     try { pp = await message.client.profilePictureUrl(user, 'image'); } catch { pp = 'https://graph.org/file/924bcf22ea2aab5208489.jpg'; }
      try { status = await message.client.fetchStatus(user); } catch { status = 'private'; }
       const date = new Date(status.setAt);
       const options = {
@@ -127,7 +127,7 @@ const {
       pattern: 'tts ?(.*)',
       fromMe: isPrivate,
       desc: 'It converts text to sound.',
-      type: 'misc'
+      type: 'converter'
   }, async (message, match) => {
       if (!(match || message.quoted.text)) return await message.reply('_Need Text!_\n_Example: tts Hello_\n_tts Hello {en}_');
       let LANG = config.LANG.toLowerCase();

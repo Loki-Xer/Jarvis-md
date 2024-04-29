@@ -4,7 +4,7 @@ System({
     pattern: "pdm",
     fromMe: true,
     desc: "To get info about promot and demote",
-    type: "user",
+    type: "manage",
 }, async (message, match) => {
     if (!message.isGroup) return;
     if (match === "on") { 
@@ -31,7 +31,7 @@ System({
     pattern: "antiviewones",
     fromMe: true,
     desc: "To get info about promot and demote",
-    type: "user",
+    type: "manage",
 }, async (message, match) => {
     if (match === "on") { 
       const antiviewones = await setData(message.user.id, "active", "true", "antiviewones");
