@@ -28,7 +28,7 @@
         "form-data": "^4.0.0",
         "fs-extra": "^11.1.1",
         "heroku-client": "^3.1.0",
-        "jarvis-md": "^1.0.2",
+        "jarvis-md": "^1.0.3",
         "jimp": "^0.16.1",
         "jsdom": "^20.0.0",
         "node-fetch": "^2.0.0",
