@@ -39,5 +39,7 @@ services:
         value: false
       - key: ERROR_MSG
         value: false
+      - key: BAN_CHATS
+        value: jid,jid
       - key: DATABASE_URL
         sync: false
