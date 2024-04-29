@@ -1,5 +1,5 @@
 #### JARVIS MD WHATSAPP BOT
-jarvis md is Multi Device whatsapp bot based on X-Asena
+jarvis md is Multi Device whatsapp bot
 ***
 
 ### SETUP JARVIS
@@ -70,10 +70,18 @@ jarvis md is Multi Device whatsapp bot based on X-Asena
 
   </details>
  
+### DEPLOY TO REPLIT 
+
+ 1. If You don't have a account in replit. Create a account in replit.
+    <br>
+<a href='https://replit.com/login' target="_blank"><img alt='railway' src='https://img.shields.io/badge/-Create-black?style=for-the-badge&logo=replit&logoColor=white'/></a>
+
+2. Now Deploy
+    <br>
+<a href='https://jarvis.lokiser.xyz/replit.html' target="_blank"><img alt='DEPLOY' src='https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=replit&logoColor=white'/></a>
 
 #### THANKS TO
 - [INRL ❤️](https://github.com/inrl-official) <br>
-- [X-Electra](https://github.com/inrl-official) for [X-Asena](https://github.com/X-Electra/X-Asena)
 
 #### JARVIS SUPPORT 
 
