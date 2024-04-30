@@ -420,4 +420,28 @@ System({
 	let userIsAdmin = await isAdmin(message, user);
 	if(userIsAdmin) return await message.client.sendMessage(message.chat, { text: `_user is admin @${jid[0].split("@")[0]}_`, mentions: jid });
         await warnMessage(message, match, user)
-})
+});
+
+System({
+    pattern: "inactive", 
+    fromMe: isPrivate,
+    desc: "To check inactive users in group", 
+    type: "group",
+}, async (message, match) => {
+    if (!message.isGroup) return message.reply("_*This command is for groups only.*_");
+    const data = await message.groupStatus("disactive");
+    let inactiveUsers = Array.isArray(data) ? `*Total Inactive Users ${data.length}*\n\n` + data.map((item, index) => `*${index + 1}. User: @${item.jid.split("@")[0]}*\n*Role: ${item.role}*\n\n`).join("") : "_*No inactive users found.*_";
+    return await message.send(inactiveUsers.trim(), { mentions: data.map(a => a.jid) || [] });
+});
+
+System({
+    pattern: "active", 
+    fromMe: isPrivate,
+    desc: "To check active users in group", 
+    type: "group",
+}, async (message, match) => {
+    if (!message.isGroup) return message.reply("_*This command is for groups only.*_");
+    const data = await message.groupStatus("active");
+    let activeUsers = Array.isArray(data) ? `*Total Active Users ${data.length}*\n\n` + data.map(item => `*Name: ${item.pushName}*\n*Number: ${item.jid.split("@")[0]}*\n*Total Messages: ${item.messageCount}*\n\n`).join("") : "_*No active users found.*_";
+    return await message.send([{ name: "quick_reply", display_text: "Inactive users", id: "inactive" }], { body: "", footer: "\n*JARVIS-MD*", title: activeUsers.trim() }, "button");
+});
