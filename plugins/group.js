@@ -10,6 +10,7 @@ Jarvis - Loki-Xer
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 const {
+    Vote,
     isUrl,
     sleep,
     System,
@@ -444,4 +445,38 @@ System({
     const data = await message.groupStatus("active");
     let activeUsers = Array.isArray(data) ? `*Total Active Users ${data.length}*\n\n` + data.map(item => `*Name: ${item.pushName}*\n*Number: ${item.jid.split("@")[0]}*\n*Total Messages: ${item.messageCount}*\n\n`).join("") : "_*No active users found.*_";
     return await message.send([{ name: "quick_reply", display_text: "Inactive users", id: "inactive" }], { body: "", footer: "\n*JARVIS-MD*", title: activeUsers.trim() }, "button");
+});
+
+System({
+    pattern: "vote",
+    fromMe: isPrivate,
+    desc: "to send a vote message",
+    type: "group",
+}, async (message, match) => {
+    let formattedResult;
+    if (!match) return message.reply("*Hey, where's the vote text?* Or you can use: _'vote result'_ or _'vote get'_ to get the result of a vote, _'vote delete'_ to delete a vote message, or _'vote What's your favorite color?;😂|Blue,😟|Red'_ to create a vote.");
+    if (match === "delete") {
+    if (!message.quoted) return message.reply("_*Reply to a vote message*_");
+    const deleted = await Vote(message, {}, "delete");
+    if (!deleted) return message.reply("*Vote message not found*");
+    await message.send({ key: message.reply_message.data.key }, {}, 'delete');
+    await message.reply("*Vote message successfully deleted*");
+    } else if (match === "result" || match === "get") {
+    if (!message.quoted) return message.reply("_*Reply to a vote message*_");
+    const data = await Vote(message, {}, "result");
+    if (!data) return message.reply("*It's not a vote message or it's patched*");
+    if (data.result.length === 0) {
+    formattedResult = ['_*No votes yet.*_'];
+    } else {
+    formattedResult = data.result.map(({ Emoji, Votes, Percentage, VotesBy, VotedOn }) => {
+    const votersList = VotesBy.map(voter => `@${voter.split("@")[0]}`).join('\n');
+    return `*Emoji*: ${Emoji}\n*Voted On*: ${VotedOn}\n*Total Votes:* ${Votes}\n*Percentage:* ${Percentage}\n*Votes By:* ${votersList}\n\n`;
+    });}
+    if (data.result.length > 0) formattedResult.unshift('*Vote Result ✨*\n\n');
+    await message.send(formattedResult.join('').trim(), { mentions: data.votersJid })
+    } else {
+    const regex = /^([^;]*;[^;]*\|[^;]*,[^;]*\|[^;]*)$/;
+    if (!regex.test(match)) return message.reply("*The text is not in the correct format. Use* ```What's your favorite color?;😂|Blue,😟|Red```");
+    await Vote(message, { text: match }, "vote");
+    }
 });
