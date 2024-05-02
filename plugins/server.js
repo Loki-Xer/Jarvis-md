@@ -175,7 +175,7 @@ System({
     fromMe: true, 
     desc: "set sudo", 
     type: "server" 
-}, async (message, match, m) => { if(!match) return message.reply("_*Reply to the number you want to add sudo*_");
+}, async (message, match, m) => { 
     const server = message.client.server;
     const newSudo = (message.mention[0] || message.reply_message.sender).split("@")[0];    
     if (!newSudo) return await m.reply("*reply to a number*");
