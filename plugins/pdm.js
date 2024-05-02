@@ -16,15 +16,14 @@ System({
     if (pdm) return await message.send("_*deactivated*_");
      await message.send("_*error*_");
     } else {
-     await message.sendPollMessage({
-        name: "\n*Choose a setting to pdm settings*\n",
-        values: [
+     await message.send("\n*Choose a setting to pdm settings*\n",
+        { values: [
             { displayText: "*on*", id: "pdm on" },
             { displayText: "*off*", id: "pdm off" }
             ],
         withPrefix: true,
         participates: [message.sender]
-    });
+    }, "poll");
 }});
 
 System({
@@ -43,13 +42,12 @@ System({
      await message.send("_*error*_");
     } else {
     if (!message.isGroup) return message.send("_*antiviewones on/off*_");
-     await message.sendPollMessage({
-        name: "\n*Choose a a settings to on/off antiviewones*\n",
+     await message.send("\n*Choose a a settings to on/off antiviewones*\n",{
         values: [
             { displayText: "*on*", id: "antiviewones on" },
             { displayText: "*off*", id: "antiviewones off" }
             ],
         withPrefix: true,
         participates: [message.sender]
-    });
+    }, "poll");
 }});
