@@ -18,18 +18,33 @@ const { exec } = require("child_process");
 const {
     config,
     System,
-    styletext,
     isPrivate,
-    getStyles,
-    selectStyle,
     toAudio,
+    postJson,
     AddMp3Meta,
+    sendUrl,
     getBuffer,
     webpToPng,
     webp2mp4,
     elevenlabs
 } = require("../lib/");
 const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
+
+async function getStyles(message) {
+  let data = await postJson('https://api.lokiser.xyz/post/fancy', { text: message })
+  return data.message
+}
+
+function selectStyle(styles, index) {
+    return new Promise((resolve, reject) => {
+        const numericIndex = parseInt(index);
+        if (!isNaN(numericIndex) && numericIndex >= 0 && numericIndex < styles.length) {
+            resolve(styles[numericIndex]);
+        } else {
+            reject(new Error("Invalid index"));
+        }
+    });
+}
 
 System({
     pattern: "photo",
@@ -230,26 +245,16 @@ System({
    let data;
    if (!message.reply_message || (!message.reply_message.sticker && !message.reply_message.audio)) return await message.reply("_Reply to a sticker or audio_");
    if (message.reply_message.sticker) {
-        const stickerPackName = (match || config.STICKER_PACKNAME).split(";");
-		await message.send(await message.reply_message.download(), {
-			packname: stickerPackName[0],
-			author: stickerPackName[1]
-		}, "sticker");
+   const stickerPackName = (match || config.STICKER_PACKNAME).split(";");
+   await message.send(await message.reply_message.download(), { packname: stickerPackName[0], author: stickerPackName[1] }, "sticker");
    } else if (message.reply_message.audio) {
    const buff = await message.reply_message.download();
    const audioBuffer = Buffer.from(buff);
    const audioResult = await toAudio(audioBuffer, 'mp4');
    if (match) data = match.split(";");
-        data = config.AUDIO_DATA.split(";");
-   await message.client.sendMessage(message.jid, {
-                audio: await AddMp3Meta(audioResult, await getBuffer(data[2]), {
-                    title: data[0],
-                    body: data[1]
-                }),
-                mimetype: "audio/mp4"
-            });
-        }
-});
+   data = config.AUDIO_DATA.split(";");
+   await message.client.sendMessage(message.jid, { audio: await AddMp3Meta(audioResult, await getBuffer(data[2]), { title: data[0], body: data[1] }), mimetype: "audio/mp4" });
+}});
 
 
 System({
@@ -260,10 +265,7 @@ System({
 }, async (message, match) => {
    if (!(message.reply_message.video || message.reply_message.image)) return await message.reply("_Reply to photo or video_");   
    let buff = await message.reply_message.download();
-   await message.send(buff, {
-	packname: stickerPackNameParts[0],
-	author: stickerPackNameParts[1]
-   }, "sticker");
+   await message.send(buff, { packname: stickerPackNameParts[0], author: stickerPackNameParts[1] }, "sticker");
 });
 
 System({
@@ -340,4 +342,14 @@ System({
 }, async (message, match) => {
     if (message.quoted && (message.reply_message.image || message.reply_message.video || message.reply_message.audio)) return await message.client.forwardMessage(message.jid, message.reply_message, { vv: true });   
     await message.reply("_*Reply to an image, video, or audio to make it viewable*_");
+});
+
+System({
+    pattern: "url",
+    fromMe: isPrivate,
+    desc: "make media into url",
+    type: "converter",
+}, async (message, match, m) => {
+    if (!message.reply_message.i || (!message.reply_message.image && !message.reply_message.video && !message.reply_message.audio && !message.reply_message.sticker)) return await message.reply('*Reply to image,video,audio,sticker*');
+    return await sendUrl(message);
 });
