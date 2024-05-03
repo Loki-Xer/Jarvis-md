@@ -1,5 +1,5 @@
 const plugins = require("../lib/utils");
-const { System, isPrivate, isUrl, version, sendUrl } = require("../lib");
+const { System, isPrivate, isUrl, version } = require("../lib");
 const { BOT_INFO, MEDIA_DATA } = require("../config");
 const { uptime } = require("os");
 
@@ -70,15 +70,4 @@ System({
     } else {
         await message.send(menu);
     }
-});
-
-
-System({
-    pattern: "url",
-    fromMe: isPrivate,
-    desc: "make media into url",
-    type: "converter",
-}, async (message, match, m) => {
-    if (!message.reply_message.i || (!message.reply_message.image && !message.reply_message.video && !message.reply_message.audio && !message.reply_message.sticker)) return await message.reply('*Reply to image,video,audio,sticker*');
-    return await sendUrl(message);
 });
