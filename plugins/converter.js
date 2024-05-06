@@ -82,7 +82,7 @@ System({
    if (!message.reply_message.video) return message.reply("_*Reply to a video*_");
    const buff = await message.reply_message.download();
    const msg = await message.client.generatPvtMessage(buff);
-   await message.client.forward(message.jid, msg);
+   await message.client.forwardMessage(message.jid, msg);
 });
 
 System({
@@ -128,7 +128,7 @@ System({
 }, async (message) => {
         const ffmpeg = ff();
         if (!message.reply_message?.audio) return await message.send("_Reply to an audio message_");
-        const file = './lib/temp/black.jpg';
+        const file = './lib/temp/media/black.jpg';
         const audioFile = './lib/temp/audio.mp3';
         fs.writeFileSync(audioFile, await message.reply_message.download());
         ffmpeg.input(file);
