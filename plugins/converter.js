@@ -30,11 +30,6 @@ const {
 } = require("../lib/");
 const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
 
-async function getStyles(message) {
-  let data = await postJson('https://api.lokiser.xyz/post/fancy', { text: message })
-  return data.message
-}
-
 function selectStyle(styles, index) {
     return new Promise((resolve, reject) => {
         const numericIndex = parseInt(index);
@@ -174,19 +169,19 @@ System({
 }, async (message, match) => {
     if (message.reply_message.text) {
         if (!match) return message.send(`*_reply to a message and use ${message.prefix} fancy 7`);
-        const style = await getStyles(message.reply_message.text);
+        const { message: style } = await postJson('https://api.lokiser.xyz/post/fancy', { text: message.reply_message.text });
         const text = await selectStyle(style, match);
         await message.reply(text.result);
     } else if (match) {
         const [text, index] = match.split(' ');
         if (!index) return await message.send(`*_use ${message.prefix} fancy hy 7`);
-        const style = await getStyles(text);
+        const { message: style } = await postJson('https://api.lokiser.xyz/post/fancy', { text: text });
         const selectedStyle = await selectStyle(style, index);
         await message.reply(selectedStyle.result);
     } else {
         let text = `*Fancy text*\n\n*Example:*\n*reply to a text and ${message.prefix} fancy 7*\n*or*\n*use ${message.prefix} fancy hy 5*\n\n`;
-        const styleResults = await getStyles("Fancy");
-        styleResults.forEach((style, index) => {
+         const { message: styleResults } = await postJson('https://api.lokiser.xyz/post/fancy', { text: "fancy" });
+         styleResults.forEach((style, index) => {
             text += `${index + 1}. ${style.result}\n`;
         });
         return await message.reply(text);
