@@ -219,7 +219,7 @@ System({
         await message.send(match, { mentions: participants.map(a => a.id) });
     } 
     else if (message.reply_message.i) {
-        return await message.client.forwardMessage(message.jid, message.reply_message, { contextInfo: { mentionedJid: participants.map(a => a.id) } });
+        return await message.client.forwardMessage(message.jid, message.reply_message.message, { contextInfo: { mentionedJid: participants.map(a => a.id) } });
     } 
     else {
         return await message.reply('*Example :* \n_*tag all*_\n*_tag admin*_\n*_tag text*_\n_*Reply to a message*_');
