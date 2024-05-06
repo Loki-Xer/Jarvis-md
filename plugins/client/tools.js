@@ -17,6 +17,17 @@ async function Runtime(date) {
     return `_*Runtime: ${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds....*_`
 }
 
+function secondsToHms(d) {
+	d = Number(d);
+	let h = Math.floor(d / 3600);
+	let m = Math.floor(d % 3600 / 60);
+	let s = Math.floor(d % 3600 % 60);
+	let hDisplay = h > 0 ? h + (h == 1 ? " HOURS, " : " HOURS, ") : "";
+	let mDisplay = m > 0 ? m + (m == 1 ? " MINUTE, " : " MINUTE, ") : "";
+	let sDisplay = s > 0 ? s + (s == 1 ? " SECOND, " : " SECOND") : "";
+	return hDisplay + mDisplay + sDisplay;
+}
+
 function selectStyle(styles, index) {
     return new Promise((resolve, reject) => {
       const numericIndex = parseInt(index);
@@ -31,5 +42,6 @@ function selectStyle(styles, index) {
 module.exports = {
   getUptime,
   Runtime,
-  selectStyle
+  selectStyle,
+  secondsToHms
 }
