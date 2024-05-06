@@ -454,6 +454,7 @@ System({
     type: "group",
 }, async (message, match) => {
     let formattedResult;
+    if (!message.isGroup) return message.reply("_*This command is for groups only.*_");
     if (!match) return message.reply("*Hey, where's the vote text?* Or you can use: _'vote result'_ or _'vote get'_ to get the result of a vote, _'vote delete'_ to delete a vote message, or _'vote What's your favorite color?;😂|Blue,😟|Red'_ to create a vote.");
     if (match === "delete") {
     if (!message.quoted) return message.reply("_*Reply to a vote message*_");
