@@ -51,7 +51,7 @@ const {
       type: "misc",
   }, async (message) => {
      if (!message.quoted) return;
-     await message.client.forward(message.user.jid, message.reply_message.message);
+     await message.client.forwardMessage(message.user.jid, message.reply_message.message);
   });
   
   System({
