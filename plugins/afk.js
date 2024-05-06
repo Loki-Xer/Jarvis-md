@@ -11,29 +11,30 @@ System({
 	on: 'all',
 	fromMe: false
 }, async (message, match) => {
-	if (!AFK.isAfk || message.fromMe) return;
-	if (!message.mention.isBotNumber && !message.reply_message.i && message.isGroup) return;
+	if (!AFK.isAfk ||  message.fromMe)  return;
+	if(!message.mention.isBotNumber && !message.reply_message.i && message.isGroup)  return;
 	if (message.mention.isBotNumber && message.isGroup) {
-		await message.send('```This is a bot. My owner is not here at the moment```\n' +
-			(AFK.reason !== false ? '\n*Reason:* ```' + AFK.reason + '```' : '') +
-			(AFK.lastseen !== 0 ? '\n*Last Seen:* ```' + secondsToHms(Math.round((new Date()).getTime() / 1000) - AFK.lastseen) + '```' : ''), {
-				quoted: message.data
-			});
+   	    await message.send('```This is a bot. My owner is not here at the moment```\n' +
+		              (AFK.reason !== false ? '\n*Reason:* ```' + AFK.reason + '```' : '') +
+		    	      (AFK.lastseen !== 0 ? '\n*Last Seen:* ```' + secondsToHms(Math.round((new Date()).getTime() / 1000) - AFK.lastseen) + '```' : ''), {
+			      quoted: message.data
+			    });
 	} else if (message.isGroup && message.reply_message.sender == message.user.jid) {
-		await message.send('```This is a bot. My owner is not here at the moment```\n' +
-			(AFK.reason !== false ? '\n*Reason:* ```' + AFK.reason + '```' : '') +
-			(AFK.lastseen !== 0 ? '\n*Last Seen:* ```' + secondsToHms(Math.round((new Date()).getTime() / 1000) - AFK.lastseen) + '```' : ''), {
-				quoted: message.data
-			});
+	    await message.send('```This is a bot. My owner is not here at the moment```\n' +
+			      (AFK.reason !== false ? '\n*Reason:* ```' + AFK.reason + '```' : '') +
+			      (AFK.lastseen !== 0 ? '\n*Last Seen:* ```' + secondsToHms(Math.round((new Date()).getTime() / 1000) - AFK.lastseen) + '```' : ''), {
+			      quoted: message.data
+			   });
 
-	} else if (!message.isGroup) {
-		await message.send('```This is a bot. My owner is not here at the moment```\n' +
-			(AFK.reason !== false ? '\n*Reason:* ```' + AFK.reason + '```' : '') +
-			(AFK.lastseen !== 0 ? '\n*Last Seen:* ```' + secondsToHms(Math.round((new Date()).getTime() / 1000) - AFK.lastseen) + '```' : ''), {
+	} else if(!message.isGroup) {
+	    await message.send('```This is a bot. My owner is not here at the moment```\n' +
+				(AFK.reason !== false ? '\n*Reason:* ```' + AFK.reason + '```' : '') +
+				(AFK.lastseen !== 0 ? '\n*Last Seen:* ```' + secondsToHms(Math.round((new Date()).getTime() / 1000) - AFK.lastseen) + '```' : ''), {
 				quoted: message.data
-			});
+			      });
 	}
 });
+
 
 System({
 	on: 'text',
