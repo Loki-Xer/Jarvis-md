@@ -17,7 +17,19 @@ async function Runtime(date) {
     return `_*Runtime: ${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds....*_`
 }
 
+function selectStyle(styles, index) {
+    return new Promise((resolve, reject) => {
+      const numericIndex = parseInt(index);
+        if (!isNaN(numericIndex) && numericIndex >= 0 && numericIndex < styles.length) {
+            resolve(styles[numericIndex]);
+        } else {
+            reject(new Error("Invalid index"));
+        }
+    });
+}
+
 module.exports = {
   getUptime,
-  Runtime
+  Runtime,
+  selectStyle
 }
