@@ -49,7 +49,7 @@ System({
     type: "tool",
 }, async (message) => {
    if (!message.reply_message.viewones) return await message.send("_*Reply to a view once*_");
-   return await message.client.forwardMessage(message.chat, message.reply_message.msg, { caption: message.reply_message.caption });
+   return await message.client.forwardMessage(message.chat, message.reply_message.message, { readViewOnce: true });
 });
 
 System({
