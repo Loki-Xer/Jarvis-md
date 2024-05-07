@@ -89,7 +89,7 @@ System({
 });
 
 System({
-      pattern: 'audio ?(.*)',
+      pattern: 'song ?(.*)',
       fromMe: isPrivate,
       desc: 'YouTube audio downloader',
       type: 'download',
