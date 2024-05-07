@@ -133,7 +133,7 @@ System({
     fromMe: true
 }, async (message, match) => {
     if(!message.isGroup) retrun;
-    if (!match) return await message.sendPollMessage({ name: "Choose settings to change antidemote settings", values: [{ displayText: "on", id: "antidemote on"}, { displayText: "off", id: "antidemote off"}], onlyOnce: true, withPrefix: true, participates: [message.sender] });
+    if (!match) return await message.send("Choose settings to change antidemote settings", { values: [{ displayText: "on", id: "antidemote on"}, { displayText: "off", id: "antidemote off"}], onlyOnce: true, withPrefix: true, participates: [message.sender] }, "poll");
     if (match != 'on' && match != 'off') return message.reply('_antidemote on_');
     const { antidemote } = await getData(message.jid);
     if (match === 'on') {
@@ -154,7 +154,7 @@ System({
     fromMe: true
 }, async (message, match) => {
     if(!message.isGroup) retrun;
-    if (!match) return await message.sendPollMessage({ name: "Choose settings to change antipromote settings", values: [{ displayText: "on", id: "antipromote on"}, { displayText: "off", id: "antipromote off"}], onlyOnce: true, withPrefix: true, participates: [message.sender] });
+    if (!match) return await message.send("Choose settings to change antipromote settings", { values: [{ displayText: "on", id: "antipromote on"}, { displayText: "off", id: "antipromote off"}], onlyOnce: true, withPrefix: true, participates: [message.sender] }, "poll");
     if (match != 'on' && match != 'off') return message.reply('antipromote on');
     const { antipromote } = await getData(message.chat);
     if (match === 'on') {
@@ -208,8 +208,7 @@ System({
          await makeInDb(message.user.id, { status: status, action: sendto, value: value }, "antidelete");
          await message.send(`_*Anti-delete is active. Messages will be sent to ${target}*_`);
      } else if (message.isGroup) {
-            await message.sendPollMessage({
-                name: "\n*Choose a setting to update-antidelete settings*\n",
+            await message.send("\n*Choose a setting to update-antidelete settings*\n", {
                 values: [
                     { displayText: "*on*", id: "antidelete on" },
                     { displayText: "*off*", id: "antidelete off" },
@@ -222,7 +221,7 @@ System({
                 ],
                 withPrefix: true,
                 participates: [message.sender]
-            });
+            }, "poll");
         } else { 
             await message.reply(`*To Update Antidelete Settings*\n\n${message.prefix} *Antidelete On.* - \`\`\`Enable Antidelete\`\`\` \n${message.prefix} *Antidelete Off.* - \`\`\`Disable Antidelete\`\`\` \n\n${message.prefix} *Antidelete Only/PM.* - \`\`\`Activate Antidelete for private messages only.\`\`\` \n${message.prefix} *Antidelete Only/Group.* - \`\`\`Activate Antidelete for group messages only.\`\`\` \n${message.prefix} *Antidelete PM/Group.* - \`\`\`Activate Antidelete for both groups and private messages.\`\`\` \n\n${message.prefix} *Antidelete Send Deleted Message to /chat.* - \`\`\`Send deleted messages to a specific chat. Use /chat, /sudo for your bot number, /pm for another number use /JID.\`\`\` `);
         }

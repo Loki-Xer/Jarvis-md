@@ -130,9 +130,9 @@ System({
     type: "download"
 }, async (message, match) => {
     let url = await extractUrlFromMessage(match || message.reply_message.text);
+    if (!url) return message.reply("_*Provide a valid Instagram story URL*_");
     if (match.startsWith("dl-url")) await message.sendFromUrl(url);
     if (!isInstaUrl(url)) return;
-    if (!url) return message.reply("_*Provide a valid Instagram story URL*_");
     const { result}  = await getJson(config.API + "download/insta?url=" + url);
     if (!result) return await message.send("Not Found");
     if (result.length === 1) return await message.sendFromUrl(result[0].download_link);

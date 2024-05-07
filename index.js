@@ -5,6 +5,7 @@ const start = async () => {
         const Client = new client();
         Client.log("starting client...");
         await Client.startServer();
+        await Client.WriteSession();
         await Client.WaConnect();
     } catch (error) {
         console.error(error);

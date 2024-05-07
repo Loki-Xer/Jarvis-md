@@ -35,24 +35,22 @@ System({
     type: 'user'
 }, async (message, match) => {
     if (match === "off") {
-        await setData(message.user.id, "disactie", "false", "autoreaction");
-        await message.send("_*autoreaction disabled*_");
+    await setData(message.user.id, "disactie", "false", "autoreaction");
+    await message.send("_*autoreaction disabled*_");
     } else if (match === "on") {
-        await setData(message.user.id, "actie", "true", "autoreaction");
-        await message.send("_*autoreaction enabled*_");
+    await setData(message.user.id, "actie", "true", "autoreaction");
+    await message.send("_*autoreaction enabled*_");
     } else if (!match) {
-        if (message.isGroup) {
-            await message.sendPollMessage({
-                name: "\nChoose one to update autoreaction\n",
-                values: [
+    if (message.isGroup) {
+      await message.send("\nChoose one to update autoreaction\n",
+                { values: [
                     { displayText: "on", id: "autoreaction on" },
                     { displayText: "off", id: "autoreaction off" }
                 ],
                 withPrefix: true,
                 participates: [message.sender]
-            });
-        } else {
-            await message.reply("_*autoreaction on/off*_");
-        }
-    }
+            }, "poll");
+    } else {
+        await message.reply("_*autoreaction on/off*_");
+    }}
 });

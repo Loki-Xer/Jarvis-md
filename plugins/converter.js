@@ -18,17 +18,17 @@ const { exec } = require("child_process");
 const {
     config,
     System,
-    styletext,
     isPrivate,
-    getStyles,
-    selectStyle,
     toAudio,
+    postJson,
     AddMp3Meta,
+    sendUrl,
     getBuffer,
     webpToPng,
     webp2mp4,
     elevenlabs
 } = require("../lib/");
+const { selectStyle } = require("./client/"); 
 const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
 
 System({
@@ -67,7 +67,7 @@ System({
    if (!message.reply_message.video) return message.reply("_*Reply to a video*_");
    const buff = await message.reply_message.download();
    const msg = await message.client.generatPvtMessage(buff);
-   await message.client.forward(message.jid, msg);
+   await message.client.forwardMessage(message.jid, msg);
 });
 
 System({
@@ -113,7 +113,7 @@ System({
 }, async (message) => {
         const ffmpeg = ff();
         if (!message.reply_message?.audio) return await message.send("_Reply to an audio message_");
-        const file = './lib/temp/black.jpg';
+        const file = './lib/temp/media/black.jpg';
         const audioFile = './lib/temp/audio.mp3';
         fs.writeFileSync(audioFile, await message.reply_message.download());
         ffmpeg.input(file);
@@ -159,19 +159,19 @@ System({
 }, async (message, match) => {
     if (message.reply_message.text) {
         if (!match) return message.send(`*_reply to a message and use ${message.prefix} fancy 7`);
-        const style = await getStyles(message.reply_message.text);
+        const { message: style } = await postJson('https://api.lokiser.xyz/post/fancy', { text: message.reply_message.text });
         const text = await selectStyle(style, match);
         await message.reply(text.result);
     } else if (match) {
         const [text, index] = match.split(' ');
         if (!index) return await message.send(`*_use ${message.prefix} fancy hy 7`);
-        const style = await getStyles(text);
+        const { message: style } = await postJson('https://api.lokiser.xyz/post/fancy', { text: text });
         const selectedStyle = await selectStyle(style, index);
         await message.reply(selectedStyle.result);
     } else {
         let text = `*Fancy text*\n\n*Example:*\n*reply to a text and ${message.prefix} fancy 7*\n*or*\n*use ${message.prefix} fancy hy 5*\n\n`;
-        const styleResults = await getStyles("Fancy");
-        styleResults.forEach((style, index) => {
+         const { message: styleResults } = await postJson('https://api.lokiser.xyz/post/fancy', { text: "fancy" });
+         styleResults.forEach((style, index) => {
             text += `${index + 1}. ${style.result}\n`;
         });
         return await message.reply(text);
@@ -207,7 +207,7 @@ System({
     type: "converter",
 }, async (msg) => {
    if (!(msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");  
-   if (msg.reply_message.isAnimatedSticker) return await message.reply("_Reply to a non-animated sticker message_");
+   if (msg.reply_message.isAnimatedSticker) return await msg.reply("_Reply to a non-animated sticker message_");
    let media = await msg.reply_message.download();
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
@@ -230,26 +230,16 @@ System({
    let data;
    if (!message.reply_message || (!message.reply_message.sticker && !message.reply_message.audio)) return await message.reply("_Reply to a sticker or audio_");
    if (message.reply_message.sticker) {
-        const stickerPackName = (match || config.STICKER_PACKNAME).split(";");
-		await message.send(await message.reply_message.download(), {
-			packname: stickerPackName[0],
-			author: stickerPackName[1]
-		}, "sticker");
+   const stickerPackName = (match || config.STICKER_PACKNAME).split(";");
+   await message.send(await message.reply_message.download(), { packname: stickerPackName[0], author: stickerPackName[1] }, "sticker");
    } else if (message.reply_message.audio) {
    const buff = await message.reply_message.download();
    const audioBuffer = Buffer.from(buff);
    const audioResult = await toAudio(audioBuffer, 'mp4');
    if (match) data = match.split(";");
-        data = config.AUDIO_DATA.split(";");
-   await message.client.sendMessage(message.jid, {
-                audio: await AddMp3Meta(audioResult, await getBuffer(data[2]), {
-                    title: data[0],
-                    body: data[1]
-                }),
-                mimetype: "audio/mp4"
-            });
-        }
-});
+   data = config.AUDIO_DATA.split(";");
+   await message.client.sendMessage(message.jid, { audio: await AddMp3Meta(audioResult, await getBuffer(data[2]), { title: data[0], body: data[1] }), mimetype: "audio/mp4" });
+}});
 
 
 System({
@@ -260,10 +250,7 @@ System({
 }, async (message, match) => {
    if (!(message.reply_message.video || message.reply_message.image)) return await message.reply("_Reply to photo or video_");   
    let buff = await message.reply_message.download();
-   await message.send(buff, {
-	packname: stickerPackNameParts[0],
-	author: stickerPackNameParts[1]
-   }, "sticker");
+   await message.send(buff, { packname: stickerPackNameParts[0], author: stickerPackNameParts[1] }, "sticker");
 });
 
 System({
@@ -338,6 +325,16 @@ System({
     type: 'converter',
     fromMe: true
 }, async (message, match) => {
-    if (message.quoted && (message.reply_message.image || message.reply_message.video || message.reply_message.audio)) return await message.client.forwardMessage(message.jid, message.reply_message, { vv: true });   
+    if (message.quoted && (message.reply_message.image || message.reply_message.video || message.reply_message.audio)) return await message.client.forwardMessage(message.jid, message.reply_message.message, { vv: true });   
     await message.reply("_*Reply to an image, video, or audio to make it viewable*_");
+});
+
+System({
+    pattern: "url",
+    fromMe: isPrivate,
+    desc: "make media into url",
+    type: "converter",
+}, async (message, match, m) => {
+    if (!message.reply_message.i || (!message.reply_message.image && !message.reply_message.video && !message.reply_message.audio && !message.reply_message.sticker)) return await message.reply('*Reply to image,video,audio,sticker*');
+    return await sendUrl(message);
 });
