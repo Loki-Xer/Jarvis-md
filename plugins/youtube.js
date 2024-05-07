@@ -37,11 +37,11 @@ System({
      const matchUrl = extractUrlFromMessage(match);
      if (isUrl(matchUrl)) {
          const { title } = await YtInfo(matchUrl);
-         await message.reply("_*" + "downloading" + title + "🪄" + "*_");
+         await message.reply("_*" + "downloading " + title + "*_");
          return await message.send(await GetYtv(matchUrl), { caption: '*made with 🤍*', quoted: message.data }, 'video');
       } else {
         const data = await Ytsearch(match);
-        await message.reply("_*" + "downloading" + data.title + "🪄" + "*_"); 
+        await message.reply("_*" + "downloading " + data.title + "*_"); 
         return await message.send(await GetYtv(data.url), { caption: '*made with 🤍*', quoted: message.data }, 'video');
       }
 });
@@ -57,11 +57,11 @@ System({
      const matchUrl = extractUrlFromMessage(match);
      if (isUrl(matchUrl)) {
          const { title } = await YtInfo(matchUrl);
-         await message.reply("_*" + "downloading" + title + "🪄" + "*_");
+         await message.reply("_*" + "downloading " + title + "*_");
          return await message.send(await GetYtv(matchUrl), { caption: '*made with 🤍*', quoted: message.data }, 'video');
       } else {
         const data = await Ytsearch(match);
-        await message.reply("_*" + "downloading" + data.title + "🪄" + "*_"); 
+        await message.reply("_*" + "downloading " + data.title + "*_"); 
         return await message.send(await GetYtv(data.url), { caption: '*made with 🤍*', quoted: message.data }, 'video');
       }
 });
@@ -77,34 +77,12 @@ System({
       const matchUrl = extractUrlFromMessage(match);
       if (isUrl(matchUrl)) {
           const { title, author, thumbnail } = await YtInfo(matchUrl);
-          await message.reply("_*" + "downloading" + title + "🍓" + "*_");
+          await message.reply("_*" + "downloading " + title + "*_");
           const aud = await AddMp3Meta(await toAudio(await GetYta(matchUrl)), await getBuffer(thumbnail), { title: title, body: author });
           await message.reply(aud, { mimetype: 'audio/mpeg' }, "audio");
       } else {
           const { title, author, thumbnail url } = await Ytsearch(match);
-          await message.reply("_*" + "downloading" + title + "🍓" + "*_");
-          const aud = await AddMp3Meta(await toAudio(await GetYta(url)), await getBuffer(thumbnail), { title: title, body: author.name });
-          await message.reply(aud, { mimetype: 'audio/mpeg' }, "audio");
-     }
-});
-  
-System({
-      pattern: 'video ?(.*)',
-      fromMe: isPrivate,
-      desc: 'YouTube audio downloader',
-      type: 'download',
-}, async (message, match) => {
-      match = match || message.reply_message.text;
-      if (!match) return await message.reply('_Give a YouTube video *Url* or *Query*_');
-      const matchUrl = extractUrlFromMessage(match);
-      if (isUrl(matchUrl)) {
-          const { title, author, thumbnail } = await YtInfo(matchUrl);
-          await message.reply("_*" + "downloading" + title + "🍓" + "*_");
-          const aud = await AddMp3Meta(await toAudio(await GetYta(matchUrl)), await getBuffer(thumbnail), { title: title, body: author });
-          await message.reply(aud, { mimetype: 'audio/mpeg' }, "audio");
-      } else {
-          const { title, author, thumbnail url } = await Ytsearch(match);
-          await message.reply("_*" + "downloading" + title + "🍓" + "*_");
+          await message.reply("_*" + "downloading " + title + "*_");
           const aud = await AddMp3Meta(await toAudio(await GetYta(url)), await getBuffer(thumbnail), { title: title, body: author.name });
           await message.reply(aud, { mimetype: 'audio/mpeg' }, "audio");
      }
