@@ -127,7 +127,7 @@ System({
     let [searchTerm, numberOfImages] = match.split(',').map(part => part.trim());
     numberOfImages = numberOfImages ? (isNaN(numberOfImages) || numberOfImages < 1 || numberOfImages > 10 ? 5 : parseInt(numberOfImages)) : 5;
     const encodedSearchTerm = encodeURIComponent(searchTerm);
-    const data = await getJson(await IronMan(`ironman/s/google/image?img=${encodedSearchTerm}`));
+    const data = await getJson(await IronMan(`ironman/s/google?image=${encodedSearchTerm}`));
     const urlsToSend = data.map(item => item.url);
     const send = await message.send(`_Downloading ${numberOfImages} images of ${searchTerm}_`);
     for (const imageUrl of urlsToSend.slice(0, numberOfImages)) {
