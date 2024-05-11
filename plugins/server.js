@@ -246,7 +246,7 @@ System({
     await message.send("_*Restarting*_");
     if (message.client.server === "HEROKU") {
         await heroku.delete(baseURI + "/dynos").catch(async (error) => {
-            await message.sendMessage(`HEROKU : ${error.body.message}`);
+            await message.send(`HEROKU : ${error.body.message}`);
         });
     } else {
         exec("pm2 restart jarvis", (error, stdout, stderr) => {
