@@ -6,7 +6,7 @@
     "keywords": ["whatsapp"],
     "repository": "https://github.com/Loki-Xer/Jarvis",
     "website": "https://github.com/Loki-Xer/Jarvis",
-    "success_url": "https://github.com/Loki-Xer/Jarvis",
+    "success_url": "/",
     "stack": "container",
     "env": {
         "BOT_INFO": {
@@ -97,14 +97,10 @@
             "value":""
         }
     },
-      "addons": [{
-      "plan": "heroku-postgresql"
-    }],
-    "buildpacks": [{
-      "url": "heroku-community/apt"
-      },
-      {
-      "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
-      }]
+      "addons": [{ "plan": "heroku-postgresql:basic" }],
+  "buildpacks": [
+    { "url": "https://github.com/heroku/heroku-buildpack-nodejs#latest" },
+    { "url": "https://github.com/carlosdommor/heroku-buildpack-ffmpeg-latest" }
+            ]
   }
   
