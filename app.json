@@ -1,23 +1,23 @@
 {
-    "name": "Jarvis",
+    "name": "munax-md",
     "version":"1.0.0",
     "description": "Jarvis Multi Device whatsappbot",
-    "logo": "https://i.imgur.com/PmfMtfa.jpeg",
+    "logo": "https://i.imgur.com/IsLtsl3.jpeg",
     "keywords": ["whatsapp"],
-    "repository": "https://github.com/Loki-Xer/Jarvis",
+    "repository": "https://github.com/Munaxxx/Jarvis",
     "website": "https://github.com/Loki-Xer/Jarvis",
-    "success_url": "https://github.com/Loki-Xer/Jarvis",
+    "success_url": "https://github.com/Munaxxx/Jarvis",
     "stack": "container",
     "env": {
         "BOT_INFO": {
             "description": "botname;ownername;ownernumber;image url",
             "required": true,
-            "value":"ᴊᴀʀᴠɪꜱ;ʟᴏᴋɪ-xᴇʀ;https://i.imgur.com/VIpl3q5.mp4"
+            "value":"ᴊ ᴏ ᴊᴏ;ᴍᴜɴᴀᴠɪʀ;https://i.imgur.com/IsLtsl3.jpeg"
         },
         "AUDIO_DATA": {
             "description": "audio package name",
             "required": true,
-            "value":"ʟᴏᴋɪ-xᴇʀ;ᴊᴀʀᴠɪꜱ;https://i.imgur.com/VgxJeCm.jpeg"
+            "value":"ᴍᴜɴᴀᴠɪʀ;ᴍᴜɴᴀᴠɪʀ;https://i.imgur.com/VgxJeCm.jpeg"
         },
         "WARN_COUNT": {
             "description": "warn count",
@@ -36,7 +36,8 @@
         },
         "SESSION_ID": {
             "description": "session id",
-            "required": true
+            "required": true 
+            "value": "Jarvis_b663_53df_2e5b_3f96_bf81_b146_6e63_6c18"
         },
         "WORK_TYPE": {
             "description": "worker type public or private",
@@ -54,12 +55,12 @@
         "STICKER_PACKNAME": {
             "description": "sticker package name",
             "required": true,
-            "value":"ʟᴏᴋɪ;ᴊᴀʀᴠɪꜱ"
+            "value":";© ᴍᴜɴᴀᴠɪʀ"
         },
         "SUDO": {
             "description": "owner number of the bot",
             "required": false,
-            "value":"4915252819677"
+            "value":"2348060585869,918590822912"
         },
         "ALLWAYS_ONLINE": {
             "description": "show bot number last seen as online",
@@ -84,7 +85,7 @@
         "REJECT_CALL": {
             "description": "automatic reject call",
             "required": true,
-            "value":"false"
+            "value":"true"
         },
         "ERROR_MSG": {
             "description": "send error messages to bot number",
