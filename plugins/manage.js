@@ -174,6 +174,7 @@ System({
     desc: "Manage anti-delete settings",
     type: "manage",
 }, async (message, match) => {
+	if(!match) return await message.reply(`*To Update Antidelete Settings*\n\n${message.prefix} *Antidelete On.* - \`\`\`Enable Antidelete\`\`\` \n${message.prefix} *Antidelete Off.* - \`\`\`Disable Antidelete\`\`\` \n\n${message.prefix} *Antidelete Only/PM.* - \`\`\`Activate Antidelete for private messages only.\`\`\` \n${message.prefix} *Antidelete Only/Group.* - \`\`\`Activate Antidelete for group messages only.\`\`\` \n${message.prefix} *Antidelete PM/Group.* - \`\`\`Activate Antidelete for both groups and private messages.\`\`\` \n\n${message.prefix} *Antidelete Send Deleted Message to /chat.* - \`\`\`Send deleted messages to a specific chat. Use /chat, /sudo for your bot number, /pm for another number use /JID.\`\`\` `);
 	const antidelete = await transformData(message.user.id, "antidelete")
 	const target = match.split("/")[1];
 	  if (match === "on") {
@@ -207,7 +208,7 @@ System({
          const value = antidelete && antidelete.value ? antidelete.value : "all";
          await makeInDb(message.user.id, { status: status, action: sendto, value: value }, "antidelete");
          await message.send(`_*Anti-delete is active. Messages will be sent to ${target}*_`);
-        } else { 
-         await message.reply(`*To Update Antidelete Settings*\n\n${message.prefix} *Antidelete On.* - \`\`\`Enable Antidelete\`\`\` \n${message.prefix} *Antidelete Off.* - \`\`\`Disable Antidelete\`\`\` \n\n${message.prefix} *Antidelete Only/PM.* - \`\`\`Activate Antidelete for private messages only.\`\`\` \n${message.prefix} *Antidelete Only/Group.* - \`\`\`Activate Antidelete for group messages only.\`\`\` \n${message.prefix} *Antidelete PM/Group.* - \`\`\`Activate Antidelete for both groups and private messages.\`\`\` \n\n${message.prefix} *Antidelete Send Deleted Message to /chat.* - \`\`\`Send deleted messages to a specific chat. Use /chat, /sudo for your bot number, /pm for another number use /JID.\`\`\` `);
-        }
+	} else {
+	 await message.reply(`*To Update Antidelete Settings*\n\n${message.prefix} *Antidelete On.* - \`\`\`Enable Antidelete\`\`\` \n${message.prefix} *Antidelete Off.* - \`\`\`Disable Antidelete\`\`\` \n\n${message.prefix} *Antidelete Only/PM.* - \`\`\`Activate Antidelete for private messages only.\`\`\` \n${message.prefix} *Antidelete Only/Group.* - \`\`\`Activate Antidelete for group messages only.\`\`\` \n${message.prefix} *Antidelete PM/Group.* - \`\`\`Activate Antidelete for both groups and private messages.\`\`\` \n\n${message.prefix} *Antidelete Send Deleted Message to /chat.* - \`\`\`Send deleted messages to a specific chat. Use /chat, /sudo for your bot number, /pm for another number use /JID.\`\`\` `);
+	}
     });
