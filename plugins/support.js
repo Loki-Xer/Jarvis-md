@@ -6,7 +6,7 @@ System({
     desc: "jarvis-md support",
     type: "support"
 }, async (message) => {
-    const name = 'ɪʀᴏɴ ᴍᴀɴ 🎓', title = "ᴊ ᴏ ᴊᴏ", number = '2348060585869', body = "hey👻";
+    const name = 'ᴍᴜɴᴀx 🌝', title = "ᴊ ᴏ ᴊᴏ", number = '2348060585869', body = "hey👻";
     const image = "https://i.imgur.com/IsLtsl3.jpeg", sourceUrl = '';
     const logo = await getBuffer(image);
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG: powered by Jarvis-md;\nTEL;type=CELL;type=VOICE;waid=${number}:${number}\nEND:VCARD`;
