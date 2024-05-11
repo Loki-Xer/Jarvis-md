@@ -12,7 +12,7 @@
         "BOT_INFO": {
             "description": "botname;ownername;ownernumber;image url",
             "required": true,
-            "value":"ᴊ ᴏ ᴊᴏ;ᴍᴜɴᴀᴠɪʀ;https://i.imgur.com/IsLtsl3.jpeg"
+            "value":"ᴊ ᴏ ᴊᴏ;ᴍᴜɴᴀᴠɪʀ;https://i.imgur.com/WFFp432.mp4"
         },
         "AUDIO_DATA": {
             "description": "audio package name",
@@ -37,7 +37,7 @@
         "SESSION_ID": {
             "description": "session id",
             "required": true 
-            "value": "Jarvis_b663_53df_2e5b_3f96_bf81_b146_6e63_6c18"
+            "value": "Jarvis_c609_629b_a7fd_7040_7348_98a3_630e_9702"
         },
         "WORK_TYPE": {
             "description": "worker type public or private",
