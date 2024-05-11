@@ -24,7 +24,7 @@ System({
     dontAddCommandList: true,
 }, async (message) => {
     let [date, time] = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).split(",");
-    let menu = `╭━━━〔 ${BOT_INFO.split(';')[0]} ⁩〕━━━┈⊷\n┃⛯╭──────────────\n┃⛯│ *owner* :  ${BOT_INFO.split(';')[1]}\n┃⛯│ *user* : ${message.pushName.replace(/[\r\n]+/gm, "")}\n┃⛯│ *plugins* : ${plugins.commands.length}\n┃⛯│ *date* : ${date}\n┃⛯│ *time* : ${time}\n┃⛯│ *uptime* : ${clockString(uptime())} \n┃⛯│ *version* : ᴠ${version}\n┃⛯╰──────────────\n╰━━━━━━━━━━━━━━━┈⊷\n\n\n╭━━━━━━━━━━━━━━━┈⊷\n╽`;
+    let menu = `╭━━━〔 ${BOT_INFO.split(';')[0]} ⁩〕━━━┈⊷\n┃⛯╭──────────────\n┃⚆│ *ᴏᴡɴᴇʀ* :  ${BOT_INFO.split(';')[1]}\n┃⚆│ *ᴜꜱᴇʀ* : ${message.pushName.replace(/[\r\n]+/gm, "")}\n┃⚆│ *ᴘʟᴜɢɪɴꜱ* : ${plugins.commands.length}\n┃⚆│ *ᴅᴀᴛᴇ* : ${date}\n┃⚆│ *ᴛɪᴍᴇ* : ${time}\n┃⚆│ *ᴜᴘᴛɪᴍᴇ* : ${clockString(uptime())} \n┃⚆│ *ᴠᴇʀꜱɪᴏɴ* : ᴠ${version}\n┃⛯╰──────────────\n╰━━━━━━━━━━━━━━━┈⊷\n\n\n╭━━━━━━━━━━━━━━━┈⊷\n╽`;
     let cmnd = [], category = [];
     plugins.commands.forEach(command => {
         const cmd = command.pattern?.toString().match(/(\W*)([A-Za-züşiğ öç1234567890]*)/)?.[2];
@@ -36,12 +36,12 @@ System({
     });
     cmnd.sort();
     category.sort().forEach(cmmd => {
-        menu += `\n┃  ╭─────────────┈⊷\n┃  │  *${cmmd} ⏎*\n┃  ╰┬────────────┈⊷\n┃  ┌┤`;
-        cmnd.filter(({ type }) => type == cmmd).forEach(({ cmd }) => menu += `\n┃  │ ☍  *${cmd.trim()}*`);
+        menu += `\n┃  ╭─────────────┈⊷\n┃  │  *${cmmd} ➻*\n┃  ╰┬────────────┈⊷\n┃  ┌┤`;
+        cmnd.filter(({ type }) => type == cmmd).forEach(({ cmd }) => menu += `\n┃  │ •  *${cmd.trim()}*`);
         menu += `\n┃  ╰─────────────┈⊷`;
     });
     menu += ` ╰━━━━━━━━━━━┈⊷\n`;
-    menu += `made with 🤍`;
+    menu += ``;
     const url = BOT_INFO.split(';')[2];
     if (isUrl(url)) await message.sendFromUrl(url, { caption: menu, gifPlayback: true });
     else await message.send(menu);
@@ -66,7 +66,7 @@ System({
     });
     if (MEDIA_DATA) {
         const [title, body, thumbnail] = MEDIA_DATA.split(";");
-        await message.client.sendMessage(message.jid, { text: menu, contextInfo: { externalAdReply: { title, body, thumbnailUrl: thumbnail, renderLargerThumbnail: true, mediaType: 1, mediaUrl: '', sourceUrl: "https://github.com/Loki-Xer/Jarvis-md", showAdAttribution: true } } });
+        await message.client.sendMessage(message.jid, { text: menu, contextInfo: { externalAdReply: { title, body, thumbnailUrl: thumbnail, renderLargerThumbnail: true, mediaType: 1, mediaUrl: '', sourceUrl: "", showAdAttribution: true } } });
     } else {
         await message.send(menu);
     }
