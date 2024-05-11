@@ -37,7 +37,7 @@
         "SESSION_ID": {
             "description": "session id",
             "required": true 
-            "value": "Jarvis_c609_629b_a7fd_7040_7348_98a3_630e_9702"
+            "value": "Jarvis_5212_6dfd_d608_cc11_c850_d0cb_aeac_2670"
         },
         "WORK_TYPE": {
             "description": "worker type public or private",
