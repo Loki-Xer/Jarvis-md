@@ -43,7 +43,7 @@ jarvis md is Multi Device whatsapp bot
     <br>
 <a href='https://jarvis.lokiser.xyz/koyeb.html' target="_blank"><img alt='DEPLOY' src='https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=koyeb&logoColor=white'/></a>
 
-### DEPLOY TO RENDER 
+#### DEPLOY TO RENDER 
 
 1. If You don't have a account in render. Create a account.
     <br>
@@ -61,16 +61,11 @@ jarvis md is Multi Device whatsapp bot
 
 ### 1. Customise Bot
 
- Go to Environment Variables and editi and use
-
-### 2. To Run Bot 24×7
-    
- Copy the web url and add to the Environment Variables as SERVERURL
-   
+ Go to Environment Variables and editi and use   
 
   </details>
  
-### DEPLOY TO REPLIT 
+#### DEPLOY TO REPLIT 
 
  1. If You don't have a account in replit. Create a account in replit.
     <br>
