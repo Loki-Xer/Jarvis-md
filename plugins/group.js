@@ -302,7 +302,7 @@ System({
     if (!isadmin) return await message.send("_I'm not admin_");
     const meta = await message.client.groupMetadata(message.chat)
     if (meta.restrict) return await message.send("_Already only admin can modify group settings_")
-    await client.groupSettingUpdate(message.jid, 'locked')
+    await message.client.groupSettingUpdate(message.jid, 'locked')
     return await message.send("*Only admin can modify group settings*")
 });
 
