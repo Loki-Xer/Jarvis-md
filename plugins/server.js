@@ -266,8 +266,9 @@ System({
 }, async (message, value) => {
     if (!value || !["private", "public"].includes(value)) {
     if(!message.isGroup) return message.reply("_*mode private/public*_");
-   await message.send("Choose mode", {values: [{ displayText: "private", id: "mode private"}, { displayText: "public", id: "mode public"}], onlyOnce: true, withPrefix: true, participates: [message.sender] }, "poll");
+    await message.send("Choose mode", {values: [{ displayText: "private", id: "mode private"}, { displayText: "public", id: "mode public"}], onlyOnce: true, withPrefix: true, participates: [message.sender] }, "poll");
     }
+    if(value.toLowerCase() !== "public" && value.toLowerCase() !== "private") return;
     if (message.client.server !== "HEROKU") return await message.reply("_*Mod cmd only works in Heroku or Koyeb*_");
     await heroku.patch(baseURI + "/config-vars", { body: { ["WORK_TYPE".toUpperCase()]: value } })
         .then(async () => { await message.send(`_*Work type changed to ${value}*_`); })
