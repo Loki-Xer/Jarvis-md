@@ -74,20 +74,29 @@ System({
 
 
 System({
-	pattern: "kick$",
-	fromMe: true,
-	desc: "kicks a person from group",
-	type: "group",
+    pattern: "kick$",
+    fromMe: true,
+    desc: "Kicks a person from the group",
+    type: "group",
 }, async (message, match) => {
-	if (!message.isGroup)
-	return await message.send("_This command is for groups_");
-	match = message.mention.jid?.[0] || message.reply_message.sender || match
-	if (!match) return await message.send("_Mention user to kick");
-	let isadmin = await isAdmin(message, message.user.jid);
-	if (!isadmin) return await message.send("_I'm not admin_");
-	const jid = parsedJid(match)
-	await await message.client.groupParticipantsUpdate(message.jid, jid, "remove");
-	return await message.client.sendMessage(message.chat, {text: `_@${jid[0].split("@")[0]} kicked successfully_`, mentions: jid, });
+    if (!message.isGroup) return await message.send("_This command is for groups_");   
+    match = message.mention?.jid?.[0] || message.reply_message?.sender || match;
+    if (!match) return await message.send("_Mention a user to kick_");    
+    if (!await isAdmin(message, message.user.jid)) return await message.send("_I'm not an admin_");
+    if (match === "all") {
+        let { participants } = await message.client.groupMetadata(message.jid);
+        participants = participants.filter(p => p.id !== message.user.jid);       
+        await message.reply("_To stop this process, use the restart command_");
+        for (let key of participants) {
+            const jid = parsedJid(key.id);
+            await message.client.groupParticipantsUpdate(message.jid, jid, "remove");
+            await message.client.sendMessage(message.chat, {text: `_@${jid[0].split("@")[0]} kicked successfully_`, mentions: jid });
+        }
+    } else {
+        const jid = parsedJid(match);
+        await message.client.groupParticipantsUpdate(message.jid, jid, "remove");
+        await message.client.sendMessage(message.chat, {text: `_@${jid[0].split("@")[0]} kicked successfully_`, mentions: jid, });
+    }
 });
 
 System({
@@ -171,22 +180,6 @@ System({
 	await message.client.groupSettingUpdate(message.jid, "not_announcement");
 	return await mute.edit("_Group Unmuted successfully_");
 });
-
-System({
-	pattern: "kickall",
-	fromMe: true,
-	desc: "Adds a person to group",
-	type: "group",
-}, async (message) => {
-	let { participants } = await message.client.groupMetadata(message.jid);
-	let isadmin = await isAdmin(message, message.user.jid);
-	if (!isadmin) return await message.send("_I'm not admin_");
-        for (let key of participants) {
-	let jid = parsedJid(key.id);
-	await await message.client.groupParticipantsUpdate(message.jid, jid, "remove");
-	return await message.client.sendMessage(message.chat, {text: `_@${jid[0].split("@")[0]} kicked successfully_`, mentions: jid, });
-}});
-
 
 System({
     pattern: "tag",
