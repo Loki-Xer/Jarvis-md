@@ -1,5 +1,5 @@
 const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl, IronMan, getBuffer, toAudio } = require("../lib/");
-
+const axios = require('axios');
 
 const fetchData = async (mediafireUrl) => {
     const data = await getJson(config.API + "download/mediafire?link=" + mediafireUrl)
@@ -80,17 +80,20 @@ System({
 System({
     pattern: 'fb ?(.*)',
     fromMe: isPrivate,
-    desc: 'Download Facebook media',
-    type: 'download'
-}, async (message, match, m) => {
-    const url = match || message.reply_message.text;
-    if (!isUrl(url)) return await message.send("_*Need a valid URL*_");
-    match = await extractUrlFromMessage(url);
-    if (!match) return await message.send("_*Need a Facebook URL*_");
-    if (!match.includes('facebook')) return await message.send("_*Need a Facebook URL*_");
-    const { data } = await getJson(config.API + "download/fb?url=" + match);
-    await message.sendFromUrl(data[0].url);
+    desc: 'Download Facebook video',
+    type: 'download',
+}, async (message, match) => {
+    if (!match) {
+        await message.send("*Need a Facebook public media link*\n_Example: .fb ");
+        return;
+    }
+
+    const query = match;
+    const response = await axios.get(IronMan(`ironman/dl/fb?url=${query}`));
+
+    await message.client.sendMessage(message.chat, {video: {url: response.data.ironman[0].url}, caption: "_*Downloaded🤍*_" })
 });
+
   
 System({
     pattern: 'pinterest ?(.*)',
