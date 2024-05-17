@@ -266,7 +266,7 @@ System({
 }, async (message, value) => {
     if (!value || !["private", "public"].includes(value)) {
     if(!message.isGroup) return message.reply("_*mode private/public*_");
-   await message.sendPollMessage({ name: "Choose mode", values: [{ displayText: "private", id: "mode private"}, { displayText: "public", id: "mode public"}], onlyOnce: true, withPrefix: true, participates: [message.sender] });
+   await message.send("Choose mode", {values: [{ displayText: "private", id: "mode private"}, { displayText: "public", id: "mode public"}], onlyOnce: true, withPrefix: true, participates: [message.sender] }, "poll");
     }
     if (message.client.server !== "HEROKU") return await message.reply("_*Mod cmd only works in Heroku or Koyeb*_");
     await heroku.patch(baseURI + "/config-vars", { body: { ["WORK_TYPE".toUpperCase()]: value } })
