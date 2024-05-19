@@ -1,8 +1,9 @@
 const simpleGit = require('simple-git');
 const axios = require('axios');
 const Heroku = require("heroku-client");
-const git = simpleGit();
+const { exec } = require('child_process');
 const Config = require("../../config");
+const git = simpleGit();
 const heroku = new Heroku({ token: Config.HEROKU_API_KEY });
 
 const axiosConfig = {
@@ -13,33 +14,33 @@ const axiosConfig = {
 };
 
 const gitPull = async (m) => {
-    m.reply("*Checking for updates...*");
-    await git.fetch();
-    let newCommits = await git.log(['main..origin/main']);
-    if (newCommits.total) {
-        m.reply("*New Update pending, updating...*");
-        await git.pull("origin", "main", async (err, update) => {
-            if (update && update.summary.changes) {
-                if (update.files.includes('package.json')) {
-                    await new Promise((resolve, reject) => {
-                        exec('npm install', (error, stdout, stderr) => {
-                            if (error) {
-                                m.reply("*Failed to install npm packages!*");
-                                reject(error);
-                            } else {
-                                m.reply("Installed npm packages successfully.");
-                                resolve();
-                            }
-                        });
+    try {
+        m.reply("*Checking for updates...*");
+        await git.fetch();
+        let newCommits = await git.log(['main..origin/main']);
+        if (newCommits.total > 0) {
+            m.reply("*New update pending, updating...*");
+            await git.pull("origin", "main");
+            const packageChanged = newCommits.latest && newCommits.latest.message.includes('package.json');
+            if (packageChanged) {
+                await new Promise((resolve, reject) => {
+                    exec('npm install', (error, stdout, stderr) => {
+                        if (error) {
+                            m.reply("*Failed to install npm packages!*");
+                            reject(error);
+                        } else {
+                            m.reply("Installed npm packages successfully.");
+                            resolve();
+                        }
                     });
-                }
-                return m.reply("*Updated the bot with latest changes.*");
-            } else if (err) {
-                return m.reply("*Could not pull latest changes!*");
+                });
             }
-        });
-    } else {
-        return m.reply("*Bot is already working on latest version.*");
+            return m.reply("*Updated the bot with latest changes.*");
+        } else {
+            return m.reply("*Bot is already working on the latest version.*");
+        }
+    } catch (error) {
+        return m.reply("*Error updating bot.*");
     }
 }
 
@@ -69,7 +70,7 @@ const redeploy = async () => {
 const updateBot = async (message) => {
     try {
         const commits = await git.log(['main..origin/main']);
-        if (commits.total === 0) return message.send(`_Jarvis is on the latest version: v${version}_`);       
+        if (commits.total === 0) return message.send(`_Jarvis is on the latest version._`);       
         await message.send("*Updating Jarvis, please wait...*");        
         await git.fetch('upstream', 'main');
         await git.reset('hard', ['FETCH_HEAD']);      
@@ -77,7 +78,7 @@ const updateBot = async (message) => {
         const git_url = app.git_url.replace("https://", "https://api:" + Config.HEROKU_API_KEY + "@");
         await git.addRemote('heroku', git_url);
         await git.push('heroku', 'main');     
-        return await message.send('_*Bot updated...  Restarting*_');
+        return await message.send('_*Bot updated... Restarting.*_');
     } catch (error) {
         return message.send('*Error updating bot.*');
     }
