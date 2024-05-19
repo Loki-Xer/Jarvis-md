@@ -82,7 +82,8 @@ System({
     fromMe: isPrivate,
     desc: 'Download Facebook video',
     type: 'download',
-}, async (message, match) => {
+}, async (message, text) => {
+    let match = await extractUrlFromMessage(text || message.reply_message.text);
     if (!match) return await message.send("*Need a Facebook public media link*\n_Example: .fb ");       
     const response = await getJson(IronMan(`ironman/dl/fb?url=${match}`));
     await message.client.sendMessage(message.chat, {video: {url: response.ironman[0].url }, caption: "_*Downloaded🤍*_" })
@@ -94,8 +95,8 @@ System({
     fromMe: isPrivate,
     desc: "pinterest downloader",
     type: "download",
-}, async (message, match, m) => {
-    match = match || message.reply_message.text;
+}, async (message, text, m) => {
+    let match = await extractUrlFromMessage(text || message.reply_message.text);
     if (!match) return await message.reply('_Please provide a pinterest *url*');
     if (!isUrl(match)) return await message.reply("_Please provide a valid pinterest *url*");
     if (!match.includes("pin.it")) return await message.reply("_Please provide a valid pinterest *url*");
