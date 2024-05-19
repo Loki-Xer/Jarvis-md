@@ -1,5 +1,5 @@
 const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl, IronMan, getBuffer, toAudio } = require("../lib/");
-const axios = require('axios');
+
 
 const fetchData = async (mediafireUrl) => {
     const data = await getJson(config.API + "download/mediafire?link=" + mediafireUrl)
