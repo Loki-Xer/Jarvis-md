@@ -83,15 +83,9 @@ System({
     desc: 'Download Facebook video',
     type: 'download',
 }, async (message, match) => {
-    if (!match) {
-        await message.send("*Need a Facebook public media link*\n_Example: .fb ");
-        return;
-    }
-
-    const query = match;
-    const response = await axios.get(IronMan(`ironman/dl/fb?url=${query}`));
-
-    await message.client.sendMessage(message.chat, {video: {url: response.data.ironman[0].url}, caption: "_*Downloaded🤍*_" })
+    if (!match) return await message.send("*Need a Facebook public media link*\n_Example: .fb ");       
+    const response = await getJson(IronMan(`ironman/dl/fb?url=${match}`));
+    await message.client.sendMessage(message.chat, {video: {url: response.ironman[0].url }, caption: "_*Downloaded🤍*_" })
 });
 
   
