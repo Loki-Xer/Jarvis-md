@@ -1,7 +1,8 @@
-const { client } = require("./lib/");
+const { client, config } = require("./lib/");
 
 const start = async () => {
     try {
+        await config.DATABASE.sync();
         const Client = new client();
         Client.log("starting client...");
         await Client.startServer();
