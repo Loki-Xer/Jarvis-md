@@ -186,7 +186,7 @@ System({
                 let data = await redeploy();
                 return await message.reply(data);
             } else {
-                const data = gitPull();
+                const data = gitPull(message);
                 await message.send(data);
             }
         }
