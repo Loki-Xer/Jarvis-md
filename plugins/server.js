@@ -19,39 +19,7 @@ const baseURI = "/apps/" + Config.HEROKU_APP_NAME;
 const simpleGit = require("simple-git");
 const git = simpleGit();
 const exec = require("child_process").exec;
-const axios = require('axios');
-
-async function updateBot(message) {
-    const commits = await git.log(['main..origin/main']);
-    if (commits.total === 0) return message.send('_Jarvis is on the latest version: v${version}_');
-    const app = await heroku.get('/apps/' + Config.HEROKU_APP_NAME);
-    await message.send("*Updating Jarvis, please wait...*");
-    git.fetch('upstream', 'main');
-    git.reset('hard', ['FETCH_HEAD']);
-    const git_url = app.git_url.replace("https://", "https://api:" + Config.HEROKU_API_KEY + "@");
-    try {
-        await git.addRemote('heroku', git_url);
-    } catch {
-        console.log('Heroku remote adding error');
-    }
-    await git.push('heroku', 'main');
-    return await message.send('*Bot updated...*\n_Restarting._');
-}
-
-async function getDeployments() {
-    const validStatus = new Set(['STOPPED', 'STOPPING', 'ERROR', 'ERRPRING']);
-    const response = await axios.get('https://app.koyeb.com/v1/deployments', { headers: { 'Content-Type': 'application/json;charset=UTF-8', "Authorization": `Bearer ${Config.KOYEB_API}` } });
-    const deploymentStatuses = response.data.deployments.map(deployment => deployment.status);
-    return deploymentStatuses.filter(status => !validStatus.has(status)).length > 1;
-}
-
-async function redeploy() {
-    if (!Config.KOYEB_API)return '*Error redeploying.*\n*Ensure KOYEB_API key is properly set.*\n_E.g.: KOYEB_API:api key from https://app.koyeb.com/account/api ._';
-    const { data } = await axios.get(`https://app.koyeb.com/v1/services`, { headers: { 'Content-Type': 'application/json;charset=UTF-8', "Authorization": `Bearer ${Config.KOYEB_API}` } });
-    if (!data.services.length) throw new Error("No services found.");
-    await axios.post(`https://app.koyeb.com/v1/services/${data.services[0].id}/redeploy`, { "deployment_group": "prod" }, axiosConfig);
-    return '_Update started._';
-}
+const { gitPull, getDeployments, redeploy, updateBot } = require("./client/");
 
 System({
     pattern: "shutdown",
@@ -218,9 +186,8 @@ System({
                 let data = await redeploy();
                 return await message.reply(data);
             } else {
-                await git.reset("hard", ["HEAD"])
-                await git.pull()
-                await message.send("_Successfully updated. Please manually update npm modules if applicable!_");
+                const data = gitPull();
+                await message.send(data);
             }
         }
     } else if (commits.total === 0) {
