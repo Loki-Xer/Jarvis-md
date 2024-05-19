@@ -12,23 +12,34 @@ const axiosConfig = {
     }
 };
 
-const gitPull = async () => {
-    try {
-        await git.fetch();
-        const newCommits = await git.log(['main..origin/main']);
-        if (newCommits.total > 0) {
-            const update = await git.pull("origin", "main");
-            if (update && update.summary.changes && update.files.includes('package.json')) {
-                await git.reset("hard", ["HEAD"]);
-                await git.pull();
-                return "_Successfully updated. Please manually update npm modules if applicable!_";
-            } else {
-                return "Bot is already working on the latest version.";
+const gitPull = async (m) => {
+    m.reply("*Checking for updates...*");
+    await git.fetch();
+    let newCommits = await git.log(['main..origin/main']);
+    if (newCommits.total) {
+        m.reply("*New Update pending, updating...*");
+        await git.pull("origin", "main", async (err, update) => {
+            if (update && update.summary.changes) {
+                if (update.files.includes('package.json')) {
+                    await new Promise((resolve, reject) => {
+                        exec('npm install', (error, stdout, stderr) => {
+                            if (error) {
+                                m.reply("*Failed to install npm packages!*");
+                                reject(error);
+                            } else {
+                                m.reply("Installed npm packages successfully.");
+                                resolve();
+                            }
+                        });
+                    });
+                }
+                return m.reply("*Updated the bot with latest changes.*");
+            } else if (err) {
+                return m.reply("*Could not pull latest changes!*");
             }
-        }
-    } catch (error) {
-        console.error("Error pulling latest changes:", error);
-        return "Could not pull latest changes!";
+        });
+    } else {
+        return m.reply("*Bot is already working on latest version.*");
     }
 }
 
