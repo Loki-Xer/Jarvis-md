@@ -186,8 +186,7 @@ System({
                 let data = await redeploy();
                 return await message.reply(data);
             } else {
-                const data = gitPull(message);
-                await message.send(data);
+                await gitPull(message);
             }
         }
     } else if (commits.total === 0) {
