@@ -70,14 +70,18 @@ const redeploy = async () => {
 const updateBot = async (message) => {
     try {
         const commits = await git.log(['main..origin/main']);
-        if (commits.total === 0) return message.send(`_Jarvis is on the latest version._`);       
-        await message.send("*Updating Jarvis, please wait...*");        
-        await git.fetch('upstream', 'main');
-        await git.reset('hard', ['FETCH_HEAD']);      
+        if (commits.total === 0) return message.send('_Jarvis is on the latest version: v${version}_');
         const app = await heroku.get('/apps/' + Config.HEROKU_APP_NAME);
+        await message.send("*Updating Jarvis, please wait...*");
+        git.fetch('upstream', 'main');
+        git.reset('hard', ['FETCH_HEAD']);
         const git_url = app.git_url.replace("https://", "https://api:" + Config.HEROKU_API_KEY + "@");
-        await git.addRemote('heroku', git_url);
-        await git.push('heroku', 'main');     
+        try {
+            await git.addRemote('heroku', git_url);
+        } catch {
+            message.send('Heroku remote adding error');
+        }
+        await git.push('heroku', 'main');
         return await message.send('_*Bot updated... Restarting.*_');
     } catch (error) {
         return message.send('*Error updating bot.*');
