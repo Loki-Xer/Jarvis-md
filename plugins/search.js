@@ -1,5 +1,5 @@
 const { System, IronMan, isPrivate, getJson } = require("../lib/");
-
+const axios = require('axios');
 
 System({
         pattern: "ig ?(.*)",
@@ -117,29 +117,24 @@ System({
 });
 
 System({
-    pattern: "img",
-    fromMe: isPrivate,
-    desc: "to search Google images",
-    type: "search",
+  pattern: 'img ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Search google images',
+  type: 'search',
 }, async (message, match) => {
-    match = match || message.reply_message.text;
-    if (!match) return await message.reply("_Invalid command format. Please use e.g.: iron man,10_");
-    let [searchTerm, numberOfImages] = match.split(',').map(part => part.trim());
-    numberOfImages = numberOfImages ? (isNaN(numberOfImages) || numberOfImages < 1 || numberOfImages > 10 ? 5 : parseInt(numberOfImages)) : 5;
-    const encodedSearchTerm = encodeURIComponent(searchTerm);
-    const data = await getJson(await IronMan(`ironman/s/google?image=${encodedSearchTerm}`));
-    const urlsToSend = data.map(item => item.url);
-    const send = await message.send(`_Downloading ${numberOfImages} images of ${searchTerm}_`);
-    for (const imageUrl of urlsToSend.slice(0, numberOfImages)) {
-        try {
-            await message.client.sendMessage(message.chat, {image: { url: imageUrl }});
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        } catch (imageError) {
-            console.error("Error with image:", imageError);
-            await send.edit("_Error in image_");
-        }
-    }
-    await send.edit("_Downloaded_");
+  const [query, count] = match.split(',').map(item => item.trim());
+  const imageCount = count ? parseInt(count, 10) : 5;
+  if (!query) return await message.send("*Need a Query*\n_Example: .img ironman, 5_");
+  const fx = await message.send(`Downloading ${imageCount} images of *${query}*`);
+  const response = await axios.get(IronMan(`ironman/s/google?image=${encodeURIComponent(query)}`));
+  const urls = response.data;
+  if (urls.length === 0) return await message.send("No images found for the query");
+  const ironman = urls.length <= imageCount ? urls : urls.sort(() => 0.5 - Math.random()).slice(0, imageCount);
+  for (const url of ironman) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await message.client.sendMessage(message.chat, { image: { url }, caption: "" });
+  }
+  await fx.edit("*Downloaded*");
 });
 
 System({
