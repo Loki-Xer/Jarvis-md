@@ -1,5 +1,4 @@
 const { System, IronMan, isPrivate, getJson } = require("../lib/");
-const axios = require('axios');
 
 System({
         pattern: "ig ?(.*)",
@@ -125,16 +124,15 @@ System({
   const [query, count] = match.split(',').map(item => item.trim());
   const imageCount = count ? parseInt(count, 10) : 5;
   if (!query) return await message.send("*Need a Query*\n_Example: .img ironman, 5_");
-  const fx = await message.send(`Downloading ${imageCount} images of *${query}*`);
-  const response = await axios.get(IronMan(`ironman/s/google?image=${encodeURIComponent(query)}`));
-  const urls = response.data;
+  const msg = await message.send(`Downloading ${imageCount} images of *${query}*`);
+  const urls = await getJson(IronMan(`ironman/s/google?image=${encodeURIComponent(query)}`));
   if (urls.length === 0) return await message.send("No images found for the query");
-  const ironman = urls.length <= imageCount ? urls : urls.sort(() => 0.5 - Math.random()).slice(0, imageCount);
-  for (const url of ironman) {
+  const list = urls.length <= imageCount ? urls : urls.sort(() => 0.5 - Math.random()).slice(0, imageCount);
+  for (const url of list) {
     await new Promise(resolve => setTimeout(resolve, 1000));
     await message.client.sendMessage(message.chat, { image: { url }, caption: "" });
   }
-  await fx.edit("*Downloaded*");
+  await msg.edit("*Downloaded*");
 });
 
 System({
