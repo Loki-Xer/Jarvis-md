@@ -25,7 +25,7 @@ System({
     pattern: "shutdown",
     fromMe: true,
     type: "server",
-    desc: "Heroku Dyno off",
+    desc: "shutdown bot",
 }, async (message) => {
     await message.send(`_Jarvis is shutting down..._`);
     return await shell("npm stop");
