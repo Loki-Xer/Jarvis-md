@@ -28,7 +28,7 @@ System({
     desc: "Heroku Dyno off",
 }, async (message) => {
     await message.send(`_Jarvis is shutting down..._`);
-    return await shell("pm2 stop jarvis");
+    return await shell("npm stop");
 });
 
 System({
