@@ -41,6 +41,10 @@ System({
 	desc: "Set full screen profile picture",
 	type: "whatsapp",
 }, async (message, match) => {
+	if(match && match === "remove") {
+	   await message.client.removeProfilePicture(message.user.jid);
+	   return await message.reply("_Profile Picture Removed_");
+	}
 	if (!message.reply_message.image)
 	return await message.reply("_Reply to a photo_");
 	let media = await message.reply_message.download();
