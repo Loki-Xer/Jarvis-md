@@ -64,6 +64,15 @@ System({
 });
 
 System({
+    pattern: "platform",
+    fromMe: true,
+    type: "server",
+    desc: "Show which platform you delpoyed",
+}, async (message, match) => {
+    message.reply("_*" + "You ara delpoyed on " + messsge.client.server + "*_");
+});
+
+System({
     pattern: "delvar",
     fromMe: true,
     type: "server",
