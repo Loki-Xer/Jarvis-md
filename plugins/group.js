@@ -423,7 +423,7 @@ System({
     type: "group",
 }, async (message, match) => {
     if (!message.isGroup) return message.reply("_*This command is for groups only.*_");
-    const data = await message.groupStatus("disactive");
+    const data = await message.store.groupStatus(message.chat, "disactive");
     let inactiveUsers = Array.isArray(data) ? `*Total Inactive Users ${data.length}*\n\n` + data.map((item, index) => `*${index + 1}. User: @${item.jid.split("@")[0]}*\n*Role: ${item.role}*\n\n`).join("") : "_*No inactive users found.*_";
     return await message.send(inactiveUsers.trim(), { mentions: data.map(a => a.jid) || [] });
 });
@@ -435,7 +435,7 @@ System({
     type: "group",
 }, async (message, match) => {
     if (!message.isGroup) return message.reply("_*This command is for groups only.*_");
-    const data = await message.groupStatus("active");
+    const data = await message.store.groupStatus(message.jid, "active");
     let activeUsers = Array.isArray(data) ? `*Total Active Users ${data.length}*\n\n` + data.map(item => `*Name: ${item.pushName}*\n*Number: ${item.jid.split("@")[0]}*\n*Total Messages: ${item.messageCount}*\n\n`).join("") : "_*No active users found.*_";
     return await message.send([{ name: "quick_reply", display_text: "Inactive users", id: "inactive" }], { body: "", footer: "\n*JARVIS-MD*", title: activeUsers.trim() }, "button");
 });
