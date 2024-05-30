@@ -20,12 +20,7 @@ const {
     warnMessage,
     extractUrlFromMessage,
 } = require("../lib/");
-
-const isBotAdmins = async (message) => {
-	const groupMetadata = await message.client.groupMetadata(message.chat)
-	const admins = await groupMetadata.participants.filter(v => v.admin !== null).map(v => v.id)
-	return admins.includes(message.user_id)
-}
+const { isBotAdmins, getAllGroups } = require("./client/");
 
 System({
     pattern: 'add ?(.*)',
@@ -364,15 +359,17 @@ System({
     fromMe: true,
     desc: "To get group jid",
     type: 'group'
-}, async (message, match, client) => {
-    match = match || message.reply_message.text
-    if (!message.isGroup) return await message.reply("_This command is for groups_");
-    let { participants } = await message.client.groupMetadata(message.jid);
-    let participant = participants.map((u) => u.id);
-    let str = " *Group Jids* \n\n";
-    participant.forEach((result) => { str += ` ${result}\n`; });
-    await message.reply(str);
+}, async (message, match) => {
+    match = match || message.reply_message.text;
+    if (!message.isGroup || match === "info") return message.send(`*All Group Jid*\n${await getAllGroups(message.client)}`);    
+    if (match === "participants jid") {
+        const { participants, subject } = await message.client.groupMetadata(message.jid);
+        const participantJids = participants.map(u => u.id).join("\n\n")
+        return message.reply(`*Group Participants Jid*\n\n*Group Name:* ${subject}\n*All Participants Jid*\n\n${participantJids}`);
+    }
+    await message.send([ { name: "quick_reply", display_text: "All Group Info", id: "gjid info" }, { name: "quick_reply", display_text: "Group Participants Jid", id: "gjid participants jid" } ], { body: "", footer: "*JARVIS-MD*", title: "*Group Jid Info 🎏*\n" }, "button");
 });
+
 
 System({
     pattern: 'ginfo ?(.*)',
