@@ -227,15 +227,17 @@ System({
 	desc: "Set full-screen profile picture",
 	type: "group",
 }, async (message) => {
-    if (!message.isGroup) { return await message.send("_This command is for groups_"); }
+    if (!message.isGroup) return await message.send("_This command is for groups_"); 
     let isadmin = await isAdmin(message, message.user.jid);
-    if (!isadmin) { return await message.send("_I'm not an admin_"); }
-    if (!message.reply_message.image) { return await message.send("_Reply to a photo_"); }
-    try { const media = await message.reply_message.download();
+    if (!isadmin) return await message.send("_I'm not an admin_");
+    if(match && match === "remove") {
+	await message.client.removeProfilePicture(message.jid);
+	return await message.reply("_Group Profile Picture Removed_");
+    }
+    if (!message.reply_message.image) return await message.send("_Reply to a photo_");
+    const media = await message.reply_message.download();
     await message.client.updateProfile(media, message.jid);
-    return await message.send("_Group Profile Picture Updated_"); } catch (error) {
-    console.error("Error updating profile picture:", error);
-    return await message.send("_Failed to update profile picture_");
+    return await message.send("_Group Profile Picture Updated_");
 }});
 
 System({
