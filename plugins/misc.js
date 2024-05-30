@@ -119,7 +119,7 @@ const {
       }; 
       let wm = 'https://wa.me/' + user.split('@')[0];
       const setAt = date.toLocaleString('en-US', options);
-      const NaMe = await message.getName(user);
+      const NaMe = await message.store.getName(user);
       await message.send({ url: pp }, { caption: `*Name :* ${NaMe}\n*About :* ${status.status}\n*About Set Date :* ${setAt}\n*whatsapp :* ${wm}`, quoted: message }, 'image');
   });
   
@@ -151,14 +151,14 @@ const {
       if (!message.body.includes('@') || !message.body.includes('‣')) return;
       if (message.body.includes("1")) {
           const text = message.body.split(" ");
-          const data = await postJson("https://api.lokiser.xyz/scraper/checkmail", { email: text[2] });
+          const data = await postJson(config.API + "scraper/checkmail", { email: text[2] });
       if (data.tempmail.length === 0) return message.reply("_*Mail box is empty*_");
           const formattedResponse = `\n  *Temp Mail ✉️*\n\n${data.tempmail.map((mail, index) => `\n  • *From :* ${mail.from}\n  • *Subject :* ${mail.subject}\n  • *Date :* ${mail.date}\n  • *Id :* ${mail.id}\n  • *Mail Number:* ${index + 1}`).join("\n\n")}`;
           await message.send(formattedResponse);
       } else if (message.body.includes("2")) {
          const { tempmail } = await getJson("https://api.lokiser.xyz/scraper/tempmail");
-         const user = await message.getName(message.sender);
-         const data = await postJson("https://api.lokiser.xyz/scraper/checkmail", { email: tempmail });
+         const user = await message.store.getName(message.sender);
+         const data = await postJson(config.API + "scraper/checkmail", { email: tempmail });
          await message.send(`*_${tempmail}_*\n\n*Dear user, this is your temp mail*\n\n*User: ${user}*\n*Mail received: ${data.tempmail.length}*\n\n\`\`\`1 ‣\`\`\` *Check mail*\n\`\`\`2 ‣\`\`\` *Next mail*\n\n*_Send a Number as reply_*`);
       }
   });
