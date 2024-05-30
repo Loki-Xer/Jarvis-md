@@ -11,7 +11,7 @@ Jarvis - Loki-Xer
 
 const Heroku = require("heroku-client");
 const { version } = require("../package.json");
-const { System, isPrivate, sleep } = require("../lib/");
+const { System, isPrivate, sleep, shell } = require("../lib/");
 const Config = require("../config");
 const { SUDO } = require("../config");
 const heroku = new Heroku({ token: Config.HEROKU_API_KEY });
@@ -27,14 +27,8 @@ System({
     type: "server",
     desc: "Heroku Dyno off",
 }, async (message) => {
-    const server = message.client.server;
-    if (server !== "HEROKU") return await message.reply("_shutdown only works in Heroku_");    
-    await heroku.get(baseURI + "/formation").then(async (formation) => {
     await message.send(`_Jarvis is shutting down..._`);
-    await heroku.patch(baseURI + "/formation/" + formation[0].id, { body: { quantity: 0 }, });
-    }).catch(async (error) => {
-        await message.send(`HEROKU: ${error.body.message}`);
-    });
+    return await shell("pm2 stop jarvis");
 });
 
 System({
