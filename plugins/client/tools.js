@@ -39,15 +39,9 @@ function selectStyle(styles, index) {
     });
 }
 
-const getAllGroups = async (client) => {
-    const list = await client.groupFetchAllParticipating();
-    return Object.values(list).map(group => `JID: ${group.id}\nGroup Name: ${group.subject}\n`).join("\n");
-};
-
 module.exports = {
   getUptime,
   Runtime,
   selectStyle,
-  secondsToHms,
-  getAllGroups
+  secondsToHms
 }
