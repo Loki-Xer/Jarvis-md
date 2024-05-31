@@ -201,3 +201,15 @@ System ({
    await message.client.sendMessage(message.chat,{ document :{ url: `https://api.github.com/repos/${user}/${repo}/zipball` }, fileName: repo , mimetype: "application/zip"}, {quoted: message });
    await msg.edit("_*downloaded 🍓*_");
 });
+
+System({
+    pattern: 'twitter ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Download Twitter video ',
+    type: 'downloader',
+}, async (message, match, m) => {if (!match || !match.includes('x.com')) {
+        return await message.send("_Need a x(twitter) media url_");}
+        const twitterVideoUrl = match;
+        const {media} = await getJson(`https://api-ironman444ff.koyeb.app/ironman/dl/x?url=${encodeURIComponent(twitterVideoUrl)}`);
+        await m.sendFromUrl(media[0].url);
+  });
