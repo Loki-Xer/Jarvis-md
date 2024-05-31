@@ -1,17 +1,32 @@
 const { System, IronMan, isPrivate, getJson } = require("../lib/");
+const axios = require('axios');
 
 System({
-        pattern: "ig ?(.*)",
-        fromMe: isPrivate,
-        desc: "Get details of Instagram id",
-        type: "search"
+    pattern: 'ig ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Instagram profile details',
+    type: 'search',
 }, async (message, match) => {
-        match = match.trim();
-        if (!match) return await message.send("*Need an Instagram username*\n_Example: .ig sedboy.am_");
-        const { result } = await getJson(await IronMan(`ironman/ig?name=${match}`));
-        const { username, full_name: fullName, biography, profile_pic_url: profilePic, posts: postCount, followers: followersCount, following: followingCount, is_verified: isVerified, is_private: isPrivate, external_url: profileUrl } = result.user_info;
-        const caption = `*𖢈Username: ${username}*\n*𖢈Name: ${fullName}*\n*𖢈Bio: ${biography}*\n*𖢈Post: ${postCount}*\n*𖢈Followers: ${followersCount}*\n*𖢈Following: ${followingCount}*\n*𖢈Verified: ${isVerified}*\n*𖢈Private: ${isPrivate}*\n*𖢈URL: https://instagram.com/${match}*`;
-        await message.client.sendMessage(message.chat, { image: { url: `${profilePic}` }, caption: caption });
+    if (!match) {
+        return await message.send("*Need a username*\n_Example: .ig sedboy.am_");
+    }
+    const res = await axios.get(IronMan(`ironman/igstalk?id=${match}`));
+    const data = res.data;
+    let caption = '';
+    if (data.name) caption += `*𖢈ɴᴀᴍᴇ:* ${data.name}\n`;
+    if (data.username) caption += `*𖢈ᴜꜱᴇʀɴᴀᴍᴇ:* ${data.username}\n`;
+    if (data.bio) caption += `*𖢈ʙɪᴏ:* ${data.bio}\n`;
+    if (data.pronouns && data.pronouns.length > 0) caption += `*𖢈ᴘʀᴏɴᴏᴜɴꜱ:* ${data.pronouns.join(', ')}\n`;
+    if (data.followers) caption += `*𖢈ꜰᴏʟʟᴏᴡᴇʀꜱ:* ${data.followers}\n`;
+    if (data.following) caption += `*𖢈ꜰᴏʟʟᴏᴡɪɴɢ:* ${data.following}\n`;
+    if (data.category) caption += `*𖢈ᴄᴀᴛᴇɢᴏʀʏ:* ${data.category}\n`;
+    if (typeof data.private !== 'undefined') caption += `*𖢈ᴘʀɪᴠᴀᴛᴇ ᴀᴄᴄ:* ${data.private}\n`;
+    if (typeof data.business !== 'undefined') caption += `*𖢈ʙᴜꜱꜱɪɴᴇꜱ ᴀᴄᴄ:* ${data.business}\n`;
+    if (data.email) caption += `*𖢈ᴇᴍᴀɪʟ:* ${data.email}\n`;
+    if (data.url) caption += `*𖢈ᴜʀʟ:* ${data.url}\n`;
+    if (data.contact) caption += `*𖢈ɴᴜᴍʙᴇʀ:*${data.contact}\n`;
+    if (data.action_button) caption += `*𖢈ᴀᴄᴛɪᴏɴ ʙᴜᴛᴛᴏɴ:* ${data.action_button}\n`;
+    await message.client.sendMessage(message.chat, { image: { url: data.hdpfp }, caption: caption.trim() });
 });
 
 System({
