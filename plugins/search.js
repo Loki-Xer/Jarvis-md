@@ -1,5 +1,5 @@
 const { System, IronMan, isPrivate, getJson } = require("../lib/");
-const axios = require('axios');
+
 
 System({
     pattern: 'ig ?(.*)',
@@ -7,11 +7,8 @@ System({
     desc: 'Instagram profile details',
     type: 'search',
 }, async (message, match) => {
-    if (!match) {
-        return await message.send("*Need a username*\n_Example: .ig sedboy.am_");
-    }
-    const res = await axios.get(IronMan(`ironman/igstalk?id=${match}`));
-    const data = res.data;
+    if (!match) return await message.send("*Need a username*\n_Example: .ig sedboy.am_");
+    const data = await getJson(IronMan(`ironman/igstalk?id=${match}`));
     let caption = '';
     if (data.name) caption += `*𖢈ɴᴀᴍᴇ:* ${data.name}\n`;
     if (data.username) caption += `*𖢈ᴜꜱᴇʀɴᴀᴍᴇ:* ${data.username}\n`;
@@ -114,11 +111,8 @@ System({
     desc: 'wallpaper search',
     type: 'search'
 }, async (message, match, m) => {
-    if (!match) {
-        return await message.send("*Need a wallpaper name*\n_Example: .wallpaper furina_");
-    }
-    const response = await axios.get(IronMan(`ironman/wallpaper/wlhven?name=${encodeURIComponent(match)}`));
-    const images = response.data;
+    if (!match) return await message.send("*Need a wallpaper name*\n_Example: .wallpaper furina_");
+    const images = await getJson(IronMan(`ironman/wallpaper/wlhven?name=${encodeURIComponent(match)}`));
     const urls = images.filter(item => item.url).map(item => item.url);
     if (urls.length > 0) {
         const selectedUrls = urls.sort(() => 0.5 - Math.random()).slice(0, 5);
