@@ -114,16 +114,16 @@ System({
     desc: 'wallpaper search',
     type: 'search'
 }, async (message, match, m) => {
-    if (!match) return await message.send("*Need a wallpaper name*\n_Example: .wallpaper mountain_");
-    const query = match.trim(); 
-    const images = await getJson(await IronMan(`ironman/wallpaper?search=${query}`));
-    if (images.length > 0) {
-        const randomIndexes = Array.from({ length: 5 }, () => Math.floor(Math.random() * images.length));
-        const randomImages = randomIndexes.map(index => images[index]);
-        
-        for (const url of randomImages) {
-            await message.client.sendMessage(message.chat, { image: { url }, caption: "" });
-            await new Promise(resolve => setTimeout(resolve, 1000));
+    if (!match) {
+        return await message.send("*Need a wallpaper name*\n_Example: .wallpaper furina_");
+    }
+    const response = await axios.get(IronMan(`ironman/wallpaper/wlhven?name=${encodeURIComponent(match)}`));
+    const images = response.data;
+    const urls = images.filter(item => item.url).map(item => item.url);
+    if (urls.length > 0) {
+        const selectedUrls = urls.sort(() => 0.5 - Math.random()).slice(0, 5);
+        for (const imageUrl of selectedUrls) {
+            await message.client.sendMessage(message.chat, { image: { url: imageUrl }, caption: "" });
         }
     } else {
         await message.send("No wallpapers found for the given query.");
