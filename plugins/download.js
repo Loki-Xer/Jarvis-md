@@ -205,15 +205,14 @@ System ({
 System({
     pattern: 'twitter ?(.*)',
     fromMe: isPrivate,
-    desc: 'Download Twitter video ',
+    desc: 'Download Twitter video',
     type: 'download',
-}, async (message, match, m) => {if (!match || !match.includes('x.com')) {
-    return await message.send("_Need a x(twitter) media url_");}
-    const twitterVideoUrl = match;
+}, async (message, match, m) => {
+    if (!match || !match.includes('x.com')) return await message.send("_Need a x(twitter) media url_");
+    const twitterVideoUrl = match.trim();
     const { media } = await getJson(`https://api-ironman444ff.koyeb.app/ironman/dl/x?url=${encodeURIComponent(twitterVideoUrl)}`);
     await m.sendFromUrl(media[0].url);
 });
-
 
 System({
     pattern: 'thread ?(.*)',
@@ -221,14 +220,17 @@ System({
     desc: 'Download threads media',
     type: 'download',
 }, async (message, match) => {
-    if (!match || !match.includes('threads')) {
-        return await message.send("_Need a threads media url_");}
-        const encodedUrl = encodeURIComponent(match.trim());
-        const media = await getJson(IronMan(`ironman/dl/threads?url=${encodedUrl}`));
+    if (!match || !match.includes('threads')) return await message.send("_Need a threads media url_");
+    const encodedUrl = encodeURIComponent(match.trim());
+    const media = await getJson(IronMan(`ironman/dl/threads?url=${encodedUrl}`));
     if (media.video) {
-        for (const videoUrl of media.video) { await message.client.sendMessage(message.chat, { video: { url: videoUrl },caption: "*Download🤍*" });
-    }}
-    if (media.image) { 
-        for (const imageUrl of media.image) { await message.client.sendMessage(message.chat, { image: { url: imageUrl }, caption: "*Download🤍*"  });
+        for (const videoUrl of media.video) {
+            await message.client.sendMessage(message.chat, { video: { url: videoUrl }, caption: "*Download🤍*" });
+        }
     }
-    });
+    if (media.image) {
+        for (const imageUrl of media.image) {
+            await message.client.sendMessage(message.chat, { image: { url: imageUrl }, caption: "*Download🤍*" });
+        }
+    }
+});
