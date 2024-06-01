@@ -26,7 +26,10 @@ const {
     getBuffer,
     webpToPng,
     webp2mp4,
-    elevenlabs
+    elevenlabs,
+    removeBg,
+    setData,
+    getData
 } = require("../lib/");
 const { selectStyle } = require("./client/"); 
 const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
@@ -76,7 +79,7 @@ System({
     desc: "audio into wave",
     type: "converter",
 }, async (message) => {
-   if (!message.reply_message?.audio) return await message.reply("_Reply to an audio_");
+   if (!message.quoted || !message.reply_message?.audio || !message.reply_message?.video) return await message.reply("_Reply to an audio/video_");
    let media = await toAudio(await message.reply_message.download());
    return await message.send(media, { mimetype: 'audio/mpeg', ptt: true, quoted: message.data }, "audio");
 });
@@ -337,4 +340,23 @@ System({
 }, async (message, match, m) => {
     if (!message.reply_message.i || (!message.reply_message.image && !message.reply_message.video && !message.reply_message.audio && !message.reply_message.sticker)) return await message.reply('*Reply to image,video,audio,sticker*');
     return await sendUrl(message);
+});
+
+
+System({
+    pattern: "rbg", 
+    fromMe: isPrivate,
+    desc: "To remove bg", 
+    type: "converter",
+}, async (m, match) => {
+   if (match && match.includes("key")) {
+        await setData(m.user.id, match.split(":")[1].trim(), "true", "removeBg");
+        return m.reply("*Key added successfully. Now you can use rbg.*");
+    }
+    if (!m.quoted || !m.reply_message.image) return m.reply("*Reply to an image*");
+    const db = await getData(m.user.id);
+    if (!db.removeBg) return await m.send("https://graph.org/file/dc22fb232b0092e6326ec.png", { type: "image", value: [{ name: "cta_url", display_text: "Sign in", url: "https://accounts.kaleido.ai/users/sign_in", merchant_url: "https://accounts.kaleido.ai/users/sign_in", action: "url", icon: "", style: "link" }, { name: "cta_url", display_text: "Get API Key", url: "https://www.remove.bg/dashboard#api-key", merchant_url: "https://www.remove.bg/dashboard#api-key", action: "url", icon: "", style: "link" }], body: "", footer: "*JARVIS-MD*", title: `\nDear user, get an API key to use this command. Sign in to remove.bg and get an API key. After that, use \n\n *${m.prefix} rbg key: _your API key_*\n` }, "button");
+    let buff = await removeBg(await m.reply_message.downloadAndSave(), db.removeBg.message);
+    if(!buff) return m.reply("*Error in api key or can't upload to remove.bg*");
+    await m.reply(buff, {}, "image");
 });
