@@ -208,11 +208,11 @@ System({
     desc: 'Download Twitter video ',
     type: 'download',
 }, async (message, match, m) => {if (!match || !match.includes('x.com')) {
-        return await message.send("_Need a x(twitter) media url_");}
-        const twitterVideoUrl = match;
-        const {media} = await getJson(`https://api-ironman444ff.koyeb.app/ironman/dl/x?url=${encodeURIComponent(twitterVideoUrl)}`);
-        await m.sendFromUrl(media[0].url);
-  });
+    return await message.send("_Need a x(twitter) media url_");}
+    const twitterVideoUrl = match;
+    const { media } = await getJson(`https://api-ironman444ff.koyeb.app/ironman/dl/x?url=${encodeURIComponent(twitterVideoUrl)}`);
+    await m.sendFromUrl(media[0].url);
+});
 
 
 System({
@@ -230,4 +230,5 @@ System({
     }}
     if (media.image) { 
         for (const imageUrl of media.image) { await message.client.sendMessage(message.chat, { image: { url: imageUrl }, caption: "*Download🤍*"  });
-    }});
+    }
+    });
