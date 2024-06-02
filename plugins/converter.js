@@ -383,8 +383,8 @@ System({
         await m.reply(output, {}, "video");
     } else if (m.reply_message.audio) {
         const file = await toVideo(await m.reply_message.downloadAndSave());
-        const output = await toAudio(await trim(file, parts[0], parts[1]));
+        const output = await trim(file, parts[0], parts[1]);
         if (!output) return m.reply("*Please check your format. The correct format is .trim 1.0,3.0*");
-        await m.reply(output, {}, "audio");
+        await m.reply(output, { mimetype: "audio/mp4" }, "audio");
     }
 });
