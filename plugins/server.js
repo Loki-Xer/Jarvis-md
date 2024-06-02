@@ -42,7 +42,7 @@ System({
     const key = match.slice(0, match.indexOf(':')).trim();
     const value = match.slice(match.indexOf(':') + 1).trim();
     if (!key || !value) return await message.send(`_*Example: .setvar SUDO:917025673121*_`); 
-    if (server !== "HEROKU") return await message.reply("_setvar only works in Heroku or Koye_");
+    if (server !== "HEROKU") return await message.reply("_setvar only works in Heroku_");
     await message.send(`_*updated var ${key.toUpperCase()}: ${value}*`);
     heroku.patch(baseURI + "/config-vars", {
         body: {
@@ -141,15 +141,34 @@ System({
     desc: "set sudo", 
     type: "server" 
 }, async (message, match, m) => { 
-    const server = message.client.server;
     const newSudo = (message.mention[0] || message.reply_message.sender).split("@")[0];    
     if (!newSudo) return await m.reply("*reply to a number*");
     let setSudo = (Config.SUDO + "," + newSudo).replace(/,,/g, ",");
     setSudo = setSudo.startsWith(",") ? setSudo.replace(",", "") : setSudo;   
-    if (server !== "HEROKU") return await message.send("setsudo only works in Heroku");
+    if (message.client.server !== "HEROKU") return await message.send("setsudo only works in Heroku");
     await message.reply("*new sudo numbers are :* " + setSudo);
     await message.reply("_It takes 30 seconds to take effect_");
     await heroku.patch(baseURI + "/config-vars", { body: { SUDO: setSudo } });
+});
+
+System({
+  pattern: "delsudo?(.*)",
+  fromMe: true,
+  desc: "delete sudo sudo",
+  type: "user",
+}, async (m, text) => {
+  if (m.client.server !== "HEROKU") return await message.send("setsudo only works in Heroku");
+  let sudoNumber = m.quoted? m.reply_message.sender : text;
+  sudoNumber = sudoNumber.split("@")[0];
+  if (!sudoNumber) return await m.send("*Need reply/mention/number*");
+  let sudoList = Config.SUDO.split(",");
+  sudoList = sudoList.filter((number) => number!== sudoNumber);
+  let newSudoList = sudoList.join(",");
+  await m.send(`NEW SUDO NUMBERS ARE: \n\`\`\`${newSudoList}\`\`\``, { quoted: m.data });
+  await m.send("_IT TAKES 30 SECONDS TO MAKE EFFECT_", { quoted: m });
+  await heroku
+   .patch(baseURI + "/config-vars", { body: { SUDO: newSudoList } })
+   .then(async (app) => {});
 });
 
 System({
