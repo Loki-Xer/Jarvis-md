@@ -303,23 +303,24 @@ System({
 });
 
 System({
-    pattern: 'rotate ?(.*)',
-    fromMe: isPrivate,
-    desc: 'rotate image or video in any direction',
-    type: 'converter'
+  pattern: 'rotate ?(.*)',
+  fromMe: isPrivate,
+  desc: 'rotate image or video in any direction',
+  type: 'converter'
 }, async (message, match) => {
-    if (!(message.quoted && (message.reply_message.video || message.reply_message.image))) return await message.reply('*Reply to an image/video*');
-    if (!match || !['left', 'right', 'horizontal', 'vertical'].includes(match.toLowerCase())) return await message.reply('*Need rotation type.*\n_Example: .rotate left, right, horizontal, or vertical_');	
-    const rotateOptions = { left: 'transpose=2', right: 'transpose=1', horizontal: 'hflip', vertical: 'vflip', };
-    const media = await message.reply_message.downloadAndSave();
-    const ext = media.endsWith('.mp4') ? 'mp4' : 'jpg';
-    const ffmpegCommand = `ffmpeg -y -i ${media} -vf "${rotateOptions[match.toLowerCase()]}" rotated.${ext}`;
-    exec(ffmpegCommand, (error, stdout, stderr) => {
-	if (error) return message.reply(`Error during rotation: ${error.message}`);
-   	let buffer = fs.readFileSync(`rotated.${ext}`);
-	message.send(buffer, {}, media.endsWith('.mp4') ? 'video' : 'image');
-	fs.unlinkSync(`rotated.${ext}`);
-    });
+  if (!(message.quoted && (message.reply_message.video || message.reply_message.image))) return await message.reply('*Reply to an image/video*');
+  if (!match || !['left', 'right', 'horizontal', 'vertical'].includes(match.toLowerCase())) return await message.reply('*Need rotation type.*\n_Example: .rotate left, right, horizontal, or vertical_');	
+  const rotateOptions = { left: 'transpose=2', right: 'transpose=1', horizontal: 'hflip', vertical: 'vflip', };
+  const media = await message.reply_message.downloadAndSave();
+  const ext = media.endsWith('.mp4') ? 'mp4' : 'jpg';
+  const ffmpegCommand = `ffmpeg -y -nostdin -i ${media} -vf "${rotateOptions[match.toLowerCase()]}" rotated.${ext}`;
+  exec(ffmpegCommand, (error, stdout, stderr) => {
+    if (error) return message.reply(`Error during rotation: ${error.message}`);
+    let buffer = fs.readFileSync(`rotated.${ext}`);
+    message.send(buffer, {}, media.endsWith('.mp4') ? 'video' : 'image');
+    fs.unlinkSync(`rotated.${ext}`);
+    fs.unlinkSync(media);
+  });
 });
 
 System({
