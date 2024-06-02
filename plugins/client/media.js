@@ -1,25 +1,27 @@
+const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
-const ff = require('fluent-ffmpeg');
 
-function cutMedia(buff, start, end, type) {
-  let buf;
-  const mediaFile = `../../lib/temp/cut.${type}`;
-  const outputFile = `../../lib/temp/outputcut.${type}`;
-  fs.writeFileSync(mediaFile, buff);
-  ff(mediaFile)
-   .setStartTime(`00:${start}`)
-   .setDuration(end)
-   .output(outputFile)
-   .on('end', function(err) {
-      if (!err) {
-        buf = fs.readFileSync(outputFile);
-      }
-    })
-   .on('error', err => buf = false);
-
-  return buf;
+async function trim(buff, startTrim, endTrim) {
+    try {
+        const tempFile = "../temp.mp4";
+        const outputFile = "trimmed_video.mp4";
+        await fs.promises.writeFile(tempFile, buff);
+        await new Promise((resolve, reject) => {
+            ffmpeg(tempFile)
+                .setStartTime(startTrim)
+                .setDuration(parseFloat(endTrim) - parseFloat(startTrim))
+                .output(outputFile)
+                .on('end', resolve)
+                .on('error', reject)
+                .run();
+        });
+        const file = await fs.promises.readFile(outputFile);
+        await fs.promises.unlink(tempFile);
+        await fs.promises.unlink(outputFile);
+        return file;
+    } catch (error) {
+        throw error;
+    }
 }
 
-module.exports = {
-  cutMedia
-}
+module.exports = trim;
