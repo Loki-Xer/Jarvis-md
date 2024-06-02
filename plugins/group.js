@@ -9,6 +9,7 @@ Jarvis - Loki-Xer
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
+
 const {
     Vote,
     isUrl,
@@ -29,28 +30,28 @@ System({
     desc: "add a person to group"
 }, async (message, match) => {
     if (!message.isGroup) return;
-    match = message.reply_message.sender || match;
+    match = message.reply_message?.sender || match;
     let isadmin = await isAdmin(message, message.user.jid);
     if (!isadmin) return await message.send("_I'm not admin_");
-    if (!match) return await message.send("_Mention user to add");
+    if (!match) return await message.send("_Mention user to add_");
     match = match.replaceAll(' ', '');
     if (match) {
         let users = match.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
         let info = await message.client.onWhatsApp(users);
-        ex = info.map((jid) => jid.jid);
+        let ex = info.map((jid) => jid.jid);
         if (!ex.includes(users)) return await message.reply('h');
         const su = await message.client.groupParticipantsUpdate(message.jid, [users], "add");
         if (su[0].status == 403) {
-            await message.reply("_Couldn\'t add. Invite sent!_");
+            await message.reply("_Couldn't add. Invite sent!_");
             return await message.sendGroupInviteMessage(users);
         } else if (su[0].status == 408) {
-            await message.send(`Couldn\'t add @${users.split("@")[0]} because they left the group recently. group Invitation sent!`, {
+            await message.send(`Couldn't add @${users.split("@")[0]} because they left the group recently. Group invitation sent!`, {
                 mentions: [users]
             });
             const code = await message.client.groupInviteCode(message.jid);
-            return await message.client.sendMessage(users, { text: `https://chat.whatsapp.com/${code}` }); 
+            return await message.client.sendMessage(users, { text: `https://chat.whatsapp.com/${code}` });
         } else if (su[0].status == 401) {
-            return await message.send(`Couldn\'t add @${users.split("@")[0]} because they blocked the bot number.`, {
+            return await message.send(`Couldn't add @${users.split("@")[0]} because they blocked the bot number.`, {
                 mentions: [users]
             });
         } else if (su[0].status == 200) {
@@ -214,26 +215,24 @@ System({
     }
 });
 
-
-
 System({
-	pattern: "gpp$",
-	fromMe: true,
-	desc: "Set full-screen profile picture",
-	type: "group",
-}, async (message) => {
+    pattern: "gpp$",
+    fromMe: true,
+    desc: "Set full-screen profile picture",
+    type: "group",
+}, async (message, match) => {
     if (!message.isGroup) return await message.send("_This command is for groups_"); 
     let isadmin = await isAdmin(message, message.user.jid);
     if (!isadmin) return await message.send("_I'm not an admin_");
     if(match && match === "remove") {
-	await message.client.removeProfilePicture(message.jid);
-	return await message.reply("_Group Profile Picture Removed_");
+        await message.client.removeProfilePicture(message.jid);
+        return await message.reply("_Group Profile Picture Removed_");
     }
-    if (!message.reply_message.image) return await message.send("_Reply to a photo_");
+    if (!message.reply_message?.image) return await message.send("_Reply to a photo_");
     const media = await message.reply_message.download();
     await message.client.updateProfile(media, message.jid);
     return await message.send("_Group Profile Picture Updated_");
-}});
+});
 
 System({
     pattern: 'revoke ?(.*)',
