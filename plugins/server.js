@@ -43,18 +43,12 @@ System({
     const value = match.slice(match.indexOf(':') + 1).trim();
     if (!key || !value) return await message.send(`_*Example: .setvar SUDO:917025673121*_`); 
     if (server !== "HEROKU") return await message.reply("_setvar only works in Heroku or Koye_");
-   
+    await message.send(`_*updated var ${key.toUpperCase()}: ${value}*`);
     heroku.patch(baseURI + "/config-vars", {
         body: {
             [key.toUpperCase()]: value,
         },
     })
-    .then(async () => {
-        await message.send(`_*updated var ${key.toUpperCase()}: ${value}*`);
-    })
-    .catch(async (error) => {
-        await message.send(`_HEROKU: ${error.body.message}_`);
-    });
 });
 
 System({
@@ -78,12 +72,12 @@ System({
         .then(async (vars) => {
             const key = match.trim().toUpperCase();
             if (vars[key]) {
+                await message.send(`_Deleted ${key}_`);
                 await heroku.patch(baseURI + "/config-vars", {
                     body: {
                         [key]: null,
                     },
                 });
-                await message.send(`_Deleted ${key}_`);
             } else {
                 await message.send(`_${key} not found_`);
             }
@@ -152,16 +146,10 @@ System({
     if (!newSudo) return await m.reply("*reply to a number*");
     let setSudo = (Config.SUDO + "," + newSudo).replace(/,,/g, ",");
     setSudo = setSudo.startsWith(",") ? setSudo.replace(",", "") : setSudo;   
-    if (server !== "HEROKU") return await message.send("setsudo only works in Heroku");   
-    await heroku.patch(baseURI + "/config-vars", { body: { SUDO: setSudo } })
-        .then(async () => {
-            await message.reply("*new sudo numbers are :* " + setSudo);
-            await message.reply("_It takes 30 seconds to take effect_");
-        })
-        .catch(async (error) => {
-            console.error("Error setting sudo:", error);
-            await message.reply("An error occurred while setting sudo.");
-        });
+    if (server !== "HEROKU") return await message.send("setsudo only works in Heroku");
+    await message.reply("*new sudo numbers are :* " + setSudo);
+    await message.reply("_It takes 30 seconds to take effect_");
+    await heroku.patch(baseURI + "/config-vars", { body: { SUDO: setSudo } });
 });
 
 System({
