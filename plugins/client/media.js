@@ -20,8 +20,8 @@ async function trim(buff, startTrim, endTrim) {
         await fs.promises.unlink(outputFile);
         return file;
     } catch (error) {
-        throw error;
+        return false;;
     }
 }
 
-module.exports = trim;
+module.exports = { trim };
