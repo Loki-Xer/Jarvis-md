@@ -411,7 +411,8 @@ System({
 	if(!isBotAdmin) return await message.send("_I'm not admin_");
 	let userIsAdmin = await isAdmin(message, user);
 	if(userIsAdmin) return await message.client.sendMessage(message.chat, { text: `_user is admin @${jid[0].split("@")[0]}_`, mentions: jid });
-        await warnMessage(message, match, user)
+	const name = await message.store.getName(user);
+        await warnMessage(message, match, user, name);
 });
 
 System({
