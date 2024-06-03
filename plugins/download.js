@@ -245,5 +245,18 @@ System({
        if (!isUrl(match)) return msg.reply("*Reply to Terabox url or provide a Terabox url*");
        if (!match || !match.includes("tera")) return msg.reply("*Reply to Terabox url or provide a Terabox url*");
        const { Name: teraBoxFileName, Download, FastDL } = await terabox(match);
-       await msg.send(await getBuffer("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdlDLWf101d_p6TaRNvymnAiPPVFZPfTML9dVbj3LD6LLf_mTvHPH5pJq5&s=10"), { type: "image", value: [{ name: "cta_url", display_text: "Download", url: Download, merchant_url: Download, action: "url", icon: "", style: "link" }, { name: "cta_url", display_text: "Fast DL", url: FastDL, merchant_url: FastDL, action: "url", icon: "", style: "link" }], body: "", footer: "*JARVIS-MD*", title: `\nTo download the terabox file click the link below if download link not wroked use Fast DL\n\nFile Name: ` + teraBoxFileName +`\n` }, "button");
+       await msg.send(await getBuffer("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdlDLWf101d_p6TaRNvymnAiPPVFZPfTML9dVbj3LD6LLf_mTvHPH5pJq5&s=10"), { type: "image", value: [{ name: "cta_url", display_text: "Download", url: Download, merchant_url: Download, action: "url", icon: "", style: "link" }, { name: "cta_url", display_text: "Fast DL", url: FastDL, merchant_url: FastDL, action: "url", icon: "", style: "link" }], body: "", footer: "*JARVIS-MD*", title: `\nTo download the terabox file click the link below if download link not wroked use Fast DL\n\nFile Name: ` + await decodeURI(teraBoxFileName) +`\n` }, "button");
  });
+
+System({
+	pattern: 'tiktok ?(.*)',
+	fromMe: isPrivate,
+	desc: 'Sends TikTok video ',
+	type: 'downloader',
+}, async (message, match, msg) => {
+       match = await extractUrlFromMessage(match || message.reply_message.text);
+       if (!isUrl(match)) return message.reply("*Reply to Terabox url or provide a Terabox url*");
+       if (!match || !match.includes("tiktok")) return message.reply("*Reply to tiktok url or provide a tiktok url*");   
+       const { result } = await getJson(IronMan("ironman/dl/v2/tiktok?url=" + match), { headers: { 'ApiKey': 'IRON-M4N' } });
+       await message.reply({ url:result.video }, { caption: "*_download🤍_*"}, "video");
+});
