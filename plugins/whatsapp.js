@@ -200,12 +200,18 @@ System({
  });
  
  System({
-    pattern: "caption",
-    fromMe: true,
-    desc: "to replace the caption of replied Message",
-    type: "whatsapp",
-}, async (message, match, m) => {
-   if(!m.quoted || !m.reply_message.image || !m.reply_message.video) return m.reply("*Reply to a image/video*");
-   if(!match) return m.reply("*Provide a match eg: .caption hy*")
-   await message.client.forwardMessage(m.jid, message.reply_message.message, { caption: match });
+    pattern: 'caption ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Change video or image caption',
+    type: 'whatsapp',
+}, async (message, match) => {
+    if (!message.reply_message || (!message.reply_message.video && !message.reply_message.image)) {
+        return await message.reply('*_Reply to a image or video_*');
+    }
+    var vid = await message.reply_message.downloadAndSaveMedia();
+    if (message.reply_message.video) {
+        await message.client.sendMessage(message.chat, { video: { url: vid }, caption: match });
+    } else if (message.reply_message.image) {
+        await message.client.sendMessage(message.chat, { image: { url: vid }, caption: match });
+    }
 });
