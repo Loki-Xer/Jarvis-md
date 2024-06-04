@@ -187,7 +187,7 @@ System({
 
 System({
     pattern: "froward",
-    fromMe: isPrivate,
+    fromMe: true,
     desc: "Forwards the replied Message",
     type: "whatsapp",
 }, async (message, match, m) => {
@@ -201,7 +201,7 @@ System({
  
  System({
     pattern: "caption",
-    fromMe: isPrivate,
+    fromMe: true,
     desc: "to replace the caption of replied Message",
     type: "whatsapp",
 }, async (message, match, m) => {
