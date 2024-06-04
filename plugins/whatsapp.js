@@ -205,13 +205,7 @@ System({
     desc: 'Change video or image caption',
     type: 'whatsapp',
 }, async (message, match) => {
-    if (!message.reply_message || (!message.reply_message.video && !message.reply_message.image)) {
-        return await message.reply('*_Reply to a image or video_*');
-    }
-    var vid = await message.reply_message.downloadAndSaveMedia();
-    if (message.reply_message.video) {
-        await message.client.sendMessage(message.chat, { video: { url: vid }, caption: match });
-    } else if (message.reply_message.image) {
-        await message.client.sendMessage(message.chat, { image: { url: vid }, caption: match });
-    }
+    if (!message.quoted || (!message.reply_message.video && !message.reply_message.image)) return await message.reply('*_Reply to a image or video_*');
+    if(!match) return message.reply("*Need a query eg: . caption hy*");
+    await message.client.forwardMessage(message.jid, message.reply_message.message, { caption: match });
 });
