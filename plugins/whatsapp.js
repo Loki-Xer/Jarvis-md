@@ -9,7 +9,7 @@ Jarvis - Loki-Xer
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-const { System } = require("../lib");
+const { System, parsedJid } = require("../lib");
 
 
 System({
@@ -183,4 +183,29 @@ System({
 	if (!match) return await message.send('*Need Name!*\n*Example: setname your name*.');
 	await message.client.updateProfileName(match);
 	await message.send('_Profile name updated_');
+});
+
+System({
+    pattern: "froward",
+    fromMe: isPrivate,
+    desc: "Forwards the replied Message",
+    type: "whatsapp",
+}, async (message, match, m) => {
+    if(!m.quoted) return message.reply('Reply to message');
+    if(!match) return m.reply("*Provide a jid use jid cmd to get jid*");
+    let jids = parsedJid(match);
+    for (let i of jids) {
+      await message.client.forwardMessage(i, message.reply_message.message);
+    }   
+ });
+ 
+ System({
+    pattern: "caption",
+    fromMe: isPrivate,
+    desc: "to replace the caption of replied Message",
+    type: "whatsapp",
+}, async (message, match, m) => {
+   if(!m.quoted || !m.reply_message.image || !m.reply_message.video) return m.reply("*Reply to a image/video*");
+   if(!match) return m.reply("*Provide a match eg: .caption hy*")
+   await message.client.forwardMessage(m.jid, message.reply_message.message, { caption: match });
 });
