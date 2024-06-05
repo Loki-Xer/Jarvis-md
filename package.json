@@ -36,12 +36,11 @@
         "pdfkit": "^0.15.0",
         "pino": "^8.14.1",
         "pm2": "^5.2.0",
-        "pg": "^8.11.3",
-        "punycode": "^2.3.1",
+        "pg": "^8.11.5",
         "socket.io-client": "^4.7.5",
-        "sequelize": "^6.21.4",
+        "sequelize": "^6.23.0",
         "simple-git": "^3.20.0",
-        "sqlite3": "^5.1.6",
+        "sqlite3": "^5.1.7",
         "util": "^0.12.5",
         "wa-sticker-formatter": "^4.3.2"
     }
