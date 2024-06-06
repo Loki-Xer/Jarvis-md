@@ -9,8 +9,8 @@ Jarvis - Loki-Xer
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-const { System, parsedJid } = require("../lib");
-
+const { System } = require("../lib");
+const { parsedJid } = require("./client/"); 
 
 System({
 	pattern: "setpp",
