@@ -1,6 +1,18 @@
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 
+const audioCut = (infile, start, end, filename = "cutted") => new Promise((resolve, reject) => {
+  ffmpeg(infile)
+   .setStartTime(start)
+   .setDuration(end)
+   .save(filename + ".mp3")
+   .on("error", (e => reject(new Error(e.message))))
+   .on("end", (() => {
+      const file = fs.readFileSync(filename + ".mp3");
+      resolve(file);
+    }));
+});
+
 async function trim(buff, startTrim, endTrim) {
     try {
         const tempFile = "../temp.mp4";
@@ -24,4 +36,4 @@ async function trim(buff, startTrim, endTrim) {
     }
 }
 
-module.exports = { trim };
+module.exports = { trim, audioCut };
