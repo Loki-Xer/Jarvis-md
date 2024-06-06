@@ -15,13 +15,11 @@ const {
     isUrl,
     sleep,
     System,
-    isAdmin,
     isPrivate,
-    parsedJid,
     warnMessage,
     extractUrlFromMessage,
 } = require("../lib/");
-const { isBotAdmins, getAllGroups } = require("./client/");
+const { parsedJid, isAdmin, isBotAdmins, getAllGroups } = require("./client/");
 
 System({
     pattern: 'add ?(.*)',
