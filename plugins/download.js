@@ -252,7 +252,7 @@ System({
 	pattern: 'tiktok ?(.*)',
 	fromMe: isPrivate,
 	desc: 'Sends TikTok video ',
-	type: 'downloader',
+	type: 'download',
 }, async (message, match, msg) => {
        match = await extractUrlFromMessage(match || message.reply_message.text);
        if (!isUrl(match)) return message.reply("*Reply to Terabox url or provide a Terabox url*");
