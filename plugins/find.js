@@ -1,4 +1,5 @@
-const { System, Ytsearch, isPrivate, audioCut } = require('../lib');
+const { System, Ytsearch, isPrivate } = require('../lib');
+const { audioCut } = require("./client/"); 
 const FormData = require('form-data');
 const fetch = require('node-fetch');
 const crypto = require('crypto');
