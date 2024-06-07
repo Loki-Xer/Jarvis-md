@@ -80,7 +80,7 @@ System({
     desc: "audio into wave",
     type: "converter",
 }, async (message) => {
-   if (!message.quoted || !message.reply_message?.audio || !message.reply_message?.video) return await message.reply("_Reply to an audio/video_");
+   if (!message.quoted || !message.reply_message?.audio && !message.reply_message?.video) return await message.reply("_Reply to an audio/video_");
    let media = await toAudio(await message.reply_message.download());
    return await message.send(media, { mimetype: 'audio/mpeg', ptt: true, quoted: message.data }, "audio");
 });
