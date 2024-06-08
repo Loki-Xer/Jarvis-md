@@ -152,10 +152,10 @@ System({
 });
 
 System({
-  pattern: "delsudo?(.*)",
+  pattern: "delsudo ?(.*)",
   fromMe: true,
   desc: "delete sudo sudo",
-  type: "user",
+  type: "server",
 }, async (m, text) => {
   if (m.client.server !== "HEROKU") return await message.send("setsudo only works in Heroku");
   let sudoNumber = m.quoted? m.reply_message.sender : text;
