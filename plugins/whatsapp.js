@@ -60,53 +60,79 @@ System({
 });
 
 System({
-    pattern: 'clear ?(.*)',
-    fromMe: true,
-    desc: 'Delete WhatsApp chat',
-    type: 'whatsapp'
-}, async (message) => {
-    await message.client.chatModify({ delete: true }, message.jid);
-    await message.send('_Cleared_');
+	pattern: 'clear ?(.*)',
+	fromMe: true,
+	desc: 'delete whatsapp chat',
+	type: 'whatsapp'
+}, async (message, match) => {
+	await message.client.chatModify({
+		delete: true,
+		lastMessages: [{
+			key: message.data.key,
+			messageTimestamp: message.messageTimestamp
+		}]
+	}, message.jid)
+	await message.send('_Cleared_')
 });
 
 System({
-    pattern: 'archive ?(.*)',
-    fromMe: true,
-    desc: 'Archive WhatsApp chat',
-    type: 'whatsapp'
-}, async (message) => {
-    await message.client.chatModify({ archive: true }, message.jid);
-    await message.send('_Archived_');
+	pattern: 'archive ?(.*)',
+	fromMe: true,
+	desc: 'archive whatsapp chat',
+	type: 'whatsapp'
+}, async (message, match) => {
+	const lstMsg = {
+		message: message.message,
+		key: message.key,
+		messageTimestamp: message.messageTimestamp
+	};
+	await message.client.chatModify({
+		archive: true,
+		lastMessages: [lstMsg]
+	}, message.jid);
+	await message.send('_Archived_')
 });
 
 System({
-    pattern: 'unarchive ?(.*)',
-    fromMe: true,
-    desc: 'Unarchive WhatsApp chat',
-    type: 'whatsapp'
-}, async (message) => {
-    await message.client.chatModify({ archive: false }, message.jid);
-    await message.send('_Unarchived_');
+	pattern: 'unarchive ?(.*)',
+	fromMe: true,
+	desc: 'unarchive whatsapp chat',
+	type: 'whatsapp'
+}, async (message, match) => {
+	const lstMsg = {
+		message: message.message,
+		key: message.key,
+		messageTimestamp: message.messageTimestamp
+	};
+	await message.client.chatModify({
+		archive: false,
+		lastMessages: [lstMsg]
+	}, message.jid);
+	await message.send('_Unarchived_')
 });
 
 System({
-    pattern: 'chatpin ?(.*)',
-    fromMe: true,
-    desc: 'Pin a chat',
-    type: 'whatsapp'
-}, async (message) => {
-    await message.client.chatModify({ pin: true }, message.jid);
-    await message.send('_Pinned_');
+	pattern: 'chatpin ?(.*)',
+	fromMe: true,
+	desc: 'pin a chat',
+	type: 'whatsapp'
+}, async (message, match) => {
+	await message.client.chatModify({
+		pin: true
+	}, message.jid);
+	await message.send('_Pined_')
 });
 
 System({
-    pattern: 'unpin ?(.*)',
-    fromMe: true,
-    desc: 'Unpin a chat',
-    type: 'whatsapp'
-}, async (message) => {
-    await message.client.chatModify({ pin: false }, message.jid);
-    await message.send('_Unpinned_');
+	pattern: 'unpin ?(.*)',
+	fromMe: true,
+	desc: 'unpin a msg',
+	type: 'whatsapp'
+}, async (message, match) => {
+	await message.client.chatModify({
+		pin: false
+	}, message.jid);
+	await message.send('_Unpined_')
 });
 
 System({
