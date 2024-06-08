@@ -70,8 +70,7 @@ System({
 }, async (message) => {
    if (!message.reply_message.video) return message.reply("_*Reply to a video*_");
    const buff = await message.reply_message.download();
-   const msg = await message.client.generatPvtMessage(buff);
-   await message.client.forwardMessage(message.jid, msg);
+   await message.reply(buff, { ptv: true }, "video");
 });
 
 System({
