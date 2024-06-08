@@ -324,7 +324,7 @@ System({
       await message.client.groupUpdateSubject(message.chat, match)
       return await message.send("*Subject updated*") 
     }
-    const isbotAdmin = await isBotAdmins(message)
+    const isbotAdmin = await isBotAdmins(message);
     if (!isbotAdmin) return await message.send("I'm not an admin")
     await client.groupUpdateSubject(message.chat, match)
     return await message.send("*Subject updated*")
@@ -338,14 +338,14 @@ System({
     type: 'group'
 }, async (message, match, client) => {
     match = match || message.reply_message.text
-    if (!message.isGroup)
-    return await message.reply("_This command is for groups_");
+    if (!message.isGroup) return await message.reply("_This command is for groups_");
     if (!match) return await message.send('*Need Description!*\n*Example: gdesc New Description!*.')
     const meta = await message.client.groupMetadata(message.jid);
     if (!meta.restrict) {
-    await message.client.groupUpdateDescription(message.jid, match)
-    return await message.send("_*Description updated*_")
-    } const isbotAdmin = await isBotAdmins(message.data)
+      await message.client.groupUpdateDescription(message.jid, match)
+      return await message.send("_*Description updated*_")
+    }
+    const isbotAdmin = await isBotAdmins(message);
     if (!isbotAdmin) return await message.send("_I'm not an admin_")
     await message.client.groupUpdateDescription(message.jid, match)
     return await message.send("_*Description updated*_")
