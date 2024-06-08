@@ -156,3 +156,24 @@ System({
     const userInfo = `\n⎔ *Username* : ${data.login} \n⎔ *Name* : ${data.name || "Not Available"} \n⎔ *Bio* : ${data.bio || "Not Available"} \n\n➭ *ID* : ${data.id}\n➭ *Followers* : ${data.followers}\n➭ *Following* : ${data.following}\n➭ *Type* : ${data.type}\n➭ *Company* : ${data.company || "Not Available"}\n➭ *Public Repos* : ${data.public_repos}\n➭ *Public Gists* : ${data.public_gists}\n➭ *Email* : ${data.email || "Not Available"}\n➭ *Twitter* : ${data.twitter_username || "Not Available"}\n➭ *Location* : ${data.location || "Not Available"}\n➭ *Blog* : ${data.blog || "Not Available"}\n➭ *Profile URL* : ${data.html_url}\n➭ *Created At* : ${data.created_at}\n\n`;
     await message.client.sendMessage(message.chat, { image: { url: GhUserPP }, caption: userInfo });
 });
+
+
+System({
+    pattern: "dict", 
+    fromMe: isPrivate,
+    desc: "to search in dictionary", 
+    type: "search",
+}, async (msg, text) => {
+    if (!text) return await msg.reply('*Please enter any word!*');
+    await getJson('https://api.dictionaryapi.dev/api/v2/entries/en/' + text)
+     .then(async (data) => {
+      let word = data[0].word;
+      let phonetics = data[0].phonetics[0].text;
+      let partsOfSpeech = data[0].meanings[0].partOfSpeech;
+      let definition = data[0].meanings[0].definitions[0].definition;
+      let example = (data[0].meanings[0].definitions.find(obj => 'example' in obj) || {})['example'];
+      return await msg.reply(`_Word_ : *${word}*\n_Parts of speech_ : *${partsOfSpeech}*\n_Definition_ :\n*${definition}*${example == undefined ? `` : `\n_Example_ : *${example}*`}`.trim() );
+    }).catch(async (e) => {
+      return await msg.reply('*Unable to find definition for ' + text + '!*');
+    });
+});
