@@ -3,7 +3,7 @@ const { decodeJid } = require("./baileys");
 const isBotAdmins = async (message) => {
   	const groupMetadata = await message.client.groupMetadata(message.chat)
 	const admins = await groupMetadata.participants.filter(v => v.admin !== null).map(v => v.id)
-  	return admins.includes(message.user_id)
+  	return admins.includes(message.user.id)
 };
 
 const getAllGroups = async (client) => {
