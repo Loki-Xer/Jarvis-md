@@ -1,6 +1,8 @@
+const { decodeJid } = require("./baileys");
+
 const isBotAdmins = async (message) => {
   	const groupMetadata = await message.client.groupMetadata(message.chat)
-	  const admins = await groupMetadata.participants.filter(v => v.admin !== null).map(v => v.id)
+	const admins = await groupMetadata.participants.filter(v => v.admin !== null).map(v => v.id)
   	return admins.includes(message.user_id)
 };
 
@@ -11,12 +13,12 @@ const getAllGroups = async (client) => {
 
 const isAdmin = async function(m, user) {
   const groupMetadata = await m.client.groupMetadata(m.jid);
-  const groupAdmins = groupMetadata.participants
-    .filter((participant) => participant.admin !== null)
-    .map((participant) => participant.id);
+    const groupAdmins = groupMetadata.participants
+      .filter((participant) => participant.admin !== null)
+      .map((participant) => participant.id);
 
-  return groupAdmins.includes(user);
-};
+    return groupAdmins.includes(decodeJid(user));
+}
 
 const parseJid = function(text = "") {
   return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(
