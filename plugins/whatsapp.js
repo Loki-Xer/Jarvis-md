@@ -28,7 +28,7 @@ System({
     desc: "Give JID of chat/user",
     type: "whatsapp",
 }, async (message) => {
-    let jid = message.quoted && message.reply_message ? message.reply_message.sender : message.jid;
+    let jid = message.quoted && message.reply_message.i ? message.reply_message.sender : message.jid;
     return await message.send(jid);
 });
 
@@ -42,8 +42,7 @@ System({
         await message.client.removeProfilePicture(message.user.jid);
         return await message.reply("_Profile Picture Removed_");
     }
-    if (!message.reply_message || !message.reply_message.image)
-        return await message.reply("_Reply to a photo_");
+    if (!message.reply_message || !message.reply_message.image) return await message.reply("_Reply to a photo_");
     let media = await message.reply_message.download();
     await message.client.updateProfile(media, message.user.jid);
     return await message.reply("_Profile Picture Updated_");
