@@ -402,7 +402,7 @@ System({
 	desc: "Warn a user",
 	type: "group",
 }, async (message, match) => {
-        let user = message.reply_message?.sender || message.mention?.jid?.[0];
+        let user = message.quoted ? message.reply_message?.sender : message.mention?.jid?.[0];
 	if (!user) return message.reply("_Reply to someone's message to warn or to reset warn reply to a user and type *warn reset*_");
 	const jid = parsedJid(user);
 	let isBotAdmin = await isAdmin(message, message.user.jid);
