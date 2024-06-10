@@ -402,7 +402,7 @@ System({
 	desc: "Warn a user",
 	type: "group",
 }, async (message, match) => {
-        let user = message.quoted ? message.reply_message?.sender : message.mention?.jid?.[0];
+        message.mention.jid?.[0] || message.reply_message.sender || match + "@s.whatsapp.net";
 	if (!user) return message.reply("_Reply to someone's message to warn or to reset warn reply to a user and type *warn reset*_");
 	const jid = parsedJid(user);
 	let isBotAdmin = await isAdmin(message, message.user.jid);
@@ -450,24 +450,24 @@ System({
     if (!message.quoted) return message.reply("_*Reply to a vote message*_");
     const deleted = await Vote(message, {}, "delete");
     if (!deleted) return message.reply("*Vote message not found*");
-    await message.send({ key: message.reply_message.data.key }, {}, 'delete');
-    await message.reply("*Vote message successfully deleted*");
+      await message.send({ key: message.reply_message.data.key }, {}, 'delete');
+      await message.reply("*Vote message successfully deleted*");
     } else if (match === "result" || match === "get") {
-    if (!message.quoted) return message.reply("_*Reply to a vote message*_");
-    const data = await Vote(message, {}, "result");
-    if (!data) return message.reply("*It's not a vote message or it's patched*");
-    if (data.result.length === 0) {
-    formattedResult = ['_*No votes yet.*_'];
+      if (!message.quoted) return message.reply("_*Reply to a vote message*_");
+      const data = await Vote(message, {}, "result");
+      if (!data) return message.reply("*It's not a vote message or it's patched*");
+      if (data.result.length === 0) {
+      formattedResult = ['_*No votes yet.*_'];
     } else {
-    formattedResult = data.result.map(({ Emoji, Votes, Percentage, VotesBy, VotedOn }) => {
-    const votersList = VotesBy.map(voter => `@${voter.split("@")[0]}`).join('\n');
-    return `*Emoji*: ${Emoji}\n*Voted On*: ${VotedOn}\n*Total Votes:* ${Votes}\n*Percentage:* ${Percentage}\n*Votes By:* ${votersList}\n\n`;
-    });}
-    if (data.result.length > 0) formattedResult.unshift('*Vote Result ✨*\n\n');
-    await message.send(formattedResult.join('').trim(), { mentions: data.votersJid })
+      formattedResult = data.result.map(({ Emoji, Votes, Percentage, VotesBy, VotedOn }) => {
+      const votersList = VotesBy.map(voter => `@${voter.split("@")[0]}`).join('\n');
+      return `*Emoji*: ${Emoji}\n*Voted On*: ${VotedOn}\n*Total Votes:* ${Votes}\n*Percentage:* ${Percentage}\n*Votes By:* ${votersList}\n\n`;
+      });
+    } if (data.result.length > 0) formattedResult.unshift('*Vote Result ✨*\n\n');
+      await message.send(formattedResult.join('').trim(), { mentions: data.votersJid })
     } else {
-    const regex = /^([^;]*;[^;]*\|[^;]*,[^;]*\|[^;]*)$/;
-    if (!regex.test(match)) return message.reply("*The text is not in the correct format. Use* ```What's your favorite color?;😂|Blue,😟|Red```");
-    await Vote(message, { text: match }, "vote");
+      const regex = /^([^;]*;[^;]*\|[^;]*,[^;]*\|[^;]*)$/;
+      if (!regex.test(match)) return message.reply("*The text is not in the correct format. Use* ```What's your favorite color?;😂|Blue,😟|Red```");
+      await Vote(message, { text: match }, "vote");
     }
 });
