@@ -138,7 +138,7 @@ const {
         if (message.quoted.text) match = message.reply_message.text;
       }
       const { data } = await axios.post('https://api.lokiser.xyz/google/tts', { text: match, lang: LANG}, { responseType: 'arraybuffer' })
-      await message.client.sendMessage(message.chat, { audio: data, mimetype: 'audio/ogg; codecs=opus', ptt: true }, { quoted: message.data });
+      await message.reply(data, { mimetype: 'audio/ogg; codecs=opus', ptt: true }, "audio");
   });
   
   
