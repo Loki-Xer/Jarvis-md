@@ -55,7 +55,7 @@ async function changeEnv(key, value) {
   }
 }
 
-async function setEnv(key, value, m) {
+async function setEnv(key, value) {
   try {
     const env = await changeVar(key, value);
     if (!env) {
