@@ -59,13 +59,12 @@ async function setEnv(key, value, m) {
   try {
     const env = await changeVar(key, value);
     if (!env) {
-      return m.reply("*Error in changing variable*");
+      return "*Error in changing variable*";
     }
     await setData(key, value, !!value, "vars");
-    m.reply(`Environment variable ${key} set to ${value}`);
-    await require('pm2').restart('index.js');
+    return `Environment variable ${key} set to ${value}`;
   } catch (error) {
-    return m.reply(`*Error setting environment variable: ${error.message}*`);
+    return `*Error setting environment variable: ${error.message}*`;
   }
 };
 
