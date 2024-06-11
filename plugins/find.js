@@ -77,5 +77,5 @@ System({
     const yt = await Ytsearch(title);
 
     const cap = `*_${yt.title}_*\n\n\n*Album :* ${album.name || ''}\n*Artists :* ${artists !== undefined ? artists.map((v) => v.name).join(', ') : ''}\n*Release Date :* ${release_date}\n\n\`\`\`1.⬢\`\`\` *audio*\n\`\`\`2.⬢\`\`\` *video*\n\n_*Send a number as a reply to download*_`
-    await message.client.sendMessage(message.chat, { image: { url: yt.image }, caption: cap });
+    await message.send({ url: yt.image }, { caption: cap }, "image");
 });
