@@ -58,7 +58,7 @@ System({
    var audioResult = await toAudio(await message.reply_message.download());
    const [firstName, author, image] = config.AUDIO_DATA.split(";");
    const aud = await AddMp3Meta(audioResult, await getBuffer(image), { title: firstName, body: author });
-   await message.client.sendMessage(message.jid, { audio: aud, mimetype: "audio/mp4" });
+   await message.reply(aud, { mimetype: "audio/mp4" }, "audio");
 });
 
 
@@ -241,7 +241,7 @@ System({
    const audioResult = await toAudio(audioBuffer, 'mp4');
    if (match) data = match.split(";");
    data = config.AUDIO_DATA.split(";");
-   await message.client.sendMessage(message.jid, { audio: await AddMp3Meta(audioResult, await getBuffer(data[2]), { title: data[0], body: data[1] }), mimetype: "audio/mp4" });
+   await message.reply(await AddMp3Meta(audioResult, await getBuffer(data[2]), { title: data[0], body: data[1] }), { mimetype: "audio/mp4" }, "audio");
 }});
 
 
@@ -299,7 +299,7 @@ System({
     if (!message.quoted || (!message.reply_message.image && !message.reply_message.audio && !message.reply_message.video)) return message.send("_*Reply to a video/audio/image message!*_");
     const media = await message.reply_message.download()
     const { ext, mime } = await fromBuffer(media);
-    return await message.client.sendMessage(message.jid, { document: media, mimetype: mime, fileName: match + "." + ext }, { quoted: message });
+    return await message.reply(media, { mimetype: mime, fileName: match + "." + ext }, "document");
 });
 
 System({
