@@ -67,7 +67,16 @@ async function setEnv(key, value, m) {
   } catch (error) {
     return m.reply(`*Error setting environment variable: ${error.message}*`);
   }
-}
+};
+
+async function herokuRestart(message) {
+  try {
+    await heroku.delete(baseURI + "/dynos");
+    return true;
+  } catch (error) {
+    return await message.send(`HEROKU : ${error.body.message}`);
+  }
+};
 
 
-module.exports = { setVar, changeEnv, setEnv };
+module.exports = { setVar, changeEnv, setEnv, herokuRestart };
