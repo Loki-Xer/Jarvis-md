@@ -11,35 +11,5 @@ services:
     envVars:
       - key: SESSION_ID
         sync: false
-      - key: BOT_INFO
-        value: ᴊᴀʀᴠɪꜱ;ʟᴏᴋɪ-xᴇʀ;https://i.imgur.com/VIpl3q5.mp4
-      - key: WARN_COUNT
-        value: 3
-      - key: MEDIA_DATA
-        value: ʟɪꜱᴛ ᴍᴇɴᴜ;ᴊᴀʀᴠɪꜱ-ᴍᴅ;https://i.imgur.com/ltPPMTh.jpeg
-      - key: HANDLER
-        value: /
-      - key: WORK_TYPE
-        value: private
-      - key: STICKER_PACKNAME
-        value: ʟᴏᴋɪ;xᴇʀ
-      - key: AUDIO_DATA
-        value: ʟᴏᴋɪ-xᴇʀ;ᴊᴀʀᴠɪꜱ;https://i.imgur.com/VgxJeCm.jpeg
-      - key: SUDO
-        value: 917025673121
-      - key: ALLWAYS_ONLINE
-        value: false
-      - key: READ_MSG
-        value: false
-      - key: SAVE_STATUS
-        value: false
-      - key: STATUS_VIEW
-        value: false
-      - key: REJECT_CALL
-        value: false
-      - key: ERROR_MSG
-        value: false
-      - key: BAN_CHATS
-        value: jid,jid
       - key: DATABASE_URL
         sync: false
