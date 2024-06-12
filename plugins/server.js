@@ -165,7 +165,7 @@ System({
   fromMe: true,
   desc: "delete sudo sudo",
   type: "server",
-}, async (m, text) => {
+}, async (m, text, message) => {
   const server = message.client.server;
   let sudoNumber = m.quoted? m.reply_message.sender : text;
   sudoNumber = sudoNumber.split("@")[0];
@@ -241,13 +241,13 @@ System({
     fromMe: true,
     type: "server",
     desc: "change work type",
-}, async (message, value) => {
+}, async (message, value, m) => {
+    const server = message.client.server;
     if (!value || !["private", "public"].includes(value)) {
     if(!message.isGroup) return message.reply("_*mode private/public*_");
     await message.send("Choose mode", {values: [{ displayText: "private", id: "mode private"}, { displayText: "public", id: "mode public"}], onlyOnce: true, withPrefix: true, participates: [message.sender] }, "poll");
     }
     if(value.toLowerCase() !== "public" && value.toLowerCase() !== "private") return;
-    if (message.client.server !== "HEROKU") return await message.reply("_*Mod cmd only works in Heroku or Koyeb*_");
     if (server === "HEROKU") {
     await message.send(`_*Work type changed to ${value}*_`); })
     const env = await setVar("WORK_TYPE", value);
