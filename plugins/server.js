@@ -237,29 +237,31 @@ System({
 });
 
 System({
-    pattern: "mode",
-    fromMe: true,
-    type: "server",
-    desc: "change work type",
+  pattern: "mode",
+  fromMe: true,
+  type: "server",
+  desc: "change work type",
 }, async (message, value, m) => {
-    const server = message.client.server;
-    if (!value || !["private", "public"].includes(value)) {
-    if(!message.isGroup) return message.reply("_*mode private/public*_");
-    await message.send("Choose mode", {values: [{ displayText: "private", id: "mode private"}, { displayText: "public", id: "mode public"}], onlyOnce: true, withPrefix: true, participates: [message.sender] }, "poll");
-    }
-    if(value.toLowerCase() !== "public" && value.toLowerCase() !== "private") return;
-    if (server === "HEROKU") {
-    await message.send(`_*Work type changed to ${value}*_`); })
-    const env = await setVar("WORK_TYPE", value);
-    if (!env) return m.reply(env);
-  } else if (server === "KOYEB") {
-    const koyebEnv = await changeEnv("WORK_TYPE", value);
-    await message.send(`_*Work type changed to ${value}*_`); });
-  } else if (server === "RAILWAY") {
-    await m.reply(`*${server} can't change variable, change it manually*`);
-  } else {
-    const defaultEnv = await setEnv("WORK_TYPE", value);
-    await message.send(`_*Work type changed to ${value}*_`); });
-    await require('pm2').restart('index.js');
+  if (!value) return message.isGroup? await message.send("Choose mode", {
+    values: [
+      { displayText: "private", id: "mode private" },
+      { displayText: "public", id: "mode public" },
+    ],
+    onlyOnce: true,
+    withPrefix: true,
+    participates: [message.sender],
+  }, "poll") : message.reply("_*mode private/public*_");
+
+  const workType = value.toLowerCase();
+  if (workType!== "public" && workType!== "private") return;
+
+  let env;
+  switch (message.client.server) {
+    case "HEROKU": env = await setVar("WORK_TYPE", workType); break;
+    case "KOYEB": env = await changeEnv("WORK_TYPE", workType); break;
+    case "RAILWAY": return m.reply(`*${message.client.server} can't change variable, change it manually*`);
+    default: env = await setEnv("WORK_TYPE", workType); await require('pm2').restart('index.js');
   }
+  if (!env) return m.reply(env);
+  await message.send(`_*Work type changed to ${workType}*_`);
 });
