@@ -254,7 +254,7 @@ System({
 
   const workType = value.toLowerCase();
   if (workType!== "public" && workType!== "private") return;
-
+  await message.send(`_*Work type changed to ${workType}*_`);
   let env;
   switch (message.client.server) {
     case "HEROKU": env = await setVar("WORK_TYPE", workType); break;
@@ -263,5 +263,4 @@ System({
     default: env = await setEnv("WORK_TYPE", workType); await require('pm2').restart('index.js');
   }
   if (!env) return m.reply(env);
-  await message.send(`_*Work type changed to ${workType}*_`);
 });
