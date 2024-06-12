@@ -16,7 +16,7 @@
         "@ffmpeg-installer/ffmpeg": "^1.1.0",
         "@ffmpeg-installer/linux-x64": "^4.1.0",
         "@hapi/boom": "^10.0.1",
-        "@whiskeysockets/baileys": "^6.6.0",
+        "@whiskeysockets/baileys": "^6.7.4",
         "awesome-phonenumber": "^6.4.0",
         "axios": "^1.3.3",
         "browser-id3-writer": "^4.4.0",
