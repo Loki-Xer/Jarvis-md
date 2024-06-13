@@ -283,8 +283,7 @@ System({
     desc: "only allow admins to modify the group's settings",
     type: 'group'
 }, async (message, match) => {
-    if (!message.isGroup)
-    return await message.reply("_This command is for groups_");
+    if (!message.isGroup) return await message.reply("_This command is for groups_");
     let isadmin = await isAdmin(message, message.user.jid);
     if (!isadmin) return await message.send("_I'm not admin_");
     const meta = await message.client.groupMetadata(message.chat)
@@ -299,8 +298,7 @@ System({
     desc: "allow everyone to modify the group's settings -- like display picture etc.",
     type: 'group'
 }, async (message, match) => {
-    if (!message.isGroup)
-    return await message.reply("_This command is for groups_");
+    if (!message.isGroup) return await message.reply("_This command is for groups_");
     let isadmin = await isAdmin(message, message.user.jid);
     if (!isadmin) return await message.send("_bot not admin_");
     const meta = await message.client.groupMetadata(message.jid);
@@ -311,25 +309,24 @@ System({
 
 
 System({
-    pattern: 'gname ?(.*)',
-    fromMe: true,
-    desc: "To change the group's subject",
-    type: 'group'
+	pattern: 'gname ?(.*)',
+	fromMe: true,
+	desc: "To change the group's subject",
+	type: 'group'
 }, async (message, match, client) => {
-    match = match || message.reply_message.text
-    if (!message.isGroup) return await message.reply("_This command is for groups_");
-    if (!match) return await message.send('*Need Subject!*\n*Example: gname New Subject!*.')
-    const meta = await message.client.groupMetadata(message.chat)
-    if (!meta.restrict) {
-      await message.client.groupUpdateSubject(message.chat, match)
-      return await message.send("*Subject updated*") 
-    }
-    const isbotAdmin = await isBotAdmins(message);
-    if (!isbotAdmin) return await message.send("I'm not an admin")
-    await client.groupUpdateSubject(message.chat, match)
-    return await message.send("*Subject updated*")
-})
-
+    if(!message.isGroup) return;
+	match = match || message.reply_message.text
+	if (!match) return await message.send('*Need Subject!*\n*Example: gname New Subject!*.')
+	const meta = await message.client.groupMetadata(message.chat);
+	if (!meta.restrict) {
+		await client.groupUpdateSubject(message.chat, match)
+		return await message.send("*Subject updated*")
+	}
+	const isbotAdmin = await isBotAdmins(message);
+	if (!isbotAdmin) return await message.send("I'm not an admin")
+	await client.groupUpdateSubject(message.chat, match)
+	return await message.send("*Subject updated*")
+});
 
 System({
     pattern: 'gdesc ?(.*)',
