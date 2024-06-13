@@ -211,6 +211,7 @@ System({
                 return await message.reply(data);
             } else {
                 await gitPull(message);
+                await require('pm2').restart('index.js');
             }
         }
     } else if (commits.total === 0) {
