@@ -57,7 +57,6 @@ System({
         await message.send([{ name: "cta_url", display_text: "Visit Google", url: response[0].link, merchant_url: response[0].link, action: "url", icon: "", style: "link" }], { body: "", footer: "*JARVIS-MD*", title: text }, "button");
 });
 
-
 System({
         pattern: "scs (.*)",
         fromMe: isPrivate,
@@ -86,7 +85,6 @@ System({
             }
         }
 });
-
 
 System({
     pattern: "device ?(.*)",
@@ -176,4 +174,34 @@ System({
     }).catch(async (e) => {
       return await msg.reply('*Unable to find definition for ' + text + '!*');
     });
+});
+
+System({
+  pattern: 'sps ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Search for songs on Spotify',
+  type: 'search',
+}, async (message, match, m) => {
+  if (!match) return await message.reply("*Give a Spotify query to search*\n_Example: .sps yoasobi idol_");
+  const query = match.startsWith('-full') ? match.slice(5).trim() : match;
+  const x = await fetch(IronMan(`ironman/spotify/s?query=${query}`));
+  const result = await x.json();
+  if (match.startsWith('-full')) {
+    let cap = '';
+    result.forEach(item => {
+      cap += `━━━━━━━━━━━━━━━━━━━━⬤\n
+*∘ᴛɪᴛʟᴇ:* ${item.title}\n*∘ᴀʀᴛɪꜱᴛ:* ${item.artist}\n*∘ᴅᴜʀᴀᴛɪᴏɴ:* ${item.duration}\n*∘ᴘᴏᴘᴜʟᴀʀɪᴛʏ:* ${item.popularity}\n*∘ᴜʀʟ:* ${item.url}\n*∘ᴘʀᴇᴠɪᴇᴡ:* ${item.preview}\n━━━━━━━━━━━━━━━━━━━━⬤
+\n\n`;
+    });
+    await message.client.sendMessage(message.chat, {
+      text: cap
+    });
+  } else {
+    const fr = result[0];
+    var caption = `*ᴛɪᴛʟᴇ:* ${fr.title}\n*ᴀʀᴛɪꜱᴛ:* ${fr.artist}\n*ᴅᴜʀᴀᴛɪᴏɴ:* ${fr.duration}\n*ᴜʀʟ:* ${fr.url}\n\n*Use -full in front of query to get full results*\n_Example: .sps -full ${match}_`;
+    await message.client.sendMessage(message.chat, {
+      image: { url: fr.thumbnail },
+      caption: caption
+    });
+  }
 });
