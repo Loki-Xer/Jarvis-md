@@ -250,25 +250,37 @@ System({
   type: "server",
   desc: "change work type",
 }, async (message, value, m) => {
-  if (!value) return message.isGroup? await message.send("Choose mode", {
-    values: [
-      { displayText: "private", id: "mode private" },
-      { displayText: "public", id: "mode public" },
-    ],
-    onlyOnce: true,
-    withPrefix: true,
-    participates: [message.sender],
-  }, "poll") : message.reply("_*mode private/public*_");
-
+  if (!value) {
+    return message.isGroup
+     ? await message.send("Choose mode", {
+          values: [
+            { displayText: "private", id: "mode private" },
+            { displayText: "public", id: "mode public" },
+          ],
+          onlyOnce: true,
+          withPrefix: true,
+          participates: [message.sender],
+        }, "poll")
+      : message.reply("_*mode private/public*_");
+  }
   const workType = value.toLowerCase();
   if (workType!== "public" && workType!== "private") return;
   await message.send(`_*Work type changed to ${workType}*_`);
-  let env = true;
+  let env;
   switch (message.client.server) {
-    case "HEROKU": env = await setVar("WORK_TYPE", workType); break;
-    case "KOYEB": env = await changeEnv("WORK_TYPE", workType); break;
-    case "RAILWAY": return m.reply(`*${message.client.server} can't change variable, change it manually*`);
-    default: const var = await changeVar("WORK_TYPE", workType); if (!var) return m.send("*Error in changing variable*"); await setData("WORK_TYPE", workType, !!workType, "vars"); await require('pm2').restart('index.js');
+    case "HEROKU":
+      env = await setVar("WORK_TYPE", workType);
+      break;
+    case "KOYEB":
+      env = await changeEnv("WORK_TYPE", workType);
+      break;
+    case "RAILWAY":
+      return m.reply(`*${message.client.server} can't change variable, change it manually*`);
+    default:
+      env = await changeVar("WORK_TYPE", workType);
+      if (!env) return await m.send("*Error in changing variable*");
+      await setData("WORK_TYPE", workType,!!workType, "vars");
+      await require('pm2').restart('index.js');
   }
-  if (!env) return m.reply(env);
+  if (!env) return await m.reply(env);
 });
