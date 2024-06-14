@@ -205,3 +205,33 @@ System({
     });
   }
 });
+
+System({
+  pattern: 'playstore ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Searches for an app on Play Store',
+  type: 'search',
+}, async (message, match, m) => {
+  if (!match) return await message.reply("*Nᴇᴇᴅ ᴀɴ ᴀᴘᴘ ɴᴀᴍᴇ*\n*Example.playstore WhatsApp*");
+  const query = match.startsWith('-full')? match.slice(5).trim() : match;
+  const x = await fetch(IronMan(`ironman/search/playstore?app=${query}`));
+  const result = await x.json();
+  if (match.startsWith('-full')) {
+    let cap = '';
+    result.forEach(item => {
+      cap += `┈──────────────────────⏣\n
+*ɴᴀᴍᴇ:* ${item.name}\n*ᴅᴇᴠᴇʟᴏᴘᴇʀ:* ${item.developer}\n*ʀᴀᴛᴇ:* ${item.rate2}\n*ʟɪɴᴋ:* ${item.link}\n┈──────────────────────⏣
+\n\n`;
+    });
+    await message.client.sendMessage(message.chat, {
+      text: cap
+    });
+  } else {
+    const fr = result[0];
+    var caption = `*◦ɴᴀᴍᴇ:* ${fr.name}\n*◦𝙳𝙴𝚅𝙴𝙻𝙾𝙿𝙴𝚁:* ${fr.developer}\n*◦ʀᴀᴛᴇ:* ${fr.rate2}\n*◦ʟɪɴᴋ:* ${fr.link}\n\n*Use -full in front of query to get full results*\n_Example: .playstore -full ${match}_`;
+    await message.client.sendMessage(message.chat, {
+      image: { url: fr.img },
+      caption: caption
+    });
+  }
+});
