@@ -61,7 +61,7 @@ jarvis md is Multi Device whatsapp bot
 
 ### 1. Customise Bot
 
- Go to Environment Variables and editi and use   
+ use setvar to customise bot
 
   </details>
  
