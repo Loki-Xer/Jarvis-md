@@ -9,11 +9,11 @@ Jarvis - Loki-Xer
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-const { System, isPrivate, sleep, shell, version } = require("../lib/");
+const { System, isPrivate, sleep, shell, version, changeVar, setData } = require("../lib/");
 const Config = require("../config");
 const simpleGit = require("simple-git");
 const git = simpleGit();
-const { gitPull, getDeployments, redeploy, updateBot, setVar, changeEnv, setEnv, herokuRestart } = require("./client/");
+const { gitPull, getDeployments, redeploy, updateBot, setVar, changeEnv, herokuRestart } = require("./client/");
 
 System({
     pattern: "shutdown",
@@ -45,8 +45,10 @@ System({
   } else if (server === "RAILWAY") {
     await m.reply(`*${server} can't change variable, change it manually*`);
   } else {
-    const defaultEnv = await setEnv(key.toUpperCase(), value);
-    await m.reply(defaultEnv);
+    const env = await changeVar(key.toUpperCase(), value);
+    if (!env) return m.send("*Error in changing variable*");  
+    await setData(key.toUpperCase(), value, !!value, "vars");
+    await m.reply(`Environment variable ${key.toUpperCase()} set to ${value}`);
     await require('pm2').restart('index.js');
   }
 });
@@ -74,12 +76,14 @@ System({
       const env = await setVar(key.toUpperCase(), null);
       if (!env) return m.reply(env);
     } else if (server === "KOYEB") {
-      const koyebEnv = await changeEnv(key.toUpperCase(), value);
+      const koyebEnv = await changeEnv(key.toUpperCase(), null);
       await m.send(`_*deleted var ${key.toUpperCase()}*_`);
     } else if (server === "RAILWAY") {
       await m.reply(`*${server} can't change variable, change it manually*`);
     } else {
-      const defaultEnv = await setEnv(key.toUpperCase(), value);
+      const env = await changeVar(key.toUpperCase(), null);
+      if (!env) return m.send("*Error in deleted variable*");  
+      await setData(key.toUpperCase(), null, false, "vars");
       await m.send(`_*deleted var ${key.toUpperCase()}*_`);
       await require('pm2').restart('index.js');
     }
@@ -144,7 +148,6 @@ System({
     if (!newSudo) return await m.reply("*reply to a number*");
     let setSudo = (Config.SUDO + "," + newSudo).replace(/,,/g, ",");
     setSudo = setSudo.startsWith(",") ? setSudo.replace(",", "") : setSudo;   
-    if (message.client.server !== "HEROKU") return await message.send("setsudo only works in Heroku");
     await message.reply("*new sudo numbers are :* " + setSudo);
     await message.reply("_It takes 30 seconds to take effect_");
     if (server === "HEROKU") {
@@ -155,7 +158,9 @@ System({
     } else if (server === "RAILWAY") {
       await m.reply(`*${server} can't change variable, change it manually*`);
     } else {
-      const defaultEnv = await setEnv("SUDO", setSudo);
+      const env = await changeVar("SUDO", setSudo);
+      if (!env) return m.send("*Error set sudo*");  
+      await setData("SUDO", setSudo, !!setSudo, "vars");
       await require('pm2').restart('index.js');
     }
 });
@@ -183,7 +188,9 @@ System({
     } else if (server === "RAILWAY") {
       await m.reply(`*${server} can't change variable, change it manually*`);
     } else {
-      const defaultEnv = await setEnv("SUDO", newSudoList);
+      const env = await changeVar("SUDO", newSudoList);
+      if (!env) return m.send("*Error set sudo*");  
+      await setData("SUDO", newSudoList, !!newSudoList, "vars");
       await require('pm2').restart('index.js');
     }
 });
@@ -256,12 +263,12 @@ System({
   const workType = value.toLowerCase();
   if (workType!== "public" && workType!== "private") return;
   await message.send(`_*Work type changed to ${workType}*_`);
-  let env;
+  let env = true;
   switch (message.client.server) {
     case "HEROKU": env = await setVar("WORK_TYPE", workType); break;
     case "KOYEB": env = await changeEnv("WORK_TYPE", workType); break;
     case "RAILWAY": return m.reply(`*${message.client.server} can't change variable, change it manually*`);
-    default: env = await setEnv("WORK_TYPE", workType); await require('pm2').restart('index.js');
+    default: const var = await changeVar("WORK_TYPE", workType); if (!var) return m.send("*Error in changing variable*"); await setData("WORK_TYPE", workType, !!workType, "vars"); await require('pm2').restart('index.js');
   }
   if (!env) return m.reply(env);
 });
