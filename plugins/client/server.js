@@ -64,4 +64,4 @@ async function herokuRestart(message) {
 };
 
 
-module.exports = { setVar, changeEnv, setEnv, herokuRestart };
+module.exports = { setVar, changeEnv, herokuRestart };
