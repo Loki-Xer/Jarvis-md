@@ -1,5 +1,4 @@
 const Heroku = require('heroku-client');
-const { changeVar, setData } = require("../../lib/")
 const Config = require('../../config');
 const heroku = new Heroku({ token: Config.HEROKU_API_KEY });
 const baseURI = `/apps/${Config.HEROKU_APP_NAME}`;
@@ -52,19 +51,6 @@ async function changeEnv(key, value) {
     }
   } catch (error) {
     return `_Error changing env var: ${error}_`;
-  }
-}
-
-async function setEnv(key, value) {
-  try {
-    const env = await changeVar(key, value);
-    if (!env) {
-      return "*Error in changing variable*";
-    }
-    await setData(key, value, !!value, "vars");
-    return `Environment variable ${key} set to ${value}`;
-  } catch (error) {
-    return `*Error setting environment variable: ${error.message}*`;
   }
 };
 
