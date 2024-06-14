@@ -260,3 +260,44 @@ System({
        const { result } = await getJson(IronMan("ironman/dl/v2/tiktok?url=" + match), { headers: { 'ApiKey': 'IRON-M4N' } });
        await message.reply({ url:result.video }, { caption: "*_download🤍_*"}, "video");
 });
+
+System({
+  pattern: 'spotify ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Downloads song from Spotify',
+  type: 'download',
+}, async (message, match, m) => {
+  if (!match) return await message.reply("_Give a spotify *Url*_");
+  if (!match.includes('https://open.spotify.com')) return await message.reply("_Need a Spotify URL_");
+  const link = match;
+  try {
+    const response = await fetch(IronMan(`ironman/dl/spotify?link=${link}`));
+    const data = await response.json();
+    const lnk = data.link;
+    const cover = data.metadata.cover;
+    const artist = data.metadata.artists;
+    const title = data.metadata.title;
+    const q = await message.send(`_*Downloading ${title}...*_`);
+    const img = await getBuffer(cover);
+    const aud = await getBuffer(lnk);
+    const audio = await toAudio(aud);
+    await message.client.sendMessage(message.from, {
+      audio: audio,
+      mimetype: 'audio/mpeg',
+      contextInfo: {
+        externalAdReply: {
+          title: title,
+          body: artist,
+          thumbnail: img,
+          mediaType: 1,
+          mediaUrl: '',
+          sourceUrl: 'https://github.com/Loki-Xer/Jarvis-md',
+          showAdAttribution: true,
+          renderLargerThumbnail: true
+        }
+      }
+    }, { quoted: q });
+  } catch (error) {
+    await message.send(error);
+  }
+});
