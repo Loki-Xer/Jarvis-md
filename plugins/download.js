@@ -255,7 +255,7 @@ System({
 	type: 'download',
 }, async (message, match, msg) => {
        match = await extractUrlFromMessage(match || message.reply_message.text);
-       if (!isUrl(match)) return message.reply("*Reply to Terabox url or provide a Terabox url*");
+       if (!isUrl(match)) return message.reply("*Reply to Tiktok url or provide a Tiktok url*");
        if (!match || !match.includes("tiktok")) return message.reply("*Reply to tiktok url or provide a tiktok url*");   
        const { result } = await getJson(IronMan("ironman/dl/v2/tiktok?url=" + match), { headers: { 'ApiKey': 'IRON-M4N' } });
        await message.reply({ url:result.video }, { caption: "*_download🤍_*"}, "video");
