@@ -110,8 +110,8 @@ System({
     match = match || message.reply_message.text;
     if (match && m.quoted) match = message.reply_message.text + '\n' + match;   
     if (!match) return m.reply("provide match");  
-    const { result } = await postJson(`https://ronak-api.onrender.com/ronak/gemini`, { prompt: match });
-    await m.send(result, { contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363197401188542@newsletter', newsletterName: 'ɢᴇᴍɪɴɪ ᴀɪ' }}});
+    const { content } = await postJson(`https://ronak-api.onrender.com/ronak/gemini`, { prompt: match });
+    await m.send(content, { contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363197401188542@newsletter', newsletterName: 'ɢᴇᴍɪɴɪ ᴀɪ' }}});
 });
 
 System({
