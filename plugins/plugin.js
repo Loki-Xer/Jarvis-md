@@ -1,5 +1,6 @@
 const { System, setData, pluginList, removeData, isUrl, extractUrlsFromText, getData } = require("../lib/");
 const axios = require("axios");
+const util = require("util");
 const fs = require("fs");
   
   
@@ -47,13 +48,12 @@ System({
               require("./" + pluginName.split(',')[0]);
             } catch (e) {
               fs.unlinkSync(__dirname + "/" + pluginName.split(',')[0] + ".js");
-              return await message.send("Invalid Plugin\n\n ```" + e + "```");
+              return await message.send("Invalid Plugin\n\n ```" + util.format(e) + "```");
             }
             await setData(pluginName.split(',')[0], url, "true", "plugin");
             await message.send(`_*New plugin installed : ${pluginName}*_`);
           }
         } catch (error) {
-          console.error(error);
           return await message.send("_Error occurred while installing plugin_");
         }
       }
