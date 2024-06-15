@@ -35,7 +35,7 @@ System({
 System({
     pattern: "prodia", 
     fromMe: isPrivate,
-    desc: "ai prodia imageing ai", 
+    desc: "prodia image gen ai", 
     type: "ai",
 }, async (message, match, m) => {
     match = match || m.reply_message.text;
@@ -50,7 +50,7 @@ System({
 System({
     pattern: "dalle", 
     fromMe: isPrivate,
-    desc: "ai dalle imageing ai", 
+    desc: "dalle image gen ai", 
     type: "ai",
 }, async (message, match, m) => {
     match = match || m.reply_message.text;
@@ -109,7 +109,7 @@ System({
 }, async (message, match, m) => {
     match = match || message.reply_message.text;
     if (match && m.quoted) match = message.reply_message.text + '\n' + match;   
-    if (!match) return m.reply("provide match");  
+    if (!match) return m.reply("_*Need Query !!*_\n_*eg: .gemini who is iron man?*_");  
     const { content } = await postJson(`https://ronak-api.onrender.com/ronak/gemini`, { prompt: match });
     await m.send(content, { contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363197401188542@newsletter', newsletterName: 'ɢᴇᴍɪɴɪ ᴀɪ' }}});
 });
