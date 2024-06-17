@@ -235,3 +235,25 @@ System({
     });
   }
 });
+
+System({
+  pattern: 'tt ?(.*)',
+  fromMe: isPrivate,
+  desc: 'TikTok Stalk',
+  type: 'search',
+}, async (message, match) => {
+  if (!match) return await message.send("Need a TikTok username");
+  const response = await fetch(`ironman/stalk/tiktok?id=${encodeURIComponent(match)}`);
+  const data = await response.json();
+  const { user, stats } = data;
+  const caption = `*⭑⭑⭑⭑ᴛɪᴋᴛᴏᴋ ꜱᴛᴀʟᴋ ʀᴇꜱᴜʟᴛ⭑⭑⭑⭑*\n\n`
+    + `*➥ᴜꜱᴇʀɴᴀᴍᴇ:* ${user.uniqueId}\n`
+    + `*➥ɴɪᴄᴋɴᴀᴍᴇ:* ${user.nickname}\n`
+    + `*➥ʙɪᴏ:* ${user.signature}\n`
+    + `*➥ᴠᴇʀɪꜰɪᴇᴅ:* ${user.verified}\n`
+    + `*➥ꜰᴏʟʟᴏᴡᴇʀꜱ:* ${stats.followerCount}\n`
+    + `*➥ꜰᴏʟʟᴏᴡɪɴɢ:* ${stats.followingCount}\n`
+    + `*➥ʜᴇᴀʀᴛꜱ:* ${stats.heartCount}\n`
+    + `*➥ᴠɪᴅᴇᴏꜱ:* ${stats.videoCount}`;
+  await message.client.sendMessage(message.chat, { image: { url: user.avatarLarger }, caption });
+});
