@@ -243,7 +243,7 @@ System({
   type: 'search',
 }, async (message, match) => {
   if (!match) return await message.send("Need a TikTok username");
-  const response = await fetch(`ironman/stalk/tiktok?id=${encodeURIComponent(match)}`);
+  const response = await fetch(IronMan(`ironman/stalk/tiktok?id=${encodeURIComponent(match)}`));
   const data = await response.json();
   const { user, stats } = data;
   const caption = `*⭑⭑⭑⭑ᴛɪᴋᴛᴏᴋ ꜱᴛᴀʟᴋ ʀᴇꜱᴜʟᴛ⭑⭑⭑⭑*\n\n`
