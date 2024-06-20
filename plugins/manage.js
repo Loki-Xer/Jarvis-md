@@ -14,6 +14,7 @@ System({
     type: "manage",
     fromMe: true 
 }, async (message, match, m) => {
+    if(!message.isGroup) return;
     if (!match) return await message.reply("_*antiword* on/off_\n_*antiword* action warn/kick/null_");
         const antiword = await transformData(message.jid, "antiword")
     if(match.toLowerCase() == 'get') {
@@ -52,7 +53,7 @@ System({
     type: "manage",
     fromMe: true 
 }, async (message, match) => {
-    if(!message.isGroup) retrun;
+    if(!message.isGroup) return;
     if (!match) return await message.reply("_*antilink* on/off_\n_*antilink* action warn/kick/null_");
     const { antilink } = await getData(message.chat);
     if(match.toLowerCase() === 'on') {
@@ -78,7 +79,7 @@ System({
     fromMe: true,
     type: 'manage'
 }, async (message, match) => {
-    if(!message.isGroup) retrun;
+    if(!message.isGroup) return;
     if (!match) return await message.reply('_*antifake* 94,92_\n_*antifake* on/off_\n_*antifake* list_');
     const { antifake } = await getData(message.chat);
     if(match.toLowerCase()==='get'){
@@ -106,7 +107,7 @@ System({
     type: "manage",
     fromMe: true 
 }, async (message, match) => {
-    if(!message.isGroup) retrun;
+    if(!message.isGroup) return;
     if (!match) return await message.reply("_*antibot* on/off_\n_*antibot* action warn/kick/null_");
     const { antibot } = await getData(message.chat)
     if(match.toLowerCase() === 'on') {
@@ -132,7 +133,7 @@ System({
     type: 'manage',
     fromMe: true
 }, async (message, match) => {
-    if(!message.isGroup) retrun;
+    if(!message.isGroup) return;
     if (!match) return await message.send("Choose settings to change antidemote settings", { values: [{ displayText: "on", id: "antidemote on"}, { displayText: "off", id: "antidemote off"}], onlyOnce: true, withPrefix: true, participates: [message.sender] }, "poll");
     if (match != 'on' && match != 'off') return message.reply('_antidemote on_');
     const { antidemote } = await getData(message.jid);
@@ -153,7 +154,7 @@ System({
     type: 'manage',
     fromMe: true
 }, async (message, match) => {
-    if(!message.isGroup) retrun;
+    if(!message.isGroup) return;
     if (!match) return await message.send("Choose settings to change antipromote settings", { values: [{ displayText: "on", id: "antipromote on"}, { displayText: "off", id: "antipromote off"}], onlyOnce: true, withPrefix: true, participates: [message.sender] }, "poll");
     if (match != 'on' && match != 'off') return message.reply('antipromote on');
     const { antipromote } = await getData(message.chat);
