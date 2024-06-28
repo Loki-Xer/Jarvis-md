@@ -329,7 +329,7 @@ System({
     type: 'converter',
     fromMe: true
 }, async (message, match) => {
-    if (message.quoted && (message.reply_message.image || message.reply_message.video || message.reply_message.audio)) return await message.client.forwardMessage(message.jid, message.reply_message.message, { vv: true });   
+    if (message.quoted && (message.reply_message.image || message.reply_message.video || message.reply_message.audio)) return await message.client.forwardMessage(message.jid, message.reply_message.message, { viewOnce: true });   
     await message.reply("_*Reply to an image, video, or audio to make it viewable*_");
 });
 
