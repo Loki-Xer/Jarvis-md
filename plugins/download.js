@@ -127,11 +127,18 @@ System({
     desc: "To download insta story",
     type: "download"
 }, async (message, match) => {
-    let url = await extractUrlFromMessage(match || message.reply_message.text);
-    if (!url) return message.reply("_*Provide a valid Instagram story URL*_");
-    if (match.startsWith("dl-url")) await message.sendFromUrl(url);
-    if (!isInstaUrl(url)) return;
-    const { result}  = await getJson(config.API + "download/insta?url=" + url);
+    if (match.startsWith("dl-url")) await message.sendFromUrl(url, { caption: "_Done 🍉_");
+    match = match || message.reply_message.text;
+    if(!isUrl(match)) {
+      const { media: result } = await getJson(IronMan("ironman/ig/story?user=" + match));
+      if (!result) return await message.send("Not Found");
+      if (result.length === 1) return await message.sendFromUrl(result[0]);
+      const options = result.map((u, index) => ({ name: "quick_reply", display_text: `${index + 1}/${result.length}`, id: `story dl-url  ${u}`}));
+      await message.send(options, { body: "", footer: "*JARVIS-MD*", title: "*Insta Media Downloader 🍉*\n"}, "button");
+    };
+    let url = await extractUrlFromMessage(match);
+    if (!isInstaUrl(url)) return message.reply("_*Provide a valid Instagram story URL*_");
+    const { result }  = await getJson(config.API + "download/insta?url=" + url);
     if (!result) return await message.send("Not Found");
     if (result.length === 1) return await message.sendFromUrl(result[0].download_link);
     const options = result.map((u, index) => ({ name: "quick_reply", display_text: `${index + 1}/${result.length}`, id: `story dl-url  ${u.download_link}`}));
