@@ -122,29 +122,28 @@ System({
 });
 
 System({
-    pattern: "story",
-    fromMe: isPrivate,
-    desc: "To download insta story",
-    type: "download"
+  pattern: "story",
+  fromMe: isPrivate,
+  desc: "To download insta story",
+  type: "download"
 }, async (message, match) => {
-    if (match.startsWith("dl-url")) await message.sendFromUrl(url, { caption: "_Done 🍉_");
-    match = match || message.reply_message.text;
-    if(!isUrl(match)) {
-      const { media: result } = await getJson(IronMan("ironman/ig/story?user=" + match));
-      if (!result) return await message.send("Not Found");
-      if (result.length === 1) return await message.sendFromUrl(result[0]);
-      const options = result.map((u, index) => ({ name: "quick_reply", display_text: `${index + 1}/${result.length}`, id: `story dl-url  ${u}`}));
-      await message.send(options, { body: "", footer: "*JARVIS-MD*", title: "*Insta Media Downloader 🍉*\n"}, "button");
-    };
-    let url = await extractUrlFromMessage(match);
-    if (!isInstaUrl(url)) return message.reply("_*Provide a valid Instagram story URL*_");
-    const { result }  = await getJson(config.API + "download/insta?url=" + url);
+  if (match.startsWith("dl-url")) return await message.sendFromUrl(await extractUrlFromMessage(match), { caption: "_Done_" });
+  match = match || message.reply_message.text;
+  if (!isUrl(match)) {
+    const { media: result } = await getJson(IronMan("ironman/ig/story?user=" + match));
     if (!result) return await message.send("Not Found");
-    if (result.length === 1) return await message.sendFromUrl(result[0].download_link);
-    const options = result.map((u, index) => ({ name: "quick_reply", display_text: `${index + 1}/${result.length}`, id: `story dl-url  ${u.download_link}`}));
-    await message.send(options, { body: "", footer: "*JARVIS-MD*", title: "*Insta Media Downloader 🍉*\n"}, "button");
+    if (result.length === 1) return await message.sendFromUrl(result[0]);
+    const options = result.map((u, index) => ({ name: "quick_reply", display_text: `${index + 1}/${result.length}`, id: `story dl-url ${u}` }));
+    return await message.send(options, { body: "", footer: "*JARVIS-MD*", title: "*Insta Media Downloader_*\n" }, "button");
+  }
+  const url = await extractUrlFromMessage(match);
+  if (!isInstaUrl(url)) return message.reply("_*Provide a valid Instagram story URL*_");
+  const { result } = await getJson(config.API + "download/insta?url=" + url);
+  if (!result) return await message.send("Not Found");
+  if (result.length === 1) return await message.sendFromUrl(result[0].download_link);
+  const options = result.map((u, index) => ({ name: "quick_reply", display_text: `${index + 1}/${result.length}`, id: `story dl-url ${u.download_link}` }));
+  await message.send(options, { body: "", footer: "*JARVIS-MD*", title: "*Insta Media Downloader_*\n" }, "button");
 });
-
 
 System({
   pattern: 'soundcloud (.*)',
@@ -274,12 +273,10 @@ System({
   desc: 'Downloads song from Spotify',
   type: 'download',
 }, async (message, match, m) => {
-  if (!match) return await message.reply("_Give a spotify *Url*_");
-  if (!match.includes('https://open.spotify.com')) return await message.reply("_Need a Spotify URL_");
-  const link = match;
-  try {
-    const response = await fetch(IronMan(`ironman/dl/spotify?link=${link}`));
-    const data = await response.json();
+  const link = await extractUrlFromMessage(match || message.reply_message.text);
+  if (!link) return await message.reply("_Give a spotify *Url*_");
+  if (!link.includes('https://open.spotify.com')) return await message.reply("_Need a Spotify URL_");
+    const data = await getJson(IronMan(`ironman/dl/spotify?link=${link}`));
     const lnk = data.link;
     const cover = data.metadata.cover;
     const artist = data.metadata.artists;
@@ -303,8 +300,5 @@ System({
           renderLargerThumbnail: true
         }
       }
-    }, { quoted: q });
-  } catch (error) {
-    await message.send(error);
-  }
+    }, { quoted: m });
 });
