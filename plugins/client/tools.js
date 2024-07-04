@@ -3,7 +3,7 @@ function getUptime() {
     const seconds = Math.floor(duration % 60);
     const minutes = Math.floor((duration / 60) % 60);
     const hours = Math.floor((duration / (60 * 60)) % 24);
-    return `_*Runtime: ${hours.toString().padStart(2, "0")} hours ${minutes.toString().padStart(2, "0")} minutes ${seconds.toString().padStart(2, "0")} seconds*_`;
+    return `_*Uptime: ${hours.toString().padStart(2, "0")} hours ${minutes.toString().padStart(2, "0")} minutes ${seconds.toString().padStart(2, "0")} seconds*_`;
 }
 
 async function Runtime(date) { 
