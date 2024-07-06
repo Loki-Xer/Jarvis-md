@@ -378,7 +378,7 @@ System({
     const areValidNumbers = parts.every(part => numberRegex.test(part));
     if (!areValidNumbers) return m.reply("*Please check your format. The correct format is .trim 1.0,3.0*");
     if (m.video && m.reply_message.video) {
-        const file = await message.downloadMediaMessage(message.video ? message.msg : message.quoted ? message.reply_message.msg : null);
+        const file = await m.downloadMediaMessage(m.video ? m.msg : m.quoted ? m.reply_message.msg : null);
         const output = await trim(file, parts[0], parts[1]);
         if (!output) return m.reply("*Please check your format. The correct format is .trim 1.0,3.0*"); 
         await m.reply(output, {}, "video");
