@@ -371,7 +371,7 @@ System({
     desc: "to trim audio/video",
     type: "converter",
 }, async (m, text) => {
-    if (!(message.video || (message.quoted && (message.reply_message.audio || message.reply_message.video)))) return m.reply("*Reply to a video/audio e.g. _.trim 1.0,3.0*");
+    if (!(m.video || (m.quoted && (m.reply_message.audio || m.reply_message.video)))) return m.reply("*Reply to a video/audio e.g. _.trim 1.0,3.0*");
     if (!text) return m.reply("*Need query to trim e.g.: _.trim 1.0,3.0*");
     const parts = text.split(',');
     const numberRegex = /^-?\d+(\.\d+)?$/;
