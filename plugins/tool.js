@@ -120,7 +120,7 @@ System({
     const res = await fetch(IronMan(`ironman/search/time?loc=${p}`));
     const data = await res.json();
     if (data.error === 'no place') {
-        return await message.send("No place found");
+        return await message.send("_*No place found*_");
     }
 
     const { name, state, tz, capital, currCode, currName, phone } = data;
