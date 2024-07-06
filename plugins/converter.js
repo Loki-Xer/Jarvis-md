@@ -68,8 +68,8 @@ System({
     desc: "video into pvt converter",
     type: "converter",
 }, async (message) => {
-   if (!message.reply_message.video) return message.reply("_*Reply to a video*_");
-   const buff = await message.reply_message.download();
+   if (!message.video && !message.reply_message.video) return message.reply("_*Reply to a video*_");
+   const buff = await message.downloadMediaMessage(message.video ? message.msg : message.quoted ? message.reply_message.msg : null);
    await message.reply(buff, { ptv: true }, "video");
 });
 
@@ -139,9 +139,9 @@ System({
     desc: "Changes photo to sticker",
     type: "converter",
 }, async (msg) => {
-   if (!(msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");
+   if (!(msg.image || msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");
    if (msg.reply_message.isAnimatedSticker) return await message.reply("_Reply to a non-animated sticker message_");
-   let media = await msg.reply_message.download();
+   let media = await msg.downloadMediaMessage(msg.image ? msg : msg.quoted ? msg.reply_message : null);
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
         author: stickerPackNameParts[1], 
@@ -187,9 +187,9 @@ System({
     desc: "Changes photo to sticker",
     type: "converter",
 }, async (message) => {
-   if (!(message.reply_message.sticker || message.reply_message.image)) return await message.reply("_*Reply to photo or sticker*_");
+   if (!(message.image || message.reply_message.sticker || message.reply_message.image)) return await message.reply("_*Reply to photo or sticker*_");
    if (message.reply_message.isAnimatedSticker) return await message.reply("_Reply to a non-animated sticker message_");
-   let media = await message.reply_message.download();
+   let media = await message.downloadMediaMessage(message.image ? message : message.quoted ? message.reply_message : null);
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
         author: stickerPackNameParts[1], 
@@ -209,9 +209,9 @@ System({
     desc: "Changes photo to sticker",
     type: "converter",
 }, async (msg) => {
-   if (!(msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");  
+   if (!(msg.image || msg.reply_message.sticker || msg.reply_message.image)) return await msg.reply("_*Reply to photo or sticker*_");  
    if (msg.reply_message.isAnimatedSticker) return await msg.reply("_Reply to a non-animated sticker message_");
-   let media = await msg.reply_message.download();
+   let media = await msg.downloadMediaMessage(msg.image ? msg : msg.quoted ? msg.reply_message : null);
    let sticker = new Sticker(media, {
         pack: stickerPackNameParts[0], 
         author: stickerPackNameParts[1], 
@@ -251,8 +251,9 @@ System({
     desc: "_Converts Photo or video to sticker_",
     type: "converter",
 }, async (message, match) => {
-   if (!(message.reply_message.video || message.reply_message.image)) return await message.reply("_Reply to photo or video_");   
-   let buff = await message.reply_message.download();
+   if (!(message.image || message.video || message.reply_message.video || message.reply_message.image)) return await message.reply("_Reply to photo or video_"); 
+   let media = (message.video || message.image)? message.msg : message.quoted? message.reply_message.msg : null;  
+   let buff = await message.downloadMediaMessage(media);
    await message.send(buff, { packname: stickerPackNameParts[0], author: stickerPackNameParts[1] }, "sticker");
 });
 
@@ -296,8 +297,9 @@ System({
     fromMe: isPrivate
 }, async (message, match) => {
     match = (match || "converted media").replace(/[^A-Za-z0-9]/g,'-');
-    if (!message.quoted || (!message.reply_message.image && !message.reply_message.audio && !message.reply_message.video)) return message.send("_*Reply to a video/audio/image message!*_");
-    const media = await message.reply_message.download()
+    if (!(message.image || message.video || (message.quoted && (message.reply_message.image || message.reply_message.audio || message.reply_message.video)))) return message.send("_*Reply to a video/audio/image message!*_");
+    let msg = (message.video || message.image)? message.msg : message.quoted? message.reply_message.msg : null;  
+    let media = await message.downloadMediaMessage(msg);
     const { ext, mime } = await fromBuffer(media);
     return await message.reply(media, { mimetype: mime, fileName: match + "." + ext }, "document");
 });
@@ -308,10 +310,10 @@ System({
   desc: 'rotate image or video in any direction',
   type: 'converter'
 }, async (message, match) => {
-  if (!(message.quoted && (message.reply_message.video || message.reply_message.image))) return await message.reply('*Reply to an image/video*');
+  if (!(message.image || message.video || (message.quoted && (message.reply_message.image || message.reply_message.video)))) return await message.reply('*Reply to an image/video*');
   if (!match || !['left', 'right', 'horizontal', 'vertical'].includes(match.toLowerCase())) return await message.reply('*Need rotation type.*\n_Example: .rotate left, right, horizontal, or vertical_');	
   const rotateOptions = { left: 'transpose=2', right: 'transpose=1', horizontal: 'hflip', vertical: 'vflip', };
-  const media = await message.reply_message.downloadAndSave();
+  const media = await message.downloadAndSaveMediaMessage(message.image || message.video ? message : message.reply_message);
   const ext = media.endsWith('.mp4') ? 'mp4' : 'jpg';
   const ffmpegCommand = `ffmpeg -y -nostdin -i ${media} -vf "${rotateOptions[match.toLowerCase()]}" rotated.${ext}`;
   exec(ffmpegCommand, (error, stdout, stderr) => {
@@ -329,7 +331,7 @@ System({
     type: 'converter',
     fromMe: true
 }, async (message, match) => {
-    if (message.quoted && (message.reply_message.image || message.reply_message.video || message.reply_message.audio)) return await message.client.forwardMessage(message.jid, message.reply_message.message, { viewOnce: true });   
+    if (!(message.image && message.video && (message.quoted && (message.reply_message.image || message.reply_message.audio || message.reply_message.video)))) return await message.client.forwardMessage(message.jid, message.image || message.video? message : message.reply_message, { viewOnce: true });
     await message.reply("_*Reply to an image, video, or audio to make it viewable*_");
 });
 
@@ -354,10 +356,10 @@ System({
         await setData(m.user.id, match.split(":")[1].trim(), "true", "removeBg");
         return m.reply("*Key added successfully. Now you can use rbg.*");
     }
-    if (!m.quoted || !m.reply_message.image) return m.reply("*Reply to an image*");
+    if (!m.image && !m.reply_message.image) return m.reply("*Reply to an image*");
     const db = await getData(m.user.id);
     if (!db.removeBg) return await m.send("https://graph.org/file/dc22fb232b0092e6326ec.png", { type: "image", value: [{ name: "cta_url", display_text: "Sign in", url: "https://accounts.kaleido.ai/users/sign_in", merchant_url: "https://accounts.kaleido.ai/users/sign_in", action: "url", icon: "", style: "link" }, { name: "cta_url", display_text: "Get API Key", url: "https://www.remove.bg/dashboard#api-key", merchant_url: "https://www.remove.bg/dashboard#api-key", action: "url", icon: "", style: "link" }], body: "", footer: "*JARVIS-MD*", title: `\nDear user, get an API key to use this command. Sign in to remove.bg and get an API key. After that, use \n\n *${m.prefix} rbg key: _your API key_*\n` }, "button");
-    let buff = await removeBg(await m.reply_message.downloadAndSave(), db.removeBg.message);
+    let buff = await removeBg(await m.downloadAndSaveMediaMessage(m.image ? m.msg : m.quoted ? m.reply_message.msg : null), db.removeBg.message);
     if(!buff) return m.reply("*Error in api key or can't upload to remove.bg*");
     await m.reply(buff, {}, "image");
 });
@@ -369,14 +371,14 @@ System({
     desc: "to trim audio/video",
     type: "converter",
 }, async (m, text) => {
-    if (!m.quoted || (!m.reply_message.audio && !m.reply_message.video)) return m.reply("*Reply to a video/audio e.g. _.trim 1.0,3.0*");
+    if (!(message.video || (message.quoted && (message.reply_message.audio || message.reply_message.video)))) return m.reply("*Reply to a video/audio e.g. _.trim 1.0,3.0*");
     if (!text) return m.reply("*Need query to trim e.g.: _.trim 1.0,3.0*");
     const parts = text.split(',');
     const numberRegex = /^-?\d+(\.\d+)?$/;
     const areValidNumbers = parts.every(part => numberRegex.test(part));
     if (!areValidNumbers) return m.reply("*Please check your format. The correct format is .trim 1.0,3.0*");
-    if (m.reply_message.video) {
-        const file = await m.reply_message.download();
+    if (m.video && m.reply_message.video) {
+        const file = await message.downloadMediaMessage(message.video ? message.msg : message.quoted ? message.reply_message.msg : null);
         const output = await trim(file, parts[0], parts[1]);
         if (!output) return m.reply("*Please check your format. The correct format is .trim 1.0,3.0*"); 
         await m.reply(output, {}, "video");
