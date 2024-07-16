@@ -10,9 +10,14 @@
     "stack": "container",
     "env": {
         "BOT_INFO": {
-            "description": "botname;ownername;ownernumber;image url",
+            "description": "botname;ownername;image url",
             "required": true,
             "value":"ᴊᴀʀᴠɪꜱ;ʟᴏᴋɪ-xᴇʀ;https://i.imgur.com/VIpl3q5.mp4"
+        },
+        "MENU_FONT": {
+            "description": "type;plugin name, have to be less than 35",
+            "required": false,
+            "value":"3;8"
         },
         "AUDIO_DATA": {
             "description": "audio package name",
