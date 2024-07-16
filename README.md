@@ -37,7 +37,7 @@ jarvis md is Multi Device whatsapp bot
 
 3. Get [DATABASE_URL](https://github.com/Loki-Xer/jarvis-md/wiki/Data-base-url) and copy it
 
-4. Get [Koyeb api key](https://app.koyeb.com/account/api)
+4. Get [Koyeb api key](https://app.koyeb.com/settings/api)
 
 2. Now Deploy
     <br>
