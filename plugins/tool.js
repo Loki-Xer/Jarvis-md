@@ -90,7 +90,7 @@ async (message, match) => {
 
 
 System({
-    pattern: 'readmore ?(.*)',
+    pattern: 'rm ?(.*)',
     fromMe: isPrivate,
     desc: 'Make Readmore Text',
     type: 'user',
