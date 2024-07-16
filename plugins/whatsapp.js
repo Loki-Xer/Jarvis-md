@@ -201,9 +201,9 @@ System({
     desc: 'Change video or image caption',
     type: 'whatsapp',
 }, async (message, match) => {
-    if (!message.quoted || (!message.reply_message.video && !message.reply_message.image)) return await message.reply('*_Reply to an image or video_*');
+    if (!message.reply_message.video && !message.reply_message.image && !message.image && !message.video) return await message.reply('*_Reply to an image or video_*');
     if (!match) return await message.reply("*Need a query, e.g., .caption Hello*");
-    await message.client.forwardMessage(message.jid, message.reply_message.message, { caption: match });
+    await message.client.forwardMessage(message.jid, message.quoted ? message.reply_message.message : message.message, { caption: match });
 });
 
 System({
