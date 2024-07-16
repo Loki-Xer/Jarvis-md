@@ -313,7 +313,7 @@ System({
 	fromMe: true,
 	desc: "To change the group's subject",
 	type: 'group'
-}, async (message, match, client) => {
+}, async (message, match, m, client) => {
     if(!message.isGroup) return;
 	match = match || message.reply_message.text
 	if (!match) return await message.send('*Need Subject!*\n*Example: gname New Subject!*.')
