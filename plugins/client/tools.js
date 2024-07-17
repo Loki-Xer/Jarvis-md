@@ -26,18 +26,7 @@ function secondsToHms(d) {
 	let mDisplay = m > 0 ? m + (m == 1 ? " MINUTE, " : " MINUTE, ") : "";
 	let sDisplay = s > 0 ? s + (s == 1 ? " SECOND, " : " SECOND") : "";
 	return hDisplay + mDisplay + sDisplay;
-}
-
-function selectStyle(styles, index) {
-    return new Promise((resolve, reject) => {
-      const numericIndex = parseInt(index - 1);
-        if (!isNaN(numericIndex) && numericIndex >= 0 && numericIndex < styles.length) {
-            resolve(styles[numericIndex]);
-        } else {
-            reject(new Error("Invalid index"));
-        }
-    });
-}
+};
 
 function timeConvert(time) {
   time = time.toString ().match (/^([01]\d|2[0-3])( )([0-5]\d)(:[0-5]\d)?$/) || [time];
@@ -52,7 +41,6 @@ function timeConvert(time) {
 module.exports = {
   getUptime,
   Runtime,
-  selectStyle,
   secondsToHms,
   timeConvert
 }
