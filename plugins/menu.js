@@ -9,7 +9,6 @@ Jarvis - Loki-Xer
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-
 const plugins = require("../lib/utils");
 const { System, isPrivate, isUrl, version, readMore } = require("../lib");
 const { BOT_INFO, MEDIA_DATA, MENU_FONT } = require("../config");
@@ -50,12 +49,23 @@ System({
     const [typFont, ptrnFont] = MENU_FONT.split(';').map(font => isNaN(font) || parseInt(font) > 35 ? null : font);
     cmnd.sort();
     for (const cmmd of category.sort()) {
-        const resc = await st.stylesText(cmmd);
-        let typ = typFont ? resc[typFont].result : resc[3].result;
+        let typ;
+        if (typFont && typFont !== '0') {
+            const resc = await st.stylesText(cmmd);
+            typ = resc[typFont].result;
+        } else {
+            typ = cmmd.toUpperCase();
+        }
+        
         menu += `\n┃  ╭─────────────┅┄▻\n┃  │  *➻ ${typ}*\n┃  ╰┬────────────┅┄▻\n┃  ┌┤`;
         for (const { cmd, type } of cmnd.filter(({ type }) => type === cmmd)) {
-            const res = await st.stylesText(cmd.trim().toUpperCase());
-            let ptrn = ptrnFont ? res[ptrnFont].result : res[8].result;
+            let ptrn;
+            if (ptrnFont && ptrnFont !== '0') {
+                const res = await st.stylesText(cmd.trim().toUpperCase());
+                ptrn = res[ptrnFont].result;
+            } else {
+                ptrn = cmd.charAt(0).toUpperCase() + cmd.slice(1).toLowerCase();
+            }
             menu += `\n┃  │ ‣ ${ptrn}`;
         }
         menu += `\n┃  ╰─────────────···▸`;
