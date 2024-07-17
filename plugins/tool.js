@@ -76,15 +76,15 @@ System({
 },
 async (message, match) => {
     const { alive } = await getData(message.user.id);
+    const data = alive ? alive.message : config.ALIVE_DATA;
     if (match === "get" && message.sudo.includes(message.sender))
-        return await message.send(alive?.message);
+        return await message.send(data);
     if (match && message.sudo.includes(message.sender)) {
         if (await setData(message.user.id, match, "true", "alive"))
             return await message.send('_Alive Message Updated_');
         else
             return await message.send('_Error in updating_');
     }
-    const data = alive ? alive.message : config.ALIVE_DATA;
     return await sendAlive(message, data);
 });
 
