@@ -32,8 +32,9 @@ const {
     setData,
     getData
 } = require("../lib/");
-const { selectStyle, trim, stylesText } = require("./client/"); 
+const { trim } = require("./client/"); 
 const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
+const fancy = require('./client/fancy');
 
 System({
     pattern: "photo",
@@ -159,27 +160,18 @@ System({
     fromMe: isPrivate,
     desc: "converts text to fancy text",
     type: "converter",
-}, async (message, match) => {
-    if (message.reply_message.text) {
-        if (!match) return message.send(`*_reply to a message and use ${message.prefix} fancy 7`);
-        const style = await stylesText(message.reply_message.text);
-        const text = await selectStyle(style, match);
-        await message.reply(text.result);
-    } else if (match) {
-        const [text, index] = match.split(' ');
-        if (!index) return await message.send(`*_use ${message.prefix} fancy hy 7`);
-        const style = await stylesText(text);
-        const selectedStyle = await selectStyle(style, index);
-        await message.reply(selectedStyle.result);
-    } else {
-        let text = `*Fancy text*\n\n*Example:*\n*reply to a text and ${message.prefix} fancy 7*\n*or*\n*use ${message.prefix} fancy hy 5*\n\n`;
-         const styleResults = await stylesText("fancy");
-         styleResults.forEach((style, index) => {
-            text += `${index + 1}. ${style.result}\n`;
-        });
-        return await message.reply(text);
-    }
-});
+ }, (async (message, match) => {    
+    if (!match && !message.reply_message.message) return await message.reply('\n*Fancy text*\n\n*Example:*\n*reply to a text and : fancy 7*\n*or*\n*use : fancy hy 5*\n\n'+String.fromCharCode(8206).repeat(4001)+fancy.list('Text here',fancy));
+    const id = match.match(/\d/g)?.join('')
+     try {
+        if (id === undefined && !message.reply_message){
+            return await message.reply(fancy.list(match, fancy));
+        }
+        return await message.reply(fancy.apply(fancy[parseInt(id)-1], message.reply_message.text || match.replace(id,'')))    
+    } catch {
+        return await message.reply('_*No such style :(*_')
+     }
+ }));
 
 System({
     pattern: "circle",
