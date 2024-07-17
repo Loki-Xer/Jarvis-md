@@ -13,7 +13,7 @@ const plugins = require("../lib/utils");
 const { System, isPrivate, isUrl, version, readMore } = require("../lib");
 const { BOT_INFO, MEDIA_DATA, MENU_FONT } = require("../config");
 const { uptime } = require("os");
-const st = require('./client');
+const fancy = require('./client/fancy');
 
 const clockString = (duration) => {
     let seconds = Math.floor((duration / 1000) % 60),
@@ -51,8 +51,7 @@ System({
     for (const cmmd of category.sort()) {
         let typ;
         if (typFont && typFont !== '0') {
-            const resc = await st.stylesText(cmmd);
-            typ = resc[typFont].result;
+            typ = await fancy.apply(fancy[parseInt(typFont)-1], cmmd);
         } else {
             typ = cmmd.toUpperCase();
         }
@@ -61,8 +60,7 @@ System({
         for (const { cmd, type } of cmnd.filter(({ type }) => type === cmmd)) {
             let ptrn;
             if (ptrnFont && ptrnFont !== '0') {
-                const res = await st.stylesText(cmd.trim().toUpperCase());
-                ptrn = res[ptrnFont].result;
+                ptrn = await fancy.apply(fancy[parseInt(ptrnFont)-1], cmd.trim().toUpperCase());
             } else {
                 ptrn = cmd.charAt(0).toUpperCase() + cmd.slice(1).toLowerCase();
             }
