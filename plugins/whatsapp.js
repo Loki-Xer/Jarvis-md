@@ -71,7 +71,7 @@ System({
 			messageTimestamp: message.messageTimestamp
 		}]
 	}, message.jid)
-	await message.send('_Cleared_')
+	await message.reply('_Cleared_')
 });
 
 System({
@@ -89,7 +89,7 @@ System({
 		archive: true,
 		lastMessages: [lstMsg]
 	}, message.jid);
-	await message.send('_Archived_')
+	await message.reply('_Archived_')
 });
 
 System({
@@ -107,7 +107,7 @@ System({
 		archive: false,
 		lastMessages: [lstMsg]
 	}, message.jid);
-	await message.send('_Unarchived_')
+	await message.reply('_Unarchived_')
 });
 
 System({
@@ -119,7 +119,7 @@ System({
 	await message.client.chatModify({
 		pin: true
 	}, message.jid);
-	await message.send('_Pined_')
+	await message.reply('_Pined_')
 });
 
 System({
@@ -131,7 +131,7 @@ System({
 	await message.client.chatModify({
 		pin: false
 	}, message.jid);
-	await message.send('_Unpined_')
+	await message.reply('_Unpined_')
 });
 
 System({
@@ -165,7 +165,7 @@ System({
     match = match || message.reply_message.text;
     if (!match) return await message.send('*Need Status!*\n*Example: setbio Hey there! I am using WhatsApp*.');
     await message.client.updateProfileStatus(match);
-    await message.send('_Profile status updated_');
+    await message.reply('_Profile bio updated_');
 });
 
 System({
@@ -177,7 +177,7 @@ System({
     match = match || message.reply_message.text;
     if (!match) return await message.send('*Need Name!*\n*Example: setname your name*.');
     await message.client.updateProfileName(match);
-    await message.send('_Profile name updated_');
+    await message.reply('_Profile name updated_');
 });
 
 System({
