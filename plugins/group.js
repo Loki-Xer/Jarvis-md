@@ -400,7 +400,7 @@ System({
 	type: "group",
 }, async (message, match) => {
         let user = message.mention.jid?.[0] || message.reply_message.sender;
-	if (!user) return message.reply("_Reply to someone's message to warn or to reset warn reply to a user and type *warn reset*_");
+	if (!user) return message.reply("_Reply to someone/mention_\n*Example:* . warn @user\n_To reset warn_\n*Example:* .warn reset");
 	const jid = parsedJid(user);
 	let isBotAdmin = await isAdmin(message, message.user.jid);
 	if(!isBotAdmin) return await message.reply("_I'm not admin_");
