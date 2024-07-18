@@ -31,7 +31,7 @@ System({
     match = message.reply_message?.sender || match;
     let isadmin = await isAdmin(message, message.user.jid);
     if (!isadmin) return await message.reply("_I'm not admin_");
-    if (!match) return await message.reply("_Mention user to add_");
+    if (!match) return await message.reply("_Reply to user or need number_\n*Example:* .add 919876543210_");
     match = match.replaceAll(' ', '');
     if (match) {
         let users = match.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
@@ -75,7 +75,7 @@ System({
 }, async (message, match) => {
     if (!message.isGroup) return await message.send("_This command is for groups_");   
     match = message.mention?.jid?.[0] || message.reply_message?.sender || match;
-    if (!match) return await message.reply("_Mention a user to kick_");    
+    if (!match) return await message.reply("_Reply to someone/mention_\n*Example:* .kick @user");    
     if (!await isAdmin(message, message.user.jid)) return await message.send("_I'm not an admin_");
     if (match === "all") {
         let { participants } = await message.client.groupMetadata(message.jid);
@@ -102,7 +102,7 @@ System({
 	if (!message.isGroup)
 	return await message.send("_This command is for groups_");
 	match = message.mention.jid?.[0] || message.reply_message.sender || match
-	if (!match) return await message.reply("_Mention user to promote_");
+	if (!match) return await message.reply("_Reply to someone/mention_\n*Example:* . promote @user");
 	let isadmin = await isAdmin(message, message.user.jid);
 	if (!isadmin) return await message.reply("_I'm not admin_");
 	let jid = parsedJid(match);
@@ -120,7 +120,7 @@ System({
 	if (!message.isGroup)
 	return await message.send("_This command is for groups_");
 	match = message.mention.jid?.[0] || message.reply_message.sender || match
-	if (!match) return await message.reply("_Mention user to demote");
+	if (!match) return await message.reply("_Reply to someone/mention_\n*Example:* . demote @user");
 	let isadmin = await isAdmin(message, message.user.jid);
 	if (!isadmin) return await message.reply("_I'm not admin_");
 	let jid = parsedJid(match);
@@ -388,7 +388,7 @@ System({
     type: "group",
 }, async (m, match) => {
     let gName = match || m.pushName;
-    if (!m.reply_message.sender) return m.reply("_reply to a user_");
+    if (!m.reply_message.sender) return m.reply("*To create group with someone*\n_Example : . create @user/reply_");
     const group = await m.client.groupCreate(gName, [m.reply_message.sender, m.sender]);
     await m.send("_Group successfully created_ ");
 });
