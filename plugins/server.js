@@ -21,7 +21,7 @@ System({
     type: "server",
     desc: "shutdown bot",
 }, async (message) => {
-    await message.send(`_Jarvis is shutting down..._`);
+    await message.reply(`_Jarvis is shutting down..._`);
     return await shell("npm stop");
 });
 
@@ -32,7 +32,7 @@ System({
   desc: "Set environment variable",
 }, async (message, match, m) => {
   const server = message.client.server;
-  if (!match) return await message.send(`Example: .setvar SUDO:917025673121`);
+  if (!match) return await message.reply(`Example: .setvar SUDO:917025673121`);
   const [key, value] = match.split(":").map(s => s.trim());
   if (!key || !value) return await message.send(`_*Example: .setvar SUDO:917025673121*_`);
   if (server === "HEROKU") {
@@ -48,7 +48,7 @@ System({
     const env = await changeVar(key.toUpperCase(), value);
     if (!env) return m.send("*Error in changing variable*");  
     await setData(key.toUpperCase(), value, !!value, "vars");
-    await m.reply(`Environment variable ${key.toUpperCase()} set to ${value}`);
+    await m.reply(`_*Environment variable ${key.toUpperCase()} set to ${value}*_`);
     await require('pm2').restart('index.js');
   }
 });
@@ -69,22 +69,22 @@ System({
     desc: "Delete environment variable",
 }, async (message, match) => {
     const server = message.client.server;
-    if (!match) return await message.send("_Example: delvar sudo_");
+    if (!match) return await message.reply("_Example: delvar sudo_");
     const key = match.trim().toUpperCase();
     if (server === "HEROKU") {
-      await m.send(`_*deleted var ${key.toUpperCase()}*_`);
+      await m.reply(`_*deleted var ${key.toUpperCase()}*_`);
       const env = await setVar(key.toUpperCase(), null);
       if (!env) return m.reply(env);
     } else if (server === "KOYEB") {
       const koyebEnv = await changeEnv(key.toUpperCase(), null);
-      await m.send(`_*deleted var ${key.toUpperCase()}*_`);
+      await m.reply(`_*deleted var ${key.toUpperCase()}*_`);
     } else if (server === "RAILWAY") {
       await m.reply(`*${server} can't change variable, change it manually*`);
     } else {
       const env = await changeVar(key.toUpperCase(), null);
-      if (!env) return m.send("*Error in deleted variable*");  
+      if (!env) return m.reply("*Error in deleted variable*");  
       await setData(key.toUpperCase(), null, false, "vars");
-      await m.send(`_*deleted var ${key.toUpperCase()}*_`);
+      await m.reply(`_*deleted var ${key.toUpperCase()}*_`);
       await require('pm2').restart('index.js');
     }
 });
@@ -134,7 +134,7 @@ System({
     desc: "shows sudo", 
     type: "server" 
  }, async (message, match) => {
-    await message.send("_*SUDO NUMBER'S ARA :*_ "+"```"+Config.SUDO+"```")
+    await message.reply("_*SUDO NUMBER'S ARA :*_ "+"```"+Config.SUDO+"```")
 });
 
 System({
@@ -206,7 +206,7 @@ System({
     var commits = await git.log([Config.BRANCH + "..origin/" + Config.BRANCH,]);
     if (match == "now") {
         if (commits.total === 0) {
-            return await message.send(`_Jarvis is on the latest version: v${version}_`);
+            return await message.reply(`_Jarvis is on the latest version: v${version}_`);
         } else {
             if (server === "HEROKU") {
                 await updateBot(message);
