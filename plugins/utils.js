@@ -32,12 +32,12 @@ System({
         }
         
         if (msg) {
-            return await message.send('_Mention Updated_');
+            return await message.reply('_Mention Updated_');
         } else {
-            return await message.send('_Error in updating_');
+            return await message.reply('_Error in updating_');
         }
     }
-    return await message.send("_You can check the format of mention https://github.com/Loki-Xer/Jarvis-md/wiki_");
+    return await message.reply("_You can check the format of mention https://github.com/Loki-Xer/Jarvis-md/wiki_");
 });
 
 System({
@@ -48,10 +48,10 @@ System({
 }, async (message, match) => {
     if (match === "off") {
     await setData(message.user.id, "disactie", "false", "autoreaction");
-    await message.send("_*autoreaction disabled*_");
+    await message.reply("_*autoreaction disabled*_");
     } else if (match === "on") {
     await setData(message.user.id, "actie", "true", "autoreaction");
-    await message.send("_*autoreaction enabled*_");
+    await message.reply("_*autoreaction enabled*__");
     } else if (!match) {
     if (message.isGroup) {
       await message.send("\nChoose one to update autoreaction\n",
@@ -63,6 +63,6 @@ System({
                 participates: [message.sender]
             }, "poll");
     } else {
-        await message.reply("_*autoreaction on/off*_");
+        await message.reply("_*autoreaction on/off*__");
     }}
 });
