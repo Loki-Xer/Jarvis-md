@@ -33,7 +33,7 @@ System({
     desc: "get view ones message",
     type: "tool",
 }, async (message) => {
-   if (!message.reply_message.viewones) return await message.send("_*Reply to a view once*_");
+   if (!message.reply_message.viewones) return await message.reply("_*Reply to a view once*_");
    return await message.client.forwardMessage(message.chat, message.reply_message.message, { readViewOnce: true });
 });
 
@@ -104,7 +104,7 @@ System({
     if (!a || !c) {
         return await m.send("*Need text*\nExample: .readmore Hi\\how are you_");
     } else {
-        return m.send(texts);
+        return m.reply(texts);
     }
 });
 
@@ -145,7 +145,7 @@ System({
     msg += `*ᴄᴀᴘɪᴛᴀʟ:* ${capital}\n`;
     msg += `*ᴄᴜʀʀᴇɴᴄʏ:* ${currName} (${currCode})\n`;
     msg += `*ᴘʜᴏɴᴇ ᴄᴏᴅᴇ:* +${phone}`;
-    await message.send(msg);
+    await message.reply(msg);
 });
 
 
