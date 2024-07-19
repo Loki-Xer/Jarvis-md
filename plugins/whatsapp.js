@@ -16,10 +16,10 @@ System({
     type: "whatsapp",
 }, async (message) => {
     if (!message.reply_message || !message.reply_message.image)
-        return await message.reply("_Reply to a photo_");
+        return await message.reply("_Reply to a photo__");
     let buff = await message.reply_message.download();
     await message.setPP(message.user.jid, buff);
-    return await message.reply("_Profile Picture Updated_");
+    return await message.reply("_Profile Picture Updated__");
 });
 
 System({
@@ -45,7 +45,7 @@ System({
     if (!message.reply_message || !message.reply_message.image) return await message.reply("_Reply to a photo_");
     let media = await message.reply_message.download();
     await message.client.updateProfile(media, message.user.jid);
-    return await message.reply("_Profile Picture Updated_");
+    return await message.reply("_Profile Picture Updated!_");
 });
 
 System({
@@ -54,7 +54,7 @@ System({
     desc: "Deletes a message",
     type: "whatsapp",
 }, async (message) => {
-    if (!message.reply_message) return await message.reply("_Reply to a message to delete it_");
+    if (!message.reply_message) return await message.reply("_Reply to a message to delete it!_");
     await message.client.sendMessage(message.chat, { delete: message.reply_message.data.key });
 });
 
@@ -71,7 +71,7 @@ System({
 			messageTimestamp: message.messageTimestamp
 		}]
 	}, message.jid)
-	await message.reply('_Cleared_')
+	await message.reply('_Cleared.._')
 });
 
 System({
@@ -89,7 +89,7 @@ System({
 		archive: true,
 		lastMessages: [lstMsg]
 	}, message.jid);
-	await message.reply('_Archived_')
+	await message.reply('_Archived.._')
 });
 
 System({
@@ -107,7 +107,7 @@ System({
 		archive: false,
 		lastMessages: [lstMsg]
 	}, message.jid);
-	await message.reply('_Unarchived_')
+	await message.reply('_Unarchived.._')
 });
 
 System({
@@ -119,7 +119,7 @@ System({
 	await message.client.chatModify({
 		pin: true
 	}, message.jid);
-	await message.reply('_Pined_')
+	await message.reply('_Pined.._')
 });
 
 System({
@@ -131,7 +131,7 @@ System({
 	await message.client.chatModify({
 		pin: false
 	}, message.jid);
-	await message.reply('_Unpined_')
+	await message.reply('_Unpined.._')
 });
 
 System({
@@ -142,7 +142,7 @@ System({
 }, async (message) => {
     let jid = message.quoted ? message.reply_message.sender : message.jid;
     await message.client.updateBlockStatus(jid, "block");
-    await message.reply("_*Blocked*_");
+    await message.reply("_*Blocked!*_");
 });
 
 System({
@@ -153,7 +153,7 @@ System({
 }, async (message) => {
     let jid = message.quoted ? message.reply_message.sender : message.jid;
     await message.client.updateBlockStatus(jid, "unblock");
-    await message.reply("_*Unblocked*_");
+    await message.reply("_*Unblocked!*_");
 });
 
 System({
