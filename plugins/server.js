@@ -144,12 +144,26 @@ System({
     type: "server" 
 }, async (message, match, m) => { 
     const server = message.client.server;
-    const newSudo = (message.mention.jid[0] || message.reply_message.sender).split("@")[0];    
-    if (!newSudo) return await m.reply("*reply to a number*");
-    let setSudo = (Config.SUDO + "," + newSudo).replace(/,,/g, ",");
-    setSudo = setSudo.startsWith(",") ? setSudo.replace(",", "") : setSudo;   
+    let newSudo;
+    if (message.mention && message.mention.jid && message.mention.jid[0]) {
+      newSudo = message.mention.jid[0].split("@")[0];
+    } else if (message.reply_message && message.reply_message.sender) {
+      newSudo = message.reply_message.sender.split("@")[0];
+    } else {
+      newSudo = null;
+    }
+
+    if (!newSudo && !match) return await m.reply("_Reply to someone/mention_\n*Example:* . setsudo @user");
+
+    let setSudo = Config.SUDO;
+    if (newSudo) {
+        setSudo = (setSudo + "," + newSudo).replace(/,,/g, ",");
+        setSudo = setSudo.startsWith(",") ? setSudo.replace(",", "") : setSudo;
+    }
+
     await message.reply("*new sudo numbers are :* " + setSudo);
     await message.reply("_It takes 30 seconds to take effect_");
+
     if (server === "HEROKU") {
       const env = await setVar("SUDO", setSudo);
       if (!env) return m.reply(env);
