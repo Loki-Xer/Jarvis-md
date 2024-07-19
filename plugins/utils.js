@@ -32,9 +32,9 @@ System({
         }
         
         if (msg) {
-            return await message.reply('_Mention Updated_');
+            return await message.reply('_Mention Updated__');
         } else {
-            return await message.reply('_Error in updating_');
+            return await message.reply('_Error in updating__');
         }
     }
     return await message.reply("_You can check the format of mention https://github.com/Loki-Xer/Jarvis-md/wiki_");
@@ -48,7 +48,7 @@ System({
 }, async (message, match) => {
     if (match === "off") {
     await setData(message.user.id, "disactie", "false", "autoreaction");
-    await message.reply("_*autoreaction disabled*_");
+    await message.reply("_*autoreaction disabled*__");
     } else if (match === "on") {
     await setData(message.user.id, "actie", "true", "autoreaction");
     await message.reply("_*autoreaction enabled*__");
