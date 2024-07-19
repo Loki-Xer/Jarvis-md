@@ -54,7 +54,7 @@ System({
     desc: "Deletes a message",
     type: "whatsapp",
 }, async (message) => {
-    if (!message.reply_message) return await message.reply("_Reply to a message to delete it!_");
+    if (!message.quoted) return await message.reply("_Reply to a message to delete it!_");
     await message.client.sendMessage(message.chat, { delete: message.reply_message.data.key });
 });
 
