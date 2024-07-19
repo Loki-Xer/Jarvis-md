@@ -105,7 +105,7 @@ const {
      let pp;
      let status;
      let user = message.quoted ? message.reply_message.sender : match.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
-     if (!user) return message.reply('_Need a User!');
+     if (!user) return message.reply('_Reply to someone/mention_\n*Example:* . whois @user');
      try { pp = await message.client.profilePictureUrl(user, 'image'); } catch { pp = 'https://graph.org/file/924bcf22ea2aab5208489.jpg'; }
      try { status = await message.client.fetchStatus(user); } catch { status = 'private'; }
       const date = new Date(status.setAt);
