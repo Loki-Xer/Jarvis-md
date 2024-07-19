@@ -38,7 +38,7 @@ System({
         await setData(message.jid, match, status, 'welcome');
         return await message.send('*successfully set*');
     }
-    return await message.send('_*welcome get*_\n_*welcome* thank you for joining &mention_\n*_welcome false_*');
+    return await message.reply('_*welcome get*_\n_*welcome* thank you for joining &mention_\n*_welcome false_*');
 });
 
 System({
@@ -67,5 +67,5 @@ System({
         await setData(message.jid, match, status, 'exit');
         return await message.send('*successfully set*');
     }
-    return await message.send('_*goodbye get*_\n_*goodbye* thank you for joining &mention_\n*_goodbye false_*');
+    return await message.reply('_*goodbye get*_\n_*goodbye* thank you for joining &mention_\n*_goodbye false_*');
 });
