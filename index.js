@@ -5,7 +5,6 @@ const start = async () => {
         await config.DATABASE.sync();
         const Client = new client();
         Client.log("starting client...");
-        await Client.startServer();
         await Client.WriteSession();
         await Client.WaConnect();
     } catch (error) {
