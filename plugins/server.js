@@ -67,7 +67,7 @@ System({
     fromMe: true,
     type: "server",
     desc: "Delete environment variable",
-}, async (message, match) => {
+}, async (message, match, m) => {
     const server = message.client.server;
     if (!match) return await message.reply("_Example: delvar sudo_");
     const key = match.trim().toUpperCase();
