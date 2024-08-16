@@ -7,10 +7,6 @@
         "start": "pm2 start . --attach --name Jarvis-md",
         "stop": "pm2 stop Jarvis-md"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Loki-Xer/Jarvis-md.git"
-    },
     "dependencies": {
         "@adiwajshing/keyed-db": "^0.2.4",
         "@ffmpeg-installer/ffmpeg": "^1.1.0",
