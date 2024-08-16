@@ -1,11 +1,11 @@
 {
-    "name": "jarvis",
+    "name": "Jarvis-md",
     "version": "2.0.0",
     "description": "A simple WhatsApp Bot Based On WhiskeySockets/Baileys",
     "main": "index.js",
     "scripts": {
-        "start": "pm2 start . --attach --name jarvis",
-        "stop": "pm2 stop jarvis"
+        "start": "pm2 start . --attach --name Jarvis-md",
+        "stop": "pm2 stop Jarvis-md"
     },
     "repository": {
         "type": "git",
