@@ -29,7 +29,7 @@ const gitPull = async (m) => {
                             m.reply("*Failed to install npm packages!*");
                             reject(error);
                         } else {
-                            m.reply("Installed npm packages successfully.");
+                            m.reply("*Installed npm packages successfully..!*");
                             resolve();
                         }
                     });
