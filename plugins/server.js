@@ -253,7 +253,7 @@ System({
   type: "server",
 }, async (message) => {
   await message.send("_*Restarting*_");
-  message.client.server === "HEROKU" ? await herokuRestart(message) : await shell("pm2 restart jarvis");
+  message.client.server === "HEROKU" ? await herokuRestart(message) : await shell("pm2 restart Jarvis-md");
 });
 
 System({
