@@ -59,7 +59,7 @@ System({
     type: "server",
     desc: "Show which platform you delpoyed",
 }, async (m, match) => {
-    m.reply("_*" + "You ara delpoyed on " + m.client.server + "*_");
+    m.reply("_*" + "You are delpoyed on " + m.client.server + "*_");
 });
 
 System({
