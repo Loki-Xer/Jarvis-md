@@ -34,8 +34,12 @@ const gitPull = async (m) => {
                         }
                     });
                 });
-            }
-            return m.reply("*Updated the bot with latest changes.*");
+            };
+            if(m.client.server === "REPLIT") {
+                return m.reply("_*Bot is updated restart your application manually*_");
+            } else {
+                return m.reply("*Updated the bot with latest changes.*");
+            };
         } else {
             return m.reply("*Bot is already working on the latest version.*");
         }
