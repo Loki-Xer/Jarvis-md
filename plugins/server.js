@@ -81,7 +81,7 @@ System({
     } else if (server === "RAILWAY") {
       await m.reply(`*${server} can't change variable, change it manually*`);
     } else {
-      const env = await changeVar(key.toUpperCase(), null);
+      const env = await changeVar(key.toUpperCase(), "");
       if (!env) return m.reply("*Error in deleted variable*");  
       await setData(key.toUpperCase(), null, false, "vars");
       await m.reply(`_*deleted var ${key.toUpperCase()}*_`);
