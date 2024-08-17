@@ -10,7 +10,7 @@ Jarvis - Loki-Xer
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 
-const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl, IronMan, getBuffer, toAudio, terabox } = require("../lib/");
+const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl, IronMan, getBuffer, toAudio, terabox, instaDl } = require("../lib/");
 
 
 const fetchData = async (mediafireUrl) => {
@@ -126,7 +126,7 @@ System({
    match = await extractUrlFromMessage(match || message.reply_message.text);
    if (!match) return await message.reply('_provide an Instagram URL_');
    if (!isInstaUrl(match)) return await message.send("_Please provide a valid Instagram URL_");
-   const { result } = await getJson(config.API + "download/insta?url=" + match);
+   const result  = await instaDl(match);
    if (result.length === 0) return await message.send("_No media found for this Instagram URL_");
    for (const video of result) {
      await message.sendFromUrl(video.download_link, { caption: "_*Download 🤍*_" });
@@ -150,7 +150,7 @@ System({
   }
   const url = await extractUrlFromMessage(match);
   if (!isInstaUrl(url)) return message.reply("_*Provide a valid Instagram story URL*_");
-  const { result } = await getJson(config.API + "download/insta?url=" + url);
+  const result = await instaDl(url);
   if (!result) return await message.send("Not Found");
   if (result.length === 1) return await message.sendFromUrl(result[0].download_link);
   const options = result.map((u, index) => ({ name: "quick_reply", display_text: `${index + 1}/${result.length}`, id: `story dl-url ${u.download_link}` }));
