@@ -134,7 +134,7 @@ System({
            await message.sendFromUrl(video.download_link, { caption: "_*Download 🤍*_" });
        }
    } else if (result.length > 1) {
-       await message.replyFromUrl(result[1].download_link, { caption: "_*Download 🤍*_" });
+       await message.sendFromUrl(result[1].download_link, { caption: "_*Download 🤍*_" });
    }
 });
 
