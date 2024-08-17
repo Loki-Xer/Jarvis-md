@@ -116,7 +116,6 @@ System({
     await message.sendFromUrl(result.LokiXer.url, { caption: "_*downloaded 🤍*_" });
 });
 
-
 System({
     pattern: "insta",
     fromMe: isPrivate,
@@ -124,13 +123,19 @@ System({
     type: "download",
 }, async (message, match) => {
    match = await extractUrlFromMessage(match || message.reply_message.text);
-   if (!match) return await message.reply('_provide an Instagram URL_');
+   if (!match) return await message.reply('_Provide an Instagram URL_');
    if (!isInstaUrl(match)) return await message.send("_Please provide a valid Instagram URL_");
-   const result  = await instaDl(match);
+
+   const result = await instaDl(match);
    if (result.length === 0) return await message.send("_No media found for this Instagram URL_");
-   for (const video of result) {
-     await message.sendFromUrl(video.download_link, { caption: "_*Download 🤍*_" });
-    }
+
+   if (match.startsWith('https://www.instagram.com/p/')) {
+       for (const video of result) {
+           await message.sendFromUrl(video.download_link, { caption: "_*Download 🤍*_" });
+       }
+   } else if (result.length > 1) {
+       await message.replyFromUrl(result[1].download_link, { caption: "_*Download 🤍*_" });
+   }
 });
 
 System({
