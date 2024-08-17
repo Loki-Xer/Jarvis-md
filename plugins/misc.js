@@ -20,6 +20,7 @@ const {
     extractUrlFromMessage
   } = require("../lib/");
   const axios = require("axios");
+  const translate = require("translate-google-api");
   
   System({
       pattern: "wm",
@@ -63,8 +64,12 @@ const {
       match = m.reply_message.text || match;
       if (!match) return await m.reply("_provided text to translate *eg: i am fine;ml*_");
       const text = match.split(";");
-      const result = await postJson("https://api.lokiser.xyz/post/trt", { text: text[0], lang: text[1] || config.LANG });
-      return await m.reply(result.message);
+      try {
+          const result = await translate(text[0], {tld: "co.in", to: text[1] || config.LANG, from: text[2] || "auto" });
+          return await m.reply(translated?.join());
+     } catch (error) {
+          await message.reply('_' + error.message + '_');
+      };
   });
   
   System({
