@@ -3,7 +3,7 @@ frontend:
     publish: ""
     scripts:
         build: npm install
-        deploy: npm start
+        deploy: node .
 name: Jarvis-md
 region: us-east-1
 yamlVersion: 2
