@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "start": "pm2 start . --attach --name Jarvis-md",
-        "stop": "pm2 stop Jarvis-md"
+        "stop": "pm2 stop Jarvis-md",
+        "postinstall": "yarn global add pm2"
     },
     "dependencies": {
         "@adiwajshing/keyed-db": "^0.2.4",
@@ -39,7 +40,6 @@
         "sequelize": "^6.21.4",
         "simple-git": "^3.20.0",
         "sqlite3": "^5.0.11",
-        "util": "^0.12.5",
         "wa-sticker-formatter": "^4.3.2"
     }
 }
