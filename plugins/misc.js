@@ -60,7 +60,7 @@ const {
       fromMe: isPrivate,
       desc: "change language", 
       type: "converter",
-  }, async (m, match) => {
+  }, async (m, match, message) => {
       match = m.reply_message.text || match;
       if (!match) return await m.reply("_provided text to translate *eg: i am fine;ml*_");
       const text = match.split(";");
