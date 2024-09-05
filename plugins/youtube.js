@@ -26,7 +26,7 @@ const {
   } = require('../lib/');
 
 
-/* System({
+/*System({
       pattern: 'video',
       fromMe: isPrivate,
       desc: 'YouTube video downloader',
@@ -64,7 +64,7 @@ System({
         await message.reply("_*" + "downloading " + data.title + "*_"); 
         return await message.send(await GetYtv(data.url), { caption: '*made with 🤍*', quoted: message.data }, 'video');
       }
-}); *\
+});*\
   
 System({
       pattern: 'yta ?(.*)',
