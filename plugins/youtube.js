@@ -45,7 +45,7 @@ System({
         return await message.send(await GetYtv(data.url), { caption: '*made with 🤍*', quoted: message.data }, 'video');
       }
 });
-  
+/* 
 System({
       pattern: 'ytv',
       fromMe: isPrivate,
@@ -65,7 +65,44 @@ System({
         return await message.send(await GetYtv(data.url), { caption: '*made with 🤍*', quoted: message.data }, 'video');
       }
 });
-  
+*/
+
+System({
+  pattern: 'ytv ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Download YouTube videos',
+  type: 'youtube',
+}, async (message, match) => {
+  if (!match) return await message.reply('Please provide a valid YouTube URL.');
+  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${match}`));
+  const data = await res.json();
+  if (!data.download || data.download.length === 0) return await message.reply('No download links found.');
+  let qualities = data.download.map((item, index) => `${index + 1}. ${item.quality}`).join('\n');
+  await message.reply(`*_${data.title}_*\n\nAvailable qualities:\n${qualities}\n\n*Reply with the number to download the video in that quality*\n✧${match}`);
+});
+
+System({
+  on: 'text',
+  fromMe: isPrivate,
+  dontAddCommandList: true,
+}, async (message) => {
+  if (message.isBot) return;
+  if (!message.reply_message || !message.reply_message.fromMe || !message.reply_message.text.includes('✧')) return;
+  const match = message.reply_message.text.split('✧')[1];
+  const qualitylist = parseInt(message.body.trim());
+  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${match}`));
+  const data = await res.json();
+  if (isNaN(qualitylist) || qualitylist < 1 || qualitylist > data.download.length) return;
+  const q = data.download[qualitylist - 1];
+  await message.reply(`Downloading *${data.title}* in *${q.quality}*, please wait...`);
+  await message.client.sendMessage(message.chat, {
+    video: {
+      url: q.download
+    },
+    caption: `*${data.title}*\n\nQuality: ${q.quality}`,
+  });
+});
+
 System({
       pattern: 'yta ?(.*)',
       fromMe: isPrivate,
@@ -109,7 +146,8 @@ System({
           await message.reply(aud, { mimetype: 'audio/mpeg' }, "audio");
      }
 });
-  
+
+/*
 System({
     pattern: 'play ?(.*)',
     fromMe: isPrivate,
@@ -202,7 +240,8 @@ System({
       return;
     }
   });
-  
+  */
+
   System({
        pattern: 'yts ?(.*)',
        fromMe: isPrivate,
