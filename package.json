@@ -8,6 +8,9 @@
         "stop": "pm2 stop Jarvis-md",
         "postinstall": "yarn global add pm2"
     },
+    "engines": {
+        "node": ">=21.0.0"
+    },
     "dependencies": {
         "@adiwajshing/keyed-db": "^0.2.4",
         "@ffmpeg-installer/ffmpeg": "^1.1.0",
