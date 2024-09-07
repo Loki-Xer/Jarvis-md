@@ -13,5 +13,3 @@ services:
         sync: false
       - key: DATABASE_URL
         sync: false
-      - key: NODE_VERSION
-        value: 22.8.0
