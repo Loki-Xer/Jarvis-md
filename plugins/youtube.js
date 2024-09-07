@@ -21,6 +21,7 @@ const {
     Ytsearch,
     getBuffer,
     isPrivate,
+    IronMan,
     AddMp3Meta,
     extractUrlFromMessage,
   } = require('../lib/');
