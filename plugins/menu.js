@@ -70,7 +70,7 @@ System({
     }
     menu += ` ╰━━━━━━━━━━━┈⊷\nmade with 🤍`;
     const url = BOT_INFO.split(';')[2];
-    if (isUrl(url)) await message.sendFromUrl(url, { caption: menu, gifPlayback: true });
+    if (isUrl(url)) await message.sendFromUrl(url, { caption: menu });
     else await message.send(menu);
 });
 
