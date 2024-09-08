@@ -119,8 +119,8 @@ System({
 System({
     pattern: 'insta ?(.*)',
     fromMe: true,
-    desc: 'Sends image',
-    type: 'misc',
+    desc: 'instagram downloader',
+    type: 'download',
 }, async (message, match) => {
     const url = await extractUrlFromMessage(match || message.reply_message.text);
     if (!url) return await message.reply('_Please provide an Instagram *url*'); 
