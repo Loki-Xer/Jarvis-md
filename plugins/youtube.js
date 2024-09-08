@@ -104,7 +104,7 @@ System({
   });
 });
 
-System({
+/*System({
       pattern: 'yta ?(.*)',
       fromMe: isPrivate,
       desc: 'YouTube audio downloader',
@@ -124,6 +124,30 @@ System({
           const aud = await AddMp3Meta(await toAudio(await GetYta(url)), await getBuffer(thumbnail), { title: title, body: author.name });
           await message.reply(aud, { mimetype: 'audio/mpeg' }, "audio");
      }
+});*/
+
+System({
+  pattern: 'yta ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Sends YouTube audio directly',
+  type: 'download',
+}, async (message, match) => {
+  if (!match && (!message.reply_message || !message.reply_message.text) || !isUrl(match || message.reply_message.text)) {
+    return await message.reply("*Need a valid video URL.*");
+  }
+
+  const url = match || message.reply_message.text;
+
+  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${url}`));
+  const aud = await res.json();
+
+  if (!aud.audio || aud.audio.length === 0) {
+    return await message.reply("No audio available for this video.");
+  }
+
+  const title = aud.title || 'audio';
+  await message.reply(`Downloading *${title}*, please wait...`);
+  await message.sendFromUrl(aud.audio[0].download,  { quoted: message});
 });
 
 System({
