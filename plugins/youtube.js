@@ -165,7 +165,7 @@ System({
   pattern: 'yta ?(.*)',
   fromMe: isPrivate,
   desc: 'Sends YouTube audio directly',
-  type: 'download',
+  type: 'youtube',
 }, async (message, match) => {
   if (!match && (!message.reply_message || !message.reply_message.text) || !isUrl(match || message.reply_message.text)) {
     return await message.reply("*Need a valid video URL.*");
@@ -189,7 +189,7 @@ System({
   pattern: 'song ?(.*)',
   fromMe: isPrivate,
   desc: 'Downloads YouTube audio',
-  type: 'download',
+  type: 'youtube',
 }, async (message, match) => {
   if (!match) return await message.reply("*Need a video URL or query.*");
 
