@@ -124,14 +124,15 @@ System({
 }, async (message, match) => {
     const url = await extractUrlFromMessage(match || message.reply_message.text);
     if (!url) return await message.reply('_Please provide an Instagram *url*'); 
-    if (!isUrl(url) return await message.reply("_Please provide a valid Instagram *url*");
-    if(!url.includes("instagram.com")) return await message.reply("_Please provide a valid Instagram *url*");
+    if (!isUrl(url)) return await message.reply("_Please provide a valid Instagram *url*");
+    if (!url.includes("instagram.com")) return await message.reply("_Please provide a valid Instagram *url*");
     const data = await instaDl(url);
+    if (!data || data.length === 0) return await message.reply("_No content found at the provided URL.");
     for (const imageUrl of data) {
         if (imageUrl) {
-           await message.sendFromUrl(imageUrl);
+            await message.sendFromUrl(imageUrl);
         }
-    };
+    }
 });
 
 System({
