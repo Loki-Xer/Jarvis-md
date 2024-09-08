@@ -127,6 +127,36 @@ System({
 });
 
 System({
+  pattern: 'song ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Downloads YouTube audio',
+  type: 'download',
+}, async (message, match) => {
+  if (!match) return await message.reply("*Need a video URL or query.*");
+
+  let url;
+
+  if (lib.isUrl(match)) {
+    url = match;
+  } else {
+    const data = await lib.Ytsearch(match);
+    if (!data.url) {
+      return await message.reply("*No video found for the given query.*");
+    }
+    url = data.url;
+  }
+
+  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${url}`));
+  const audioData = await res.json();
+
+  if (!audioData.audio || audioData.audio.length === 0) {
+    return await message.reply("No audio available for this video.");
+  }
+
+  await message.sendFromUrl(audioData.audio[0].download, { quoted: message });
+});
+/*
+System({
       pattern: 'song ?(.*)',
       fromMe: isPrivate,
       desc: 'YouTube audio downloader',
@@ -148,7 +178,7 @@ System({
      }
 });
 
-/*
+
 System({
     pattern: 'play ?(.*)',
     fromMe: isPrivate,
