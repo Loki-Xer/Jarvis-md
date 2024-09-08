@@ -224,8 +224,8 @@ System({
 	fromMe: true,
 	desc: 'to change lastseen privacy',
 	type: 'privacy'
-}, async (message, match) => {
-	if (!match) return await message.send(`_*Example:-* ${cmd} all_\n_to change last seen privacy settings_`);
+}, async (message, match, m) => {
+	if (!match) return await message.send(`_*Example:-* ${m.prefix} all_\n_to change last seen privacy settings_`);
 	const available_privacy = ['all', 'contacts', 'contact_blacklist', 'none'];
 	if (!available_privacy.includes(match)) return await message.send(`_action must be *${available_privacy.join('/')}* values_`);
 	await message.client.updateLastSeenPrivacy(match)
@@ -238,8 +238,8 @@ System({
 	fromMe: true,
 	desc: 'to change online privacy',
 	type: 'privacy'
-}, async (message, match) => {
-	if (!match) return await message.send(`_*Example:-* ${cmd} all_\n_to change *online*  privacy settings_`);
+}, async (message, match, m) => {
+	if (!match) return await message.send(`_*Example:-* ${m.prefix} all_\n_to change *online*  privacy settings_`);
 	const available_privacy = ['all', 'match_last_seen'];
 	if (!available_privacy.includes(match)) return await message.send(`_action must be *${available_privacy.join('/')}* values_`);
 	await message.client.updateOnlinePrivacy(match)
@@ -280,8 +280,8 @@ System({
 	fromMe: true,
 	desc: 'privacy for read message',
 	type: 'privacy'
-}, async (message, match) => {
-	if (!match) return await message.send(`_*Example:-* ${cmd} all_\n_to change *read and receipts message*  privacy settings_`);
+}, async (message, match, m) => {
+	if (!match) return await message.send(`_*Example:-* ${m.prefix} all_\n_to change *read and receipts message*  privacy settings_`);
 	const available_privacy = ['all', 'none'];
 	if (!available_privacy.includes(match)) return await message.send(`_action must be *${available_privacy.join('/')}* values_`);
 	await message.client.updateReadReceiptsPrivacy(match)
@@ -294,8 +294,8 @@ System({
 	fromMe: true,
 	desc: 'privacy for group add',
 	type: 'privacy'
-}, async (message, match) => {
-	if (!match) return await message.send(`_*Example:-* ${cmd} all_\n_to change *group add*  privacy settings_`);
+}, async (message, match, m) => {
+	if (!match) return await message.send(`_*Example:-* ${m.prefix} all_\n_to change *group add*  privacy settings_`);
 	const available_privacy = ['all', 'contacts', 'contact_blacklist', 'none'];
 	if (!available_privacy.includes(match)) return await message.send(`_action must be *${available_privacy.join('/')}* values_`);
 	await message.client.updateGroupsAddPrivacy(match)
