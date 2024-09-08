@@ -160,10 +160,10 @@ System({
 
   let url;
 
-  if (lib.isUrl(match)) {
+  if (isUrl(match)) {
     url = match;
   } else {
-    const data = await lib.Ytsearch(match);
+    const data = await Ytsearch(match);
     if (!data.url) {
       return await message.reply("*No video found for the given query.*");
     }
