@@ -78,7 +78,7 @@ System({
   type: 'download',
 }, async (message, match, m) => {
   const appId = match;
-  if (!appId) return await message.send('*Nᴇᴇᴅ ᴀɴ ᴀᴘᴘ ɴᴀᴍᴇ*\n*Exᴀᴍᴘʟᴇ: ꜰʀᴇᴇ ꜰɪʀᴇ*');
+  if (!appId) return await message.reply('*Nᴇᴇᴅ ᴀɴ ᴀᴘᴘ ɴᴀᴍᴇ*\n*Exᴀᴍᴘʟᴇ: ꜰʀᴇᴇ ꜰɪʀᴇ*');
 
   const appInfo = await aptoideDl(appId);
   await message.client.sendMessage(message.chat, {
