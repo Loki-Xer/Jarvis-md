@@ -9,7 +9,7 @@
         "postinstall": "yarn global add pm2"
     },
     "engines": {
-        "node": ">=21.0.0"
+        "node": ">=18.0.0 <=21.x"
     },
     "dependencies": {
         "@adiwajshing/keyed-db": "^0.2.4",
