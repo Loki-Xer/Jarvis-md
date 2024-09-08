@@ -10,7 +10,7 @@ Jarvis - Loki-Xer
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 
-const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl, IronMan, getBuffer, toAudio, terabox, instaDl } = require("../lib/");
+const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl, IronMan, getBuffer, toAudio, terabox, instaDl, aptoideDl } = require("../lib/");
 
 
 const fetchData = async (mediafireUrl) => {
@@ -72,21 +72,26 @@ async (message, match, client) => {
 });
 
 System({
-    pattern: 'apk ?(.*)',
-    fromMe: isPrivate,
-    desc: 'Download apps from Aptoide',
-    type: 'download'
-}, async (message, match) => {
-    match = match || message.reply_message.text;
-    if (!match) return await message.reply("*Nᴇᴇᴅ ᴀɴ ᴀᴘᴘ ɴᴀᴍᴇ*\n*Exᴀᴍᴘʟᴇ: ꜰʀᴇᴇ ꜰɪʀᴇ*");
-    var { status, details } = await getJson(config.API + "scraper/app/download?id=" + encodeURIComponent(match));
-    if (status) {
-      var send = await message.send(`_*Dᴏᴡɴʟᴏᴀᴅɪɴɢ : ${details.appname}*_`);
-      await message.client.sendMessage({'url': details.link}, { 'mimetype': "application/vnd.android.package-archive",'fileName': details.appname + ".apk"}, 'document');
-      await send.edit("_*Aᴘᴘ Dᴏᴡɴʟᴏᴀᴅᴇᴅ*_");
-    } else {
-      await message.reply("_Failed to download APK. Please check the app name or try again later_");
-    }
+  pattern: 'apk ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Downloads and sends an app ',
+  type: 'download',
+}, async (message, match, m) => {
+  const appId = match;
+  if (!appId) return await message.send('*Nᴇᴇᴅ ᴀɴ ᴀᴘᴘ ɴᴀᴍᴇ*\n*Exᴀᴍᴘʟᴇ: ꜰʀᴇᴇ ꜰɪʀᴇ*');
+
+  const appInfo = await aptoideDl(appId);
+  await message.client.sendMessage(message.chat, {
+    document: {
+      url: appInfo.link,
+    },
+    mimetype: 'application/vnd.android.package-archive',
+    fileName: appInfo.appname, 
+    caption: `*App Name:* ${appInfo.appname}\n*Developer:* ${appInfo.developer}`,
+  }, {
+    quoted: message.data,
+  });
+ 
 });
 
 System({
