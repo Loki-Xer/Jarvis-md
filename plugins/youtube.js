@@ -26,7 +26,7 @@ const {
     extractUrlFromMessage,
   } = require('../lib/');
 
-
+/*
 System({
       pattern: 'video',
       fromMe: isPrivate,
@@ -46,7 +46,7 @@ System({
         return await message.send(await GetYtv(data.url), { caption: '*made with 🤍*', quoted: message.data }, 'video');
       }
 });
-/* 
+
 System({
       pattern: 'ytv',
       fromMe: isPrivate,
@@ -67,6 +67,41 @@ System({
       }
 });
 */
+
+System({
+  pattern: 'video ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Downloads YouTube video',
+  type: 'youtube',
+}, async (message, match) => {
+  const sq = match || (message.reply_message && message.reply_message.text);
+  if (!sq) return message.reply("*Need a video URL or query.*");
+  let url = sq;
+  if (!isUrl(sq)) {
+    if (isUrl(message.reply_message?.text)) {
+      url = message.reply_message.text;
+    } else {
+      const data = await Ytsearch(sq);
+      url = data.url;
+    }
+  }
+
+  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${url}`));
+  const videoData = await res.json();
+  let quality = videoData.download.find(q => q.quality.includes('720p')) || 
+                videoData.download.reduce((best, q) => {
+                  const qualityy = parseInt(q.quality.match(/\d+/)[0]);
+                  const bestq = best ? parseInt(best.quality.match(/\d+/)[0]) : null;
+                  if (qualityy < 720 && (!best || qualityy > bestq)) {
+                    return q;
+                  }
+                  return best;
+                }, null);
+  if (!quality) return await message.reply("*No suitable quality found.*\n_Use .ytv_");
+  quality.quality = quality.quality.replace("MP4", "").trim();
+  await message.reply(`- *Downloading video in ${quality.quality} quality...*`);
+  await message.sendFromUrl(quality.download, { quoted: message });
+});
 
 System({
   pattern: 'ytv ?(.*)',
