@@ -19,7 +19,7 @@ System({
     desc: 'Instagram profile details',
     type: 'search',
 }, async (message, match) => {
-    if (!match) return await message.send("*Need a username*\n_Example: .ig sedboy.am_");
+    if (!match) return await message.reply("*Need a username*\n_Example: .ig sedboy.am_");
     const data = await getJson(IronMan(`ironman/igstalk?id=${match}`));
     let caption = '';
     if (data.name) caption += `*𖢈ɴᴀᴍᴇ:* ${data.name}\n`;
@@ -75,7 +75,7 @@ System({
         desc: "SoundCloud search",
         type: "search"
 }, async (message, match) => {
-        if (!match) return await message.send("*Need a query to search*\n_Example: .scs life waster_");
+        if (!match) return await message.reply("*Need a query to search*\n_Example: .scs life waster_");
         const fullResult = match.trim().startsWith("-full");
         const query = fullResult ? match.replace("-full", "").trim() : match.trim();
         const { result: results } = await getJson(IronMan(`ironman/s/soundcloud?query=${query}`));
@@ -248,7 +248,7 @@ System({
   desc: 'TikTok Stalk',
   type: 'search',
 }, async (message, match) => {
-  if (!match) return await message.send("Need a TikTok username");
+  if (!match) return await message.send("*Need a TikTok username*");
   const response = await fetch(IronMan(`ironman/stalk/tiktok?id=${encodeURIComponent(match)}`));
   const data = await response.json();
   const { user, stats } = data;
