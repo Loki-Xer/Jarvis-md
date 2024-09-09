@@ -409,7 +409,7 @@ System({
   if (!match) return await message.reply("_provide text to translate *eg: i am fine;ml*_");
   const text = match.split(";");
   try {
-      const result = await translate(text[0], {tld: "co.in", to: text[1] || lib.config.LANG, from: text[2] || "auto" });
+      const result = await translate(text[0], {tld: "co.in", to: text[1] || config.LANG, from: text[2] || "auto" });
       return await message.reply(result.join());
   } catch (error) {
       await message.reply('_' + error.message + '_');
