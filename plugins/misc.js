@@ -17,6 +17,7 @@ const {
     getJson,
     postJson,
     isPrivate,
+    ssweb,
     extractUrlFromMessage
   } = require("../lib/");
   const axios = require("axios");
@@ -34,16 +35,17 @@ const {
   });
 
   System({
-      pattern: "ss", 
-      fromMe: isPrivate,
-      desc: "take screenshot of a web", 
-      type: "misc",
-  }, async (message, match) => {
-      match = message.reply_message.text || match;
-      match = await extractUrlFromMessage(match);
-      if(!match) return message.reply("_*Give me a url to take ss*_");
-      await message.sendFromUrl(await LokiXer(`ssweb?link=${match}`));
-  });
+  pattern: 'ss ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Takes a screenshot of a website',
+  type: 'example',
+}, async (message, match, m) => {
+  if (!match) return await message.reply(`*Please provide a URL*`);
+  const url = match;
+  const response = await ssweb(url);
+  const screenshotUrl = response.iurl; 
+  await m.sendFromUrl(screenshotUrl, { quoted: message.data, caption: `*Screenshot of ${url}*` });
+});
 
   System({
       pattern: "save", 
