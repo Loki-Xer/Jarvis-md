@@ -38,7 +38,7 @@ const {
   pattern: 'ss ?(.*)',
   fromMe: isPrivate,
   desc: 'Takes a screenshot of a website',
-  type: 'example',
+  type: 'misc',
 }, async (message, match, m) => {
   if (!match) return await message.reply(`*Please provide a URL*`);
   const url = match;
