@@ -30,7 +30,8 @@ const {
     elevenlabs,
     removeBg,
     setData,
-    getData
+    getData,
+    bitly
 } = require("../lib/");
 const { trim } = require("./client/"); 
 const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
@@ -380,4 +381,18 @@ System({
         if (!output) return m.reply("*Please check your format. The correct format is .trim 1.0,3.0*");
         await m.reply(output, { mimetype: "audio/mp4" }, "audio");
     }
+});
+
+
+System({
+    pattern: 'bitly ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Shortern a URL using Bitly',
+    type: 'converter',
+}, async (message, match, m) => {
+    const longUrl = match || message.reply_message.text;
+    if (!longUrl) return await message.reply('*Please provide a URL to shorten.*');
+    const response = await bitly(longUrl);
+    const shortUrl = response.link;
+    await message.send(`*SHORT URL:* ${shortUrl}`, { quoted: message.data });
 });
