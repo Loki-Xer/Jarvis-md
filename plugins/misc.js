@@ -21,7 +21,7 @@ const {
     extractUrlFromMessage
   } = require("../lib/");
   const axios = require("axios");
-  const translate = require("translate-google-api");
+  
   
   System({
       pattern: "wm",
@@ -57,22 +57,7 @@ const {
      await message.client.forwardMessage(message.user.jid, message.reply_message.message);
   });
   
-  System({
-      pattern: "trt", 
-      fromMe: isPrivate,
-      desc: "change language", 
-      type: "converter",
-  }, async (m, match, message) => {
-      match = m.reply_message.text || match;
-      if (!match) return await m.reply("_provided text to translate *eg: i am fine;ml*_");
-      const text = match.split(";");
-      try {
-          const result = await translate(text[0], {tld: "co.in", to: text[1] || config.LANG, from: text[2] || "auto" });
-          return await m.reply(translated?.join());
-     } catch (error) {
-          await message.reply('_' + error.message + '_');
-      };
-  });
+ 
   
   System({
       pattern: "attp",
