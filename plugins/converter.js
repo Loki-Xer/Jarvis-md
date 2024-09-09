@@ -15,6 +15,7 @@ const { Image } = require("node-webpmux");
 const { fromBuffer } = require('file-type');
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 const { exec } = require("child_process");
+const translate = require("translate-google-api");
 const {
     config,
     System,
@@ -395,4 +396,22 @@ System({
     const response = await bitly(longUrl);
     const shortUrl = response.link;
     await message.send(`*SHORT URL:* ${shortUrl}`, { quoted: message.data });
+});
+
+
+System({
+  pattern: "trt ?(.*)",
+  fromMe: isPrivate,
+  desc: "change language",
+  type: "converter",
+}, async (message, match, m) => {
+  match = message.reply_message.text || match;
+  if (!match) return await message.reply("_provide text to translate *eg: i am fine;ml*_");
+  const text = match.split(";");
+  try {
+      const result = await translate(text[0], {tld: "co.in", to: text[1] || lib.config.LANG, from: text[2] || "auto" });
+      return await message.reply(result.join());
+  } catch (error) {
+      await message.reply('_' + error.message + '_');
+  };
 });
