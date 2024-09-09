@@ -23,6 +23,7 @@ System({
 	on: 'all',
 	fromMe: false
 }, async (message, match) => {
+	if(message.isBot) return;
 	if (!AFK.isAfk ||  message.fromMe)  return;
 	if(!message.mention.isBotNumber && !message.reply_message.i && message.isGroup)  return;
 	if (message.mention.isBotNumber && message.isGroup) {
@@ -66,6 +67,7 @@ System({
 	desc: 'away from keyboard'
 }, async (message, match) => {
 	if (AFK.isAfk) return;
+        if(message.isBot) return;
 	AFK.lastseen = Math.round((new Date()).getTime() / 1000);
 	if (match !== '') AFK.reason = match;
 	AFK.isAfk = true;
