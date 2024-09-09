@@ -90,18 +90,7 @@ const {
         await message.send(buff, { packname, author }, "sticker");
   });
   
-  System({
-      pattern: "bitly",
-      fromMe: isPrivate,
-      desc: "To get URL short",
-      type: "converter",
-  }, async (message, match) => {
-     match = match || message.reply_message.text;
-     if (!match) return await message.reply("_Reply to a URL or enter a URL_");          
-     if (!isUrl(match)) return await message.reply("_Not a valid URL_");
-     let short = await getJson(await LokiXer(`bitly?link=${match}`));
-     return await message.reply(short.link);
-  });
+ 
   
   System({
       pattern: 'whois ?(.*)',
