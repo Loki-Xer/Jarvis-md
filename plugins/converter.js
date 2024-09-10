@@ -306,10 +306,10 @@ System({
   desc: 'Rotate image or video in any direction',
   type: 'converter'
 }, async (message, match) => {
-  if (!(message.image || message.video || (message.quoted && (message.reply_message.image || message.reply_message.video)))) return await message.reply('Reply to an image/video');
+  if (!(message.image || message.video || (message.quoted && (message.reply_message.image || message.reply_message.video)))) return await message.reply('*Reply to an image/video*');
   const rmap = { 'left': 90, 'right': 180, 'vertical': 'vertical', 'horizontal': 'horizontal' };
   const rtype = match ? match.toLowerCase() : '';
-  if (!rmap.hasOwnProperty(rtype)) return await message.reply('Need rotation type.\nExample: .rotate left, right, vertical, or horizontal');
+  if (!rmap.hasOwnProperty(rtype)) return await message.reply('*Need rotation type.*\n_Example: .rotate left, right, vertical, or horizontal_');
   const option = rmap[rtype];
   const url = await GraphOrg(await message.reply_message.downloadAndSaveMedia());
   await message.sendFromUrl(IronMan(`ironman/convert/rotate?image=${url}&option=${option}`));
