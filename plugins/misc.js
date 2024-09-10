@@ -118,7 +118,7 @@ const {
         LANG = lang[1];
         if (message.quoted.text) match = message.reply_message.text;
       }
-      const { data } = await axios.post('https://api.lokiser.xyz/google/tts', { text: match, lang: LANG}, { responseType: 'arraybuffer' })
+      const { data } = await axios.post('https://api-loki-ser-1o2h.onrender.com/google/tts', { text: match, lang: LANG}, { responseType: 'arraybuffer' })
       await message.reply(data, { mimetype: 'audio/ogg; codecs=opus', ptt: true }, "audio");
   });
   
