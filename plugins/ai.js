@@ -15,9 +15,9 @@ const {
     IronMan,
     postJson,
     isPrivate,
-    interactWithAi
-} = require("../lib/"); 
-const { uploader } = require('jarvis-md');
+    interactWithAi,
+    GraphOrg
+} = require("../lib/");
 
 
 System({
@@ -160,7 +160,7 @@ System({
 	type: 'ai',
 }, async (message, match) => {
     if(!message.reply_message.image) return await message.reply("_Reply to a image_");
-    const data = await uploader(await message.reply_message.downloadAndSaveMedia());
+    const data = await GraphOrg(await message.reply_message.downloadAndSaveMedia());
     const res = await fetch(IronMan(`ironman/ai/ocr?url=${data}`));
     if (res.status !== 200) return await message.reply('*Error*');
     const ress = await res.json();
