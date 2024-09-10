@@ -32,7 +32,9 @@ const {
     removeBg,
     setData,
     getData,
-    bitly
+    bitly,
+    IronMan,
+    GraphOrg
 } = require("../lib/");
 const { trim } = require("./client/"); 
 const stickerPackNameParts = config.STICKER_PACKNAME.split(";");
@@ -301,22 +303,16 @@ System({
 System({
   pattern: 'rotate ?(.*)',
   fromMe: isPrivate,
-  desc: 'rotate image or video in any direction',
+  desc: 'Rotate image or video in any direction',
   type: 'converter'
 }, async (message, match) => {
-  if (!(message.image || message.video || (message.quoted && (message.reply_message.image || message.reply_message.video)))) return await message.reply('*Reply to an image/video*');
-  if (!match || !['left', 'right', 'horizontal', 'vertical'].includes(match.toLowerCase())) return await message.reply('*Need rotation type.*\n_Example: .rotate left, right, horizontal, or vertical_');	
-  const rotateOptions = { left: 'transpose=2', right: 'transpose=1', horizontal: 'hflip', vertical: 'vflip', };
-  const media = await message.downloadAndSaveMediaMessage(message.image || message.video ? message : message.reply_message);
-  const ext = media.endsWith('.mp4') ? 'mp4' : 'jpg';
-  const ffmpegCommand = `ffmpeg -y -nostdin -i ${media} -vf "${rotateOptions[match.toLowerCase()]}" rotated.${ext}`;
-  exec(ffmpegCommand, (error, stdout, stderr) => {
-    if (error) return message.reply(`Error during rotation: ${error.message}`);
-    let buffer = fs.readFileSync(`rotated.${ext}`);
-    message.send(buffer, {}, media.endsWith('.mp4') ? 'video' : 'image');
-    fs.unlinkSync(`rotated.${ext}`);
-    fs.unlinkSync(media);
-  });
+  if (!(message.image || message.video || (message.quoted && (message.reply_message.image || message.reply_message.video)))) return await message.reply('Reply to an image/video');
+  const rmap = { 'left': 90, 'right': 180, 'vertical': 'vertical', 'horizontal': 'horizontal' };
+  const rtype = match ? match.toLowerCase() : '';
+  if (!rmap.hasOwnProperty(rtype)) return await message.reply('Need rotation type.\nExample: .rotate left, right, vertical, or horizontal');
+  const option = rmap[rtype];
+  const url = await GraphOrg(await message.reply_message.downloadAndSaveMedia());
+  await message.sendFromUrl(IronMan(`ironman/convert/rotate?image=${url}&option=${option}`));
 });
 
 System({
