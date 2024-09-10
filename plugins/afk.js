@@ -24,7 +24,8 @@ System({
 	fromMe: false
 }, async (message, match) => {
 	if(message.isBot) return;
-	if (!AFK.isAfk ||  message.fromMe)  return;
+	if(message.fromMe) return;
+	if (!AFK.isAfk)  return;
 	if(!message.mention.isBotNumber && !message.reply_message.i && message.isGroup)  return;
 	if (message.mention.isBotNumber && message.isGroup) {
    	    await message.send('```This is a bot. My owner is not here at the moment```\n' +
