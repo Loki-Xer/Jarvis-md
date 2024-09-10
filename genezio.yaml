@@ -1,9 +1,0 @@
-frontend:
-    path: ./
-    publish: ""
-    scripts:
-        build: npm run build
-        deploy: npm install
-name: Jarvis-md
-region: us-east-1
-yamlVersion: 2
