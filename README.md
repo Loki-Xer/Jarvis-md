@@ -43,6 +43,13 @@ jarvis md is Multi Device whatsapp bot
     <br>
 <a href='https://qr-dnpk.onrender.com/koyeb.html' target="_blank"><img alt='DEPLOY' src='https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=koyeb&logoColor=white'/></a>
 
+#### DEPLOY TO PANEL
+
+1. If You don't have a account in panel create it . 
+2. How to deploy in panel?
+    <br>
+<a href='https://gist.github.com/IRON-M4N/f516e849f9ad569f9fdd3e5013cff0fd' target="_blank"><img alt='PANEL' src=' https://img.shields.io/badge/PANEL-100000?style=for-the-badge&logo=scan&logoColor=white&labelColor=black&color=black '/></a>
+
 #### DEPLOY TO RENDER 
 
 1. If You don't have a account in render. Create a account.
