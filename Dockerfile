@@ -1,5 +1,5 @@
-FROM quay.io/loki-xer/jarvis-md:latest
-RUN git clone https://github.com/Loki-Xer/Jarvis-md /root/Jarvis-md/
-WORKDIR /root/Jarvis-md/
+FROM quay.io/TcronebHackx-Md/whatsapp:latest
+RUN git clone https://github.com/TcronebHackx-Md/whatsapp /root/whatsapp/
+WORKDIR /root/whatsapp/
 RUN yarn install --network-concurrency 1
 CMD ["npm", "start"]
