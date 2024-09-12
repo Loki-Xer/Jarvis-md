@@ -468,3 +468,49 @@ System({
       await Vote(message, { text: match }, "vote");
     }
 });
+
+System({
+  pattern: 'getinfo',
+  fromMe: isPrivate,
+  desc: 'Get group info',
+  type: 'group',
+}, async (message, match, m) => {
+  if (!message.isGroup) {
+    return await message.reply('*This command only works in groups baka!*');
+  }
+  const ppUrl = await message.client.profilePictureUrl(message.chat, 'image');
+  const metadata = await message.client.groupMetadata(message.chat);
+  const admins = metadata.participants
+    .filter(participant => participant.admin === 'admin')
+    .map(admin => admin.id.split('@')[0]);
+  const validMetadata = {
+    id: metadata.id,
+    subject: metadata.subject,
+    subjectOwner: metadata.subjectOwner ? metadata.subjectOwner.split('@')[0] : 'Not defined',
+    subjectTime: metadata.subjectTime,
+    size: metadata.size,
+    creation: metadata.creation,
+    owner: metadata.owner || 'Not defined',
+    desc: metadata.desc || 'No description',
+    restrict: metadata.restrict,
+    announce: metadata.announce,
+    isCommunity: metadata.isCommunity,
+    isCommunityAnnounce: metadata.isCommunityAnnounce,
+    joinApprovalMode: metadata.joinApprovalMode,
+    memberAddMode: metadata.memberAddMode,
+    participants: metadata.participants
+  };
+  let caption = `\`\`\`
+━━━───𝗚𝗥𝗢𝗨𝗣 𝗜𝗡𝗙𝗢───━━━
+𝗡𝗔𝗠𝗘: ${validMetadata.subject}
+𝗖𝗥𝗘𝗔𝗧𝗘𝗗 𝗢𝗡: ${new Date(validMetadata.creation * 1000).toLocaleString()}
+𝗦𝗜𝗭𝗘: ${validMetadata.size} MEMBERS
+𝗦𝗨𝗕𝗝𝗘𝗖𝗧 𝗢𝗪𝗡𝗘𝗥: ${validMetadata.subjectOwner}
+𝗢𝗪𝗡𝗘𝗥: ${validMetadata.owner}
+𝗗𝗘𝗦𝗖𝗥𝗜𝗣𝗧𝗜𝗢𝗡: ${validMetadata.desc}
+𝗝𝗢𝗜𝗡 𝗔𝗣𝗣𝗥𝗢𝗩𝗔𝗟: ${validMetadata.joinApprovalMode ? 'ENABLED' : 'DISABLED'}
+𝗔𝗡𝗡𝗢𝗨𝗡𝗖𝗘𝗠𝗘𝗡𝗧: ${validMetadata.announce ? 'YES' : 'NO'}
+𝗔𝗗𝗠𝗜𝗡𝗦: ${admins.join(', ')}
+\`\`\``;
+ await message.client.sendMessage(message.chat, { image: { url: ppUrl }, caption: caption });
+});
