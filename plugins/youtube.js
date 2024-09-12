@@ -74,7 +74,7 @@ System({
   desc: 'Downloads YouTube video',
   type: 'youtube',
 }, async (message, match) => {
-  const sq = match || (message.reply_message && message.reply_message.text);
+  const sq = match || extractUrlFromMessage(message.reply_message?.text);
   if (!sq) return message.reply("*Need a video URL or query.*");
   let url = sq;
   if (!isUrl(sq)) {
