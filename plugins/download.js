@@ -101,12 +101,12 @@ System({
     type: 'download',
 }, async (message, text) => {
     let match = await extractUrlFromMessage(text || message.reply_message.text);
-    if (!match) return await message.send("*Need a Facebook public media link*\n_Example: .fb ");       
-    const response = await getJson(IronMan(`ironman/dl/fb?url=${match}`));
-    await message.reply({url: response.ironman[0].url }, { caption: "_*Downloaded🤍*_" }, "video")
+    if (!match) return await message.send("*Need a Facebook public media link*\n_Example: .fb_ ");       
+    const res = await fetch(IronMan(`ironman/dl/fbdl?link=${match}`));
+    const data = await res.json();
+    await message.reply({url: data.data.HD }, { caption: "_*Downloaded🤍*_" }, "video")
 });
 
-  
 System({
     pattern: 'pinterest ?(.*)',
     fromMe: isPrivate,
