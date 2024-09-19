@@ -1,8 +1,8 @@
 {
-    "name": "Jarvis",
+    "name": "𓄂𓆩𝞓𝙇𝙄 𝙍𝞓𝙕𝞓⤹³𖤍𓆪",
     "version":"1.0.0",
-    "description": "Jarvis Multi Device whatsappbot",
-    "logo": "https://i.imgur.com/PmfMtfa.jpeg",
+    "description": "Ali Multi Device whatsappbot",
+    "logo": "https://i.imgur.com/1HtpS4V.jpeg",
     "keywords": ["whatsapp"],
     "repository": "https://github.com/Loki-Xer/Jarvis",
     "website": "https://github.com/Loki-Xer/Jarvis",
@@ -12,7 +12,7 @@
         "BOT_INFO": {
             "description": "botname;ownername;image url",
             "required": true,
-            "value":"ᴊᴀʀᴠɪꜱ;ʟᴏᴋɪ-xᴇʀ;https://i.imgur.com/VIpl3q5.mp4"
+            "value":"ᴊᴀʀᴠɪꜱ;ʟᴏᴋɪ-xᴇʀ;https://i.imgur.com/1HtpS4V.jpeg"
         },
         "MENU_FONT": {
             "description": "type;plugin name, have to be less than 35",
@@ -22,7 +22,7 @@
         "AUDIO_DATA": {
             "description": "audio package name",
             "required": true,
-            "value":"ʟᴏᴋɪ-xᴇʀ;ᴊᴀʀᴠɪꜱ;https://i.imgur.com/VgxJeCm.jpeg"
+            "value":"ʟᴏᴋɪ-xᴇʀ;ᴊᴀʀᴠɪꜱ;https://i.imgur.com/1HtpS4V.jpeg"
         },
         "WARN_COUNT": {
             "description": "warn count",
@@ -32,7 +32,7 @@
         "MEDIA_DATA": {
             "description": "media data that uses in list",
             "required": true,
-            "value":"ʟɪꜱᴛ ᴍᴇɴᴜ;ᴊᴀʀᴠɪꜱ-ᴍᴅ;https://i.imgur.com/ltPPMTh.jpeg"
+            "value":"ʟɪꜱᴛ ᴍᴇɴᴜ;ᴊᴀʀᴠɪꜱ-ᴍᴅ;https://i.imgur.com/1HtpS4V.jpeg"
         },
         "HANDLER": {
             "description": "handler for bot. all so can be null or false",
@@ -64,7 +64,7 @@
         "SUDO": {
             "description": "owner number of the bot",
             "required": false,
-            "value":"4915252819677"
+            "value":"923003588997"
         },
         "ALLWAYS_ONLINE": {
             "description": "show bot number last seen as online",
