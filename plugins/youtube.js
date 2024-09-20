@@ -192,11 +192,10 @@ System({
     }
     url = data.url;
   }
-  const res = await fetch(IronMan(`ironman/dl/ytdl2?url=${url}`));
+  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${url}`));
   const fek = await res.json();
   await message.send(`*Downloading ${fek.title}...*`);
-  await message.sendFromUrl(fek.audio, { quoted: message });
-  await message.client.sendMessage(message.chat, { audio: {url:fek.audio, mimetype: 'audio/mpeg', ptt: false }}, { quoted: message.data });
+  await message.sendFromUrl(fek.audio[0].download, { quoted: message });
 });
 
 /*
