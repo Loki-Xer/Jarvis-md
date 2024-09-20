@@ -87,10 +87,10 @@ System({
     }
   }
   const res = await fetch(IronMan(`ironman/dl/ytdl2?url=${url}`));
-  const data = await res.json();
-  if (!data) return await message.reply("*No suitable video found.*");
-  await message.reply(`- *Downloading ${data.title}...*`);
-  await message.sendFromUrl(data.video, { quoted: message });
+  const dataa = await res.json();
+  if (!dataa) return await message.reply("*No suitable video found.*");
+  await message.reply(`- *Downloading ${dataa.title}...*`);
+  await message.sendFromUrl(dataa.video, { quoted: message });
 });
 
 System({
@@ -182,9 +182,7 @@ System({
   type: 'youtube',
 }, async (message, match) => {
   if (!match) return await message.reply("*Need a video URL or query.*");
-
   let url;
-
   if (isUrl(match)) {
     url = match;
   } else {
@@ -194,16 +192,12 @@ System({
     }
     url = data.url;
   }
-
-  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${url}`));
-  const audioData = await res.json();
-
-  if (!audioData.audio || audioData.audio.length === 0) {
-    return await message.reply("No audio available for this video.");
-  }
-
-  await message.sendFromUrl(audioData.audio[0].download, { quoted: message });
+  const res = await fetch(IronMan(`ironman/dl/ytdl2?url=${url}`));
+  const fek = await res.json();
+  await message.send(`*Downloading ${fek.title}...*`);
+  await message.sendFromUrl(fek.audio, { quoted: message });
 });
+
 /*
 System({
       pattern: 'song ?(.*)',
