@@ -196,6 +196,7 @@ System({
   const fek = await res.json();
   await message.send(`*Downloading ${fek.title}...*`);
   await message.sendFromUrl(fek.audio, { quoted: message });
+  await message.client.sendMessage(message.chat, { audio: {url:fek.audio, mimetype: 'audio/mpeg', ptt: false }}, { quoted: message.data });
 });
 
 /*
