@@ -86,21 +86,11 @@ System({
       url = data.url;
     }
   }
-
-  const res = await fetch(IronMan(`ironman/dl/v2/aio?url=${url}&apikey=Furina`));
-  const videoData = await res.json();
-  const quality = videoData.video.find(q => q.quality.includes('720p')) ||
-                  videoData.video.reduce((best, q) => {
-                    const qualityy = parseInt(q.quality.match(/\d+/)[0]);
-                    const bestq = best ? parseInt(best.quality.match(/\d+/)[0]) : null;
-                    if (qualityy < 720 && (!best || qualityy > bestq)) {
-                      return q;
-                    }
-                    return best;
-                  }, null);
-  if (!quality) return await message.reply("*No suitable quality found.*\n_Use .ytv_");
-  await message.reply(`- *Downloading video in ${quality.quality} quality...*`);
-  await message.sendFromUrl(quality.url, { quoted: message });
+  const res = await fetch(IronMan(`ironman/dl/ytdl2?url=${url}`));
+  const data = await res.json();
+  if (!data) return await message.reply("*No suitable video found.*");
+  await message.reply(`- *Downloading ${data.title}...*`);
+  await message.sendFromUrl(data.video, { quoted: message });
 });
 
 System({
