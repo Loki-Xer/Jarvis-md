@@ -233,9 +233,9 @@ System({
     type: 'download',
 }, async (message, match, m) => {
     if (!match || !match.includes('x.com')) return await message.send("_Need a x(twitter) media url_");
-    const twitterVideoUrl = match.trim();
-    const { media } = await getJson(`https://api-ironman444ff.koyeb.app/ironman/dl/x?url=${encodeURIComponent(twitterVideoUrl)}`);
-    await m.sendFromUrl(media[0].url);
+    const url = match.trim();
+    const { media } = await getJson(IronMan(`ironman/dl/x?url=${encodeURIComponent(url)}`));
+    await messsage.sendFromUrl(media[0].url);
 });
 
 System({
