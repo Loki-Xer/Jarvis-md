@@ -235,7 +235,7 @@ System({
     if (!match || !match.includes('x.com')) return await message.send("_Need a x(twitter) media url_");
     const url = match.trim();
     const { media } = await getJson(IronMan(`ironman/dl/x?url=${encodeURIComponent(url)}`));
-    await messsage.sendFromUrl(media[0].url);
+    await message.sendFromUrl(media[0].url);
 });
 
 System({
