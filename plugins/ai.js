@@ -16,7 +16,8 @@ const {
     postJson,
     isPrivate,
     interactWithAi,
-    GraphOrg
+    GraphOrg,
+    readMore
 } = require("../lib/");
 
 
@@ -166,4 +167,26 @@ System({
     const ress = await res.json();
     if (!ress.text) return await message.reply('*Not found*');
     await message.reply(`\`\`\`${ress.text}\`\`\``);
+});
+
+System({
+  pattern: 'detectai ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Detects AI-generated text',
+  type: 'ai',
+}, async (message, match, m) => {
+  const text = message.reply_message.text || match;
+  const res = await fetch(IronMan(`ironman/ai/detectai?text=${encodeURIComponent(text)}`));
+  const data = await res.json();
+  let output = "*𝙰𝙸 𝙳𝙴𝚃𝙴𝙲𝚃𝙸𝙾𝙽*\n\n";
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
+    output += `*тєχт:* ${item.text}\n`;
+    output += `*ѕ¢σяє:* ${(item.score * 100).toFixed(2)}%\n`;
+    output += `*туρє:* ${item.type}\n\n`;
+    if (i === 2 && data.length > 3) {
+      output += await readMore();
+    }
+  }
+  await message.reply(output.trim());
 });
