@@ -263,3 +263,33 @@ System({
     + `*➥ᴠɪᴅᴇᴏꜱ:* ${stats.videoCount}`;
   await message.send({ url: user.avatarLarger }, { caption }, "image");
 });
+
+System({
+    pattern: 'pinimg ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Search for images on Pinterest',
+    type: 'search',
+}, async (message, match, m) => {
+    if (!match) return await message.send("*Need a query to search on Pinterest*\n_Example: .pinimg furina_\nWith count eg: .pinimg furina,5");
+    var [query, count] = match.trim().split(',').map(str => str.trim());
+    var res = await fetch(IronMan(`search/pin?query=${query}`));
+    var images = await res.json();
+    if (images.length > 0) {
+        let ri;
+        if (count && !isNaN(count)) {
+            ri = Array.from({ length: Math.min(parseInt(count), images.length) }, () => {
+                const rix = Math.floor(Math.random() * images.length);
+                return images.splice(rix, 1)[0];
+            });
+        } else {
+            ri = [images[Math.floor(Math.random() * images.length)]];
+        }
+        
+        for (const img of ri) {
+            await message.client.sendMessage(message.chat, { image: { url: img }, caption: "" }, { quoted: message });
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    } else {
+        await message.send("No images found for the given query.");
+    }
+});
