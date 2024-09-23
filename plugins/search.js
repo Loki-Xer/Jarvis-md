@@ -293,3 +293,23 @@ System({
         await message.send("No images found for the given query.");
     }
 });
+
+System({
+  pattern: 'pinvid ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Search for a Pinterest video.',
+  type: 'search',
+}, async (message, match, m) => {
+  if (!match) return await message.reply("_Give a pinterest video *query*_\n*Example* : .pinvid furina edit");
+  var query = match.trim();
+  var res = await fetch(IronMan(`ironman/search/pinterest?q=${encodeURIComponent(query)}`));
+  var data = await res.json();
+  var vidurl = data;
+  if (vidurl.length > 0) {
+    var ri = Math.floor(Math.random() * vidurl.length);
+    var rvu = vidurl[ri];
+    await message.sendFromUrl(rvu, { quoted: message });
+  } else {
+    await message.reply('No video results found');
+  }
+});
