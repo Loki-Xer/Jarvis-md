@@ -12,7 +12,6 @@ Jarvis - Loki-Xer
 
 const { System, IronMan, isPrivate, getJson, Google } = require("../lib/");
 
-
 System({
     pattern: 'ig ?(.*)',
     fromMe: isPrivate,
@@ -20,8 +19,9 @@ System({
     type: 'search',
 }, async (message, match) => {
     if (!match) return await message.reply("*Need a username*\n_Example: .ig sedboy.am_");
-    const data = await getJson(IronMan(`ironman/igstalk?id=${match}`));
-    let caption = '';
+    var res = await fetch(IronMan(`ironman/igstalk?id=${encodeURIComponent(match.trim())}`));
+    var data = await res.json();
+    var caption = '';
     if (data.name) caption += `*𖢈ɴᴀᴍᴇ:* ${data.name}\n`;
     if (data.username) caption += `*𖢈ᴜꜱᴇʀɴᴀᴍᴇ:* ${data.username}\n`;
     if (data.bio) caption += `*𖢈ʙɪᴏ:* ${data.bio}\n`;
@@ -33,9 +33,9 @@ System({
     if (typeof data.business !== 'undefined') caption += `*𖢈ʙᴜꜱꜱɪɴᴇꜱ ᴀᴄᴄ:* ${data.business}\n`;
     if (data.email) caption += `*𖢈ᴇᴍᴀɪʟ:* ${data.email}\n`;
     if (data.url) caption += `*𖢈ᴜʀʟ:* ${data.url}\n`;
-    if (data.contact) caption += `*𖢈ɴᴜᴍʙᴇʀ:*${data.contact}\n`;
+    if (data.contact) caption += `*𖢈ɴᴜᴍʙᴇʀ:* ${data.contact}\n`;
     if (data.action_button) caption += `*𖢈ᴀᴄᴛɪᴏɴ ʙᴜᴛᴛᴏɴ:* ${data.action_button}\n`;
-    await message.send({ url: data.hdpfp }, { caption: caption.trim() }, "image");
+    await message.client.sendMessage(message.chat, { image: { url: data.hdpfp }, caption: caption.trim() }, { quoted: message });
 });
 
 System({
