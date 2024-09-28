@@ -22,6 +22,7 @@ const {
     getBuffer,
     isPrivate,
     IronMan,
+    youtube,
     AddMp3Meta,
     extractUrlFromMessage,
   } = require('../lib/');
@@ -86,8 +87,8 @@ System({
       url = data.url;
     }
   }
-  const res = await fetch(IronMan(`ironman/dl/ytdl2?url=${url}`));
-  const dataa = await res.json();
+  var res = await fetch(IronMan(`ironman/dl/ytdl2?url=${url}`));
+  var dataa = await res.json();
   if (!dataa) return await message.reply("*No suitable video found.*");
   await message.reply(`- *Downloading ${dataa.title}...*`);
   await message.sendFromUrl(dataa.video, { quoted: message });
@@ -100,8 +101,7 @@ System({
   type: 'youtube',
 }, async (message, match) => {
   if (!match) return await message.reply('Please provide a valid YouTube URL.');
-  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${match}`));
-  const data = await res.json();
+  var data = await youtube(match);
   if (!data.download || data.download.length === 0) return await message.reply('No download links found.');
   let qualities = data.download.map((item, index) => `${index + 1}. ${item.quality}`).join('\n');
   await message.reply(`*_${data.title}_*\n\nAvailable qualities:\n${qualities}\n\n*Reply with the number to download the video in that quality*\n✧${match}`);
@@ -116,8 +116,7 @@ System({
   if (!message.reply_message || !message.reply_message.fromMe || !message.reply_message.text.includes('✧')) return;
   const match = message.reply_message.text.split('✧')[1];
   const qualitylist = parseInt(message.body.trim());
-  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${match}`));
-  const data = await res.json();
+  var data = await youtube(match);
   if (isNaN(qualitylist) || qualitylist < 1 || qualitylist > data.download.length) return;
   const q = data.download[qualitylist - 1];
   await message.reply(`Downloading *${data.title}* in *${q.quality}*, please wait...`);
@@ -157,20 +156,11 @@ System({
   desc: 'Sends YouTube audio directly',
   type: 'youtube',
 }, async (message, match) => {
-  if (!match && (!message.reply_message || !message.reply_message.text) || !isUrl(match || message.reply_message.text)) {
-    return await message.reply("*Need a valid video URL.*");
-  }
-
+  if (!match && (!message.reply_message || !message.reply_message.text) || !isUrl(match || message.reply_message.text)) return await message.reply("*Need a valid video URL.*");
   const url = match || message.reply_message.text;
-
-  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${url}`));
-  const aud = await res.json();
-
-  if (!aud.audio || aud.audio.length === 0) {
-    return await message.reply("No audio available for this video.");
-  }
-
-  const title = aud.title || 'audio';
+  const aud = await youtube(url);
+  if (!aud.audio || aud.audio.length === 0) return await message.reply("No audio available for this video.");
+  var title = aud.title || 'audio';
   await message.reply(`Downloading *${title}*, please wait...`);
   await message.sendFromUrl(aud.audio[0].download,  { quoted: message});
 });
@@ -187,13 +177,10 @@ System({
     url = match;
   } else {
     const data = await Ytsearch(match);
-    if (!data.url) {
-      return await message.reply("*No video found for the given query.*");
-    }
+    if (!data.url) return await message.reply("*No video found for the given query.*");
     url = data.url;
   }
-  const res = await fetch(IronMan(`ironman/dl/ytdl?url=${url}`));
-  const fek = await res.json();
+  var fek = await youtube(url);
   await message.send(`*Downloading ${fek.title}...*`);
   await message.sendFromUrl(fek.audio[0].download, { quoted: message });
 });
