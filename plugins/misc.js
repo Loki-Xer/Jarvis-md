@@ -143,3 +143,5 @@ const {
          await message.send(`*_${tempmail}_*\n\n*Dear user, this is your temp mail*\n\n*User: ${user}*\n*Mail received: ${data.tempmail.length}*\n\n\`\`\`1 ‣\`\`\` *Check mail*\n\`\`\`2 ‣\`\`\` *Next mail*\n\n*_Send a Number as reply_*`);
       }
   });
+
+  System({ pattern: "mee", fromMe: true, desc: "self mention", type: "user", }, async (message, match) => { await message.client.sendMessage(message.chat, { text: `@${message.sender.split("@")[0]}`, mentions: [message.sender] }) });

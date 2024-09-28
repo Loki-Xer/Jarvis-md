@@ -86,21 +86,11 @@ System({
       url = data.url;
     }
   }
-
-  const res = await fetch(IronMan(`ironman/dl/v2/aio?url=${url}&apikey=Furina`));
-  const videoData = await res.json();
-  const quality = videoData.video.find(q => q.quality.includes('720p')) ||
-                  videoData.video.reduce((best, q) => {
-                    const qualityy = parseInt(q.quality.match(/\d+/)[0]);
-                    const bestq = best ? parseInt(best.quality.match(/\d+/)[0]) : null;
-                    if (qualityy < 720 && (!best || qualityy > bestq)) {
-                      return q;
-                    }
-                    return best;
-                  }, null);
-  if (!quality) return await message.reply("*No suitable quality found.*\n_Use .ytv_");
-  await message.reply(`- *Downloading video in ${quality.quality} quality...*`);
-  await message.sendFromUrl(quality.url, { quoted: message });
+  const res = await fetch(IronMan(`ironman/dl/ytdl2?url=${url}`));
+  const dataa = await res.json();
+  if (!dataa) return await message.reply("*No suitable video found.*");
+  await message.reply(`- *Downloading ${dataa.title}...*`);
+  await message.sendFromUrl(dataa.video, { quoted: message });
 });
 
 System({
@@ -192,9 +182,7 @@ System({
   type: 'youtube',
 }, async (message, match) => {
   if (!match) return await message.reply("*Need a video URL or query.*");
-
   let url;
-
   if (isUrl(match)) {
     url = match;
   } else {
@@ -204,16 +192,12 @@ System({
     }
     url = data.url;
   }
-
   const res = await fetch(IronMan(`ironman/dl/ytdl?url=${url}`));
-  const audioData = await res.json();
-
-  if (!audioData.audio || audioData.audio.length === 0) {
-    return await message.reply("No audio available for this video.");
-  }
-
-  await message.sendFromUrl(audioData.audio[0].download, { quoted: message });
+  const fek = await res.json();
+  await message.send(`*Downloading ${fek.title}...*`);
+  await message.sendFromUrl(fek.audio[0].download, { quoted: message });
 });
+
 /*
 System({
       pattern: 'song ?(.*)',

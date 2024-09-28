@@ -233,9 +233,9 @@ System({
     type: 'download',
 }, async (message, match, m) => {
     if (!match || !match.includes('x.com')) return await message.send("_Need a x(twitter) media url_");
-    const twitterVideoUrl = match.trim();
-    const { media } = await getJson(`https://api-ironman444ff.koyeb.app/ironman/dl/x?url=${encodeURIComponent(twitterVideoUrl)}`);
-    await m.sendFromUrl(media[0].url);
+    const url = match.trim();
+    const { media } = await getJson(IronMan(`ironman/dl/x?url=${encodeURIComponent(url)}`));
+    await message.sendFromUrl(media[0].url);
 });
 
 System({
@@ -273,16 +273,17 @@ System({
  });
 
 System({
-	pattern: 'tiktok ?(.*)',
-	fromMe: isPrivate,
-	desc: 'Sends TikTok video ',
-	type: 'download',
+  pattern: 'tiktok ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Sends TikTok video ',
+  type: 'download',
 }, async (message, match, msg) => {
-       match = await extractUrlFromMessage(match || message.reply_message.text);
-       if (!isUrl(match)) return message.reply("*Reply to Tiktok url or provide a Tiktok url*");
-       if (!match || !match.includes("tiktok")) return message.reply("*Reply to tiktok url or provide a tiktok url*");   
-       const { result } = await getJson(IronMan("ironman/dl/v2/tiktok?url=" + match), { headers: { 'ApiKey': 'IRON-M4N' } });
-       await message.reply({ url:result.video }, { caption: "*_download🤍_*"}, "video");
+  match = await extractUrlFromMessage(match || message.reply_message.text);
+  if (!isUrl(match)) return message.reply("*Reply to Tiktok url or provide a Tiktok url*");
+  if (!match || !match.includes("tiktok")) return message.reply("*Reply to tiktok url or provide a tiktok url*");   
+  var res = await fetch(IronMan(`ironman/dl/v4/tiktok?url=${match}`));
+  var data = await res.json();
+  await message.client.sendMessage(message.chat, { video: { url: data.url }, caption: "*_Downloaded🤍_*" }, { quoted: message.data });
 });
 
 System({

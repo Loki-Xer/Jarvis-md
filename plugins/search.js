@@ -12,7 +12,6 @@ Jarvis - Loki-Xer
 
 const { System, IronMan, isPrivate, getJson, Google } = require("../lib/");
 
-
 System({
     pattern: 'ig ?(.*)',
     fromMe: isPrivate,
@@ -20,8 +19,9 @@ System({
     type: 'search',
 }, async (message, match) => {
     if (!match) return await message.reply("*Need a username*\n_Example: .ig sedboy.am_");
-    const data = await getJson(IronMan(`ironman/igstalk?id=${match}`));
-    let caption = '';
+    var res = await fetch(IronMan(`ironman/igstalk?id=${encodeURIComponent(match.trim())}`));
+    var data = await res.json();
+    var caption = '';
     if (data.name) caption += `*𖢈ɴᴀᴍᴇ:* ${data.name}\n`;
     if (data.username) caption += `*𖢈ᴜꜱᴇʀɴᴀᴍᴇ:* ${data.username}\n`;
     if (data.bio) caption += `*𖢈ʙɪᴏ:* ${data.bio}\n`;
@@ -33,9 +33,9 @@ System({
     if (typeof data.business !== 'undefined') caption += `*𖢈ʙᴜꜱꜱɪɴᴇꜱ ᴀᴄᴄ:* ${data.business}\n`;
     if (data.email) caption += `*𖢈ᴇᴍᴀɪʟ:* ${data.email}\n`;
     if (data.url) caption += `*𖢈ᴜʀʟ:* ${data.url}\n`;
-    if (data.contact) caption += `*𖢈ɴᴜᴍʙᴇʀ:*${data.contact}\n`;
+    if (data.contact) caption += `*𖢈ɴᴜᴍʙᴇʀ:* ${data.contact}\n`;
     if (data.action_button) caption += `*𖢈ᴀᴄᴛɪᴏɴ ʙᴜᴛᴛᴏɴ:* ${data.action_button}\n`;
-    await message.send({ url: data.hdpfp }, { caption: caption.trim() }, "image");
+    await message.client.sendMessage(message.chat, { image: { url: data.hdpfp }, caption: caption.trim() }, { quoted: message });
 });
 
 System({
@@ -64,8 +64,8 @@ System({
         type: "search"
 }, async (message, match) => {
         if (!match) return await message.send("*Need a query to search*\n_Example: who is iron man_");
-        const response = await getJson(IronMan(`ironman/s/google/search?q=${match}`));
-        const text = `*⬢ title*: ${response[0].title}\n\n*⬢ description*: _${response[0].snippet}_\n`
+        const response = await Google(match);
+        const text = `*⬢ Title*: ${response[0].title}\n\n*⬢ Description*: _${response[0].description}_\n`
         await message.send([{ name: "cta_url", display_text: "Visit Google", url: response[0].link, merchant_url: response[0].link, action: "url", icon: "", style: "link" }], { body: "", footer: "*JARVIS-MD*", title: text }, "button");
 });
 
@@ -262,4 +262,54 @@ System({
     + `*➥ʜᴇᴀʀᴛꜱ:* ${stats.heartCount}\n`
     + `*➥ᴠɪᴅᴇᴏꜱ:* ${stats.videoCount}`;
   await message.send({ url: user.avatarLarger }, { caption }, "image");
+});
+
+System({
+    pattern: 'pinimg ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Search for images on Pinterest',
+    type: 'search',
+}, async (message, match, m) => {
+    if (!match) return await message.send("*Need a query to search on Pinterest*\n_Example: .pinimg furina_\nWith count eg: .pinimg furina,5");
+    var [query, count] = match.trim().split(',').map(str => str.trim());
+    var res = await fetch(IronMan(`search/pin?query=${query}`));
+    var images = await res.json();
+    if (images.length > 0) {
+        let ri;
+        if (count && !isNaN(count)) {
+            ri = Array.from({ length: Math.min(parseInt(count), images.length) }, () => {
+                const rix = Math.floor(Math.random() * images.length);
+                return images.splice(rix, 1)[0];
+            });
+        } else {
+            ri = [images[Math.floor(Math.random() * images.length)]];
+        }
+        
+        for (const img of ri) {
+            await message.client.sendMessage(message.chat, { image: { url: img }, caption: "" }, { quoted: message });
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    } else {
+        await message.send("No images found for the given query.");
+    }
+});
+
+System({
+  pattern: 'pinvid ?(.*)',
+  fromMe: isPrivate,
+  desc: 'Search for a Pinterest video.',
+  type: 'search',
+}, async (message, match, m) => {
+  if (!match) return await message.reply("_Give a pinterest video *query*_\n*Example* : .pinvid furina edit");
+  var query = match.trim();
+  var res = await fetch(IronMan(`ironman/search/pinterest?q=${encodeURIComponent(query)}`));
+  var data = await res.json();
+  var vidurl = data;
+  if (vidurl.length > 0) {
+    var ri = Math.floor(Math.random() * vidurl.length);
+    var rvu = vidurl[ri];
+    await message.sendFromUrl(rvu, { quoted: message });
+  } else {
+    await message.reply('No video results found');
+  }
 });
