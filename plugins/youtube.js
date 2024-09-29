@@ -156,13 +156,18 @@ System({
   desc: 'Sends YouTube audio directly',
   type: 'youtube',
 }, async (message, match) => {
-  if (!match && (!message.reply_message || !message.reply_message.text) || !isUrl(match || message.reply_message.text)) return await message.reply("*Need a valid video URL.*");
-  const url = match || message.reply_message.text;
-  const aud = await youtube(url);
-  if (!aud.audio || aud.audio.length === 0) return await message.reply("No audio available for this video.");
-  var title = aud.title || 'audio';
-  await message.reply(`Downloading *${title}*, please wait...`);
-  await message.sendFromUrl(aud.audio[0].download,  { quoted: message});
+    var url = match || (message.reply_message && message.reply_message.text);
+    if (!url || !isUrl(url)) return await message.reply("*Need a valid video URL.*");
+    var aud = await youtube(url);
+    if (!aud.audio || aud.audio.length === 0) return await message.reply("No audio available for this video.");
+    var title = aud.title || "audio";
+    var artist = aud.artist || "Unknown Artist";
+    var image = aud.image || "https://graph.org/file/58ea74675af7836579a3a.jpg";
+    if (config.AUDIO_DATA !== "original") [artist, title, image] = config.AUDIO_DATA.split(';').map((v, i) => v || [artist, title, image][i]);
+    await message.reply(`Downloading *${title}*, please wait...`);
+    var [audbuff, imgbuff] = await Promise.all([getBuffer(aud.audio[0].download), getBuffer(image)]);
+    var fek = await AddMp3Meta(audbuff, imgbuff, { title, body: artist });
+    await message.reply(fek, { mimetype: 'audio/mpeg' }, "audio");
 });
 
 System({
