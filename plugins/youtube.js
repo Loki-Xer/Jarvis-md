@@ -170,24 +170,50 @@ System({
     await message.reply(fek, { mimetype: 'audio/mpeg' }, "audio");
 });
 
+
 System({
   pattern: 'song ?(.*)',
   fromMe: isPrivate,
   desc: 'Downloads YouTube audio',
   type: 'youtube',
 }, async (message, match) => {
-  if (!match) return await message.reply("*Need a video URL or query.*");
-  let url;
-  if (isUrl(match)) {
-    url = match;
-  } else {
-    const data = await Ytsearch(match);
-    if (!data.url) return await message.reply("*No video found for the given query.*");
-    url = data.url;
+  var url;
+  if (match) {
+    url = match.includes("--thumbnail") ? (await Ytsearch(match.replace("--thumbnail", "").trim())).url : (isUrl(match) ? match : (await Ytsearch(match)).url);
+  } else if (message.reply_message && message.reply_message.text) {
+    url = extractUrlFromMessage(message.reply_message.text);
+    if (!url) return await message.reply("*No URL found in the replied message.*");
   }
-  var fek = await youtube(url);
-  await message.send(`*Downloading ${fek.title}...*`);
-  await message.sendFromUrl(fek.audio[0].download, { quoted: message });
+  
+  if (!url) return await message.reply("*Need a song URL or query.*\n_Use --thumbnail at end if you want video thumbnail_");
+  var aud = await youtube(url);
+  if (!aud || !aud.audio || aud.audio.length === 0) return await message.reply("No audio available for this video.");
+  var { title = "audio", artist = "Unknown Artist", image = "https://graph.org/file/58ea74675af7836579a3a.jpg" } = aud;
+  if (config.AUDIO_DATA !== "original") [artist, title, image] = config.AUDIO_DATA.split(';').map((v, i) => v || [artist, title, image][i]);
+  var audbuff = await AddMp3Meta(await getBuffer(aud.audio[0].download), await getBuffer(image), { title, body: artist });
+  var isThumbnail = match && match.includes("--thumbnail");
+  if (isThumbnail) {
+    await message.client.sendMessage(message.chat, { image: { url: image }, caption: `Downloading *${title}*, please wait...` }, { quoted: message });
+    await message.reply(audbuff, { mimetype: 'audio/mpeg' }, "audio");
+  } else {
+    await message.send(`Downloading *${title}*, please wait...`);
+    await message.client.sendMessage(message.chat, {
+      audio: audbuff,
+      mimetype: 'audio/mpeg',
+      contextInfo: {
+        externalAdReply: {
+          title,
+          body: artist,
+          thumbnail: await getBuffer(image),
+          mediaType: 1,
+          mediaUrl: url,
+          sourceUrl: url,
+          showAdAttribution: false,
+          renderLargerThumbnail: true
+        }
+      }
+    }, { quoted: message });
+  }
 });
 
 /*
