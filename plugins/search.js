@@ -313,3 +313,18 @@ System({
     await message.reply('No video results found');
   }
 });
+
+System({
+    pattern: 'lyrics (.*)',
+    fromMe: isPrivate,
+    type: 'search',
+    desc: 'Search for song lyrics',
+}, async (message, match) => {
+    if(!match) return await message.send("*Need a song name!*\n_Example: .lyrics let me die_");
+    const [song, author] = match.split(/\s+by\s+/i);
+    const res = await fetch(IronMan(`ironman/song/lrc?track_name=${encodeURIComponent(song)}${author ? `&artist_name=${encodeURIComponent(author)}` : ''}`));
+    if (!res.ok) return await message.send("Error fetching lyrics. Please try again later.");
+    const { title, artist, lyrics, image } = await res.json();
+    const caption = `*Title:* ${title}\n*Artist:* ${artist}\n\n${lyrics}`;
+    await message.client.sendMessage(message.chat, { image: { url: image }, caption }, {quoted: message});
+});

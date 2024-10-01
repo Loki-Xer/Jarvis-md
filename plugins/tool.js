@@ -162,3 +162,41 @@ System({
       if(!message.quoted) return m.client.forwardMessage(m.jid, message, { quoted: m.data });
       return m.client.forwardMessage(m.jid, message.reply_message, { quoted: m.data });
 });
+
+
+System({
+    pattern: 'calc ?(.*)',
+    fromMe: isPrivate,
+    desc: 'Sends the result of a mathematical expression',
+    type: 'tools',
+}, async (message, match, m) => {
+    if (!match) {
+        await message.reply("*EXAMPLE* *:* _.calc 2+2_");
+        return;
+    }
+    const ronak = match.trim();
+    const [num1, op, num2] = ronak.match(/(\d+)\s*([-+*\/])\s*(\d+)/).slice(1);
+
+    function calculate(x, operator, y) {
+        const parseFloatX = parseFloat(x);
+        const parseFloatY = parseFloat(y);
+        
+        switch (operator) {
+            case '+':
+                return parseFloatX + parseFloatY;
+            case '-':
+                return parseFloatX - parseFloatY;
+            case '*':
+                return parseFloatX * parseFloatY;
+            case '/':
+                if (parseFloatY === 0) {
+                    return "Error: Division by zero";
+                }
+                return parseFloatX / parseFloatY;
+            default:
+                return "Error: Invalid operator";
+        }
+    }
+   const result = calculate(num1, op, num2);
+   await message.reply(`Q : ${num1} ${op} ${num2}\n\nResult: *${result}*`);
+});
