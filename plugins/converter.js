@@ -152,7 +152,7 @@ System({
         author: stickerPackNameParts[1], 
         type: StickerTypes.ROUNDED ,
         categories: ["🤩", "🎉"], 
-        id: "https://github.com/Loki-Xer/jarvis-md",
+        id: "https://github.com/aliraza716/Jarvis-md",
         quality: 75, 
    });
    const buffer = await sticker.toBuffer();
@@ -191,7 +191,7 @@ System({
         author: stickerPackNameParts[1], 
         type: StickerTypes.CIRCLE ,
         categories: ["🤩", "🎉"],
-        id: "https://github.com/Loki-Xer/jarvis-md", 
+        id: "https://github.com/aliraza716/Jarvis-md", 
         quality: 75,
    });
   const buffer = await sticker.toBuffer();
@@ -213,7 +213,7 @@ System({
         author: stickerPackNameParts[1], 
         type: StickerTypes.CROPPED,
         categories: ["🤩", "🎉"],
-        id: "https://github.com/Loki-Xer/jarvis-md", 
+        id: "https://github.com/aliraza716/Jarvis-md", 
         quality: 75, 
    });
    const buffer = await sticker.toBuffer();
