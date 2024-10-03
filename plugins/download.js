@@ -10,7 +10,7 @@ Jarvis - Loki-Xer
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 
-const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl, IronMan, getBuffer, toAudio, terabox, instaDl, aptoideDl } = require("../lib/");
+const { System, isPrivate, extractUrlFromMessage, sleep, getJson, config, isUrl, IronMan, getBuffer, toAudio, terabox, instaDl, aptoideDl, tiktokDl } = require("../lib/");
 
 
 const fetchData = async (mediafireUrl) => {
@@ -281,9 +281,8 @@ System({
   match = await extractUrlFromMessage(match || message.reply_message.text);
   if (!isUrl(match)) return message.reply("*Reply to Tiktok url or provide a Tiktok url*");
   if (!match || !match.includes("tiktok")) return message.reply("*Reply to tiktok url or provide a tiktok url*");   
-  var res = await fetch(IronMan(`ironman/dl/v4/tiktok?url=${match}`));
-  var data = await res.json();
-  await message.client.sendMessage(message.chat, { video: { url: data.url }, caption: "*_Downloaded🤍_*" }, { quoted: message.data });
+  var data = await tiktokDl(match);
+  await message.client.sendMessage(message.chat, { video: { url: data.data.find(item => item.type === 'nowatermark_hd').url }, caption: "*_Downloaded_*" }, { quoted: message.data });
 });
 
 System({
