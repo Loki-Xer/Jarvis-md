@@ -51,7 +51,7 @@ System({
         await makeInDb(message.jid, { status: status, action: match, value: word }, "antiword");
         return await message.send(`_antiword Action Updated_`);
     } else {
-    	if(!match) return await message.send('_*Example:* antiword 🏳️‍🌈, gay, nigga_');
+    	if(!match) return await message.send('_*Example:* antiword 🦄, gay, nigga_');
     	const status = antiword && antiword.status ? antiword.status : 'false';
         const action = antiword && antiword.action ? antiword.action : 'null';
         await makeInDb(message.jid, { status: status, action: action, value: match }, "antiword");
