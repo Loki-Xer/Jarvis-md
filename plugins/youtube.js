@@ -193,10 +193,10 @@ System({
   var audbuff = await AddMp3Meta(await getBuffer(aud.audio[0].download), await getBuffer(image), { title, body: artist });
   var isThumbnail = match && match.includes("--thumbnail");
   if (isThumbnail) {
-    await message.client.sendMessage(message.chat, { image: { url: image }, caption: `Downloading *${title}*, please wait...` }, { quoted: message });
+    await message.client.sendMessage(message.chat, { image: { url: aud.image }, caption: `Downloading *${aud.title}*, please wait...` }, { quoted: message });
     await message.reply(audbuff, { mimetype: 'audio/mpeg' }, "audio");
   } else {
-    await message.send(`Downloading *${title}*, please wait...`);
+    await message.send(`Downloading *${aud.title}*, please wait...`);
     await message.client.sendMessage(message.chat, {
       audio: audbuff,
       mimetype: 'audio/mpeg',
@@ -204,7 +204,7 @@ System({
         externalAdReply: {
           title,
           body: artist,
-          thumbnail: await getBuffer(image),
+          thumbnail: await getBuffer(aud.image),
           mediaType: 1,
           mediaUrl: url,
           sourceUrl: url,
