@@ -24,8 +24,8 @@ jarvis md is Multi Device whatsapp bot
 
 3. Now Deploy
     <br>
-<a href='https://qr-dnpk.onrender.com/heroku.html' target="_blank"><img alt='Heroku' src='https://img.shields.io/badge/-Deploy-black?style=for-the-badge&logo=heroku&logoColor=white'/></a>
-
+<a 
+[![Find On Whatsapp ](https://img.shields.io/badge/-Deploy-black?style=for-the-badge&logo=heroku&logoColor=whitClick-Here-red.svg)](https://dashboard.heroku.com/new?template=https://github.com/aliraza716/Jarvis-md)
 
 #### DEPLOY TO RAILWAY
 
