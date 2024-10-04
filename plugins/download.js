@@ -323,7 +323,7 @@ System({
           thumbnail: img,
           mediaType: 1,
           mediaUrl: '',
-          sourceUrl: 'https://github.com/Loki-Xer/Jarvis-md',
+          sourceUrl: 'https://github.com/aliraza716/Jarvis-md',
           showAdAttribution: true,
           renderLargerThumbnail: true
         }
