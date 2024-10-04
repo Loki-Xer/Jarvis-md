@@ -1,7 +1,5 @@
-#### JARVIS MD WHATSAPP BOT
-jarvis md is Multi Device whatsapp bot
-***
-
+![ALI-MD](https://readme-typing-svg.demolab.com?font=Garamond&size=20&pause=998&color=skyblue&background=white&right=true&random=true&width=465&lines=HELLO+EVERYONE👋🏻;WELCOME+TO+Aʟɪ+Mᴅ+💙)
+  
 ### SETUP JARVIS
 
 1. Scan the QR code
