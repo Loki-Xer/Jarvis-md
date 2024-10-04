@@ -1,3 +1,5 @@
+https://img.shields.io/badge/-Deploy-black?style=for-the-badge&logo=heroku&logoColor=white
+
 [![Find On Whatsapp ](https://img.shields.io/badge/➤Click-Here-red.svg)](https://dashboard.heroku.com/new?template=https://github.com/aliraza716/Jarvis-md)
 
 
