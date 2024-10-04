@@ -202,8 +202,8 @@ System({
       mimetype: 'audio/mpeg',
       contextInfo: {
         externalAdReply: {
-          title,
-          body: artist,
+          title: aud.title,
+          body: aud.artist,
           thumbnail: await getBuffer(aud.image),
           mediaType: 1,
           mediaUrl: url,
