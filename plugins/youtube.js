@@ -60,11 +60,11 @@ System({
      if (isUrl(matchUrl)) {
          const { title } = await YtInfo(matchUrl);
          await message.reply("_*" + "downloading " + title + "*_");
-         return await message.send(await GetYtv(matchUrl), { caption: '*made with 🤍*', quoted: message.data }, 'video');
+         return await message.send(await GetYtv(matchUrl), { caption: '*𓄂𓆩𝞓𝙇𝙄 𝙍𝞓𝙕𝞓⤹³𖤍𓆪*', quoted: message.data }, 'video');
       } else {
         const data = await Ytsearch(match);
         await message.reply("_*" + "downloading " + data.title + "*_"); 
-        return await message.send(await GetYtv(data.url), { caption: '*made with 🤍*', quoted: message.data }, 'video');
+        return await message.send(await GetYtv(data.url), { caption: '*𓄂𓆩𝞓𝙇𝙄 𝙍𝞓𝙕𝞓⤹³𖤍𓆪*', quoted: message.data }, 'video');
       }
 });
 */
@@ -348,7 +348,7 @@ System({
         } else {
           const videos = await yts(match);
           const result = videos.all.map(video => `*🏷️ Title :* _*${video.title}*_\n*📁 Duration :* _${video.duration}_\n*🔗 Link :* _${video.url}_`);
-          return await message.reply(`\n\n_*Result Of ${match} 🔍*_\n\n`+result.join('\n\n')+"\n\n*🤍 صنع بواسطة لوكي*")
+          return await message.reply(`\n\n_*Result Of ${match} 🔍*_\n\n`+result.join('\n\n')+"\n\n*𓄂𓆩𝞓𝙇𝙄 𝙍𝞓𝙕𝞓⤹³𖤍𓆪*")
         }
       }
   });
