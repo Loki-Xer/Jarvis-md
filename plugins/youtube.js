@@ -164,7 +164,7 @@ System({
     var artist = aud.artist || "Unknown Artist";
     var image = aud.image || "https://graph.org/file/58ea74675af7836579a3a.jpg";
     if (config.AUDIO_DATA !== "original") [artist, title, image] = config.AUDIO_DATA.split(';').map((v, i) => v || [artist, title, image][i]);
-    await message.reply(`Downloading *${title}*, please wait...`);
+    await message.reply(`Downloading *${aud.title}*, please wait...`);
     var [audbuff, imgbuff] = await Promise.all([getBuffer(aud.audio[0].download), getBuffer(image)]);
     var fek = await AddMp3Meta(audbuff, imgbuff, { title, body: artist });
     await message.reply(fek, { mimetype: 'audio/mpeg' }, "audio");
