@@ -164,7 +164,7 @@ System({
     var artist = aud.artist || "Unknown Artist";
     var image = aud.image || "https://graph.org/file/58ea74675af7836579a3a.jpg";
     if (config.AUDIO_DATA !== "original") [artist, title, image] = config.AUDIO_DATA.split(';').map((v, i) => v || [artist, title, image][i]);
-    await message.reply(`Downloading *${title}*, please wait...`);
+    await message.reply(`Downloading *${aud.title}*, please wait...`);
     var [audbuff, imgbuff] = await Promise.all([getBuffer(aud.audio[0].download), getBuffer(image)]);
     var fek = await AddMp3Meta(audbuff, imgbuff, { title, body: artist });
     await message.reply(fek, { mimetype: 'audio/mpeg' }, "audio");
@@ -193,18 +193,18 @@ System({
   var audbuff = await AddMp3Meta(await getBuffer(aud.audio[0].download), await getBuffer(image), { title, body: artist });
   var isThumbnail = match && match.includes("--thumbnail");
   if (isThumbnail) {
-    await message.client.sendMessage(message.chat, { image: { url: image }, caption: `Downloading *${title}*, please wait...` }, { quoted: message });
+    await message.client.sendMessage(message.chat, { image: { url: aud.image }, caption: `Downloading *${aud.title}*, please wait...` }, { quoted: message });
     await message.reply(audbuff, { mimetype: 'audio/mpeg' }, "audio");
   } else {
-    await message.send(`Downloading *${title}*, please wait...`);
+    await message.send(`Downloading *${aud.title}*, please wait...`);
     await message.client.sendMessage(message.chat, {
       audio: audbuff,
       mimetype: 'audio/mpeg',
       contextInfo: {
         externalAdReply: {
-          title,
-          body: artist,
-          thumbnail: await getBuffer(image),
+          title: aud.title,
+          body: aud.artist,
+          thumbnail: await getBuffer(aud.image),
           mediaType: 1,
           mediaUrl: url,
           sourceUrl: url,
