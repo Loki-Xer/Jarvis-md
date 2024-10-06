@@ -1,8 +1,8 @@
 {
-    "name": "Jarvis",
+    "name": "manu",
     "version":"1.0.0",
-    "description": "Jarvis Multi Device whatsappbot",
-    "logo": "https://i.imgur.com/PmfMtfa.jpeg",
+    "description": "manu Multi Device whatsappbot",
+    "logo": ""C:\Users\MANU\Downloads\3a72b68d-ebcd-489e-95d8-3d05cc800919.jpg"",
     "keywords": ["whatsapp"],
     "repository": "https://github.com/Loki-Xer/Jarvis",
     "website": "https://github.com/Loki-Xer/Jarvis",
@@ -59,12 +59,12 @@
         "STICKER_PACKNAME": {
             "description": "sticker package name",
             "required": true,
-            "value":"ʟᴏᴋɪ;ᴊᴀʀᴠɪꜱ"
+            "value":"manu;oh myyy"
         },
         "SUDO": {
             "description": "owner number of the bot",
             "required": false,
-            "value":"4915252819677"
+            "value":"0718842235"
         },
         "ALLWAYS_ONLINE": {
             "description": "show bot number last seen as online",
