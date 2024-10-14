@@ -17,8 +17,8 @@ const {
     getJson,
     postJson,
     isPrivate,
-    ssweb,
-    extractUrlFromMessage
+    extractUrlFromMessage,
+    takeSs
   } = require("../lib/");
   const axios = require("axios");
   
@@ -36,15 +36,21 @@ const {
 
   System({
   pattern: 'ss ?(.*)',
-  fromMe: isPrivate,
+  fromMe: true,
   desc: 'Takes a screenshot of a website',
   type: 'misc',
 }, async (message, match, m) => {
-  if (!match) return await message.reply(`*Please provide a URL*`);
-  const url = match;
-  const response = await ssweb(url);
-  const screenshotUrl = response.iurl; 
-  await m.sendFromUrl(screenshotUrl, { quoted: message.data, caption: `*Screenshot of ${url}*` });
+  let url;
+  if (match) {
+    url = match;
+  } else if (message.reply_message && message.reply_message.text) {
+    url = await extractUrlFromMessage(message.reply_message.text);
+  } else {
+    return await message.reply(`*Please provide a URL*`);
+  }
+    if (!isUrl(url)) return await message.reply(`*Please provide a valid URL*`);
+    const response = await takeSs(url);
+    await message.client.sendMessage(message.chat, { image: response, caption: `*Screenshot of ${url}*`}, { quoted: message.data });
 });
 
   System({

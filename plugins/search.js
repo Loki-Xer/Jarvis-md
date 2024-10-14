@@ -243,7 +243,7 @@ System({
 });
 
 System({
-  pattern: 'tt ?(.*)',
+  pattern: 'tkt ?(.*)',
   fromMe: isPrivate,
   desc: 'TikTok Stalk',
   type: 'search',

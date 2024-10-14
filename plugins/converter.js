@@ -16,6 +16,7 @@ const { fromBuffer } = require('file-type');
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 const { exec } = require("child_process");
 const translate = require("translate-google-api");
+const axios = require("axios");
 const {
     config,
     System,
@@ -410,4 +411,62 @@ System({
   } catch (error) {
       await message.reply('_' + error.message + '_');
   };
+});
+
+System({
+  pattern: 'qc ?(.*)',
+  fromMe:  isPrivate,
+  desc: 'Generate a sticker with a custom quote',
+  type: "converter",
+}, async (message, match, m) => {
+if(!match) match = message.reply_message.text ? message.reply_message.text : match;
+  if(!match) return await message.reply(" *EXAMPLE:.qc Hi! ; name*\n _Or reply to a message_")
+  
+const image = await message.client.profilePictureUrl(m.sender, 'image');
+const thumb = await message.client.profilePictureUrl(m.sender, 'image');
+const number = message.user.jid;
+    const logo = await getBuffer(image);
+    const thumbnail = await getBuffer(thumb);
+    let q = {
+        key: {
+            fromMe: false,
+            participant: "0@s.whatsapp.net",
+            remoteJid: "status@broadcast"
+        },
+        message: {
+            contactMessage: {
+                displayName: `${message.pushName}`,
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${message.client.user.name},;;;\nFN:${message.client.user.name},\nitem1.TEL;waid=${number.split('@')[0]}:${number.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
+                jpegThumbnail: thumbnail
+            }
+        }
+    };
+  let pp;
+  try { pp = await message.client.profilePictureUrl(message.quoted ? message.reply_message.sender : message.sender, 'image'); } catch { pp = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" }
+const [text, name] = match.split(';')
+  if (text.length > 100) return await message.reply(' *Max 80 characters*')
+   const obj = {
+    type: 'quote',
+    format: 'png',
+    backgroundColor: '#1e2b33',
+    width: 512,
+    height: 512,
+    scale: 2,
+    messages: [
+      {
+        avatar: true,
+        from: {
+          name: name || await message.store.getName(message.quoted ? message.reply_message.sender : message.sender),
+          photo: { url: pp },
+        },
+        text: text || message.reply_message.text,
+        replyMessage: {},
+      },
+    ],
+  }
+  const response = await axios.post('https://bot.lyo.su/quote/generate', obj, {
+    headers: { 'Content-Type': 'application/json' },
+  })
+  const img = Buffer.from(response.data.result.image, 'base64')
+  await message.send(img, { quoted: q }, "sticker");
 });
