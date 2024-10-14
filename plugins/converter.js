@@ -417,7 +417,7 @@ System({
   fromMe:  isPrivate,
   desc: 'Generate a sticker with a custom quote',
   type: "converter",
-}, async (message, match) => {
+}, async (message, match, m) => {
 if(!match) match = message.reply_message.text ? message.reply_message.text : match;
   if(!match) return await message.reply(" *EXAMPLE:.qc Hi! ; name*\n _Or reply to a message_")
   
