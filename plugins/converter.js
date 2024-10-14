@@ -16,6 +16,7 @@ const { fromBuffer } = require('file-type');
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 const { exec } = require("child_process");
 const translate = require("translate-google-api");
+const axios = require("axios");
 const {
     config,
     System,
